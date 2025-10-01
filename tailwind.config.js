@@ -18,7 +18,14 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ["Figtree", ...defaultTheme.fontFamily.sans],
+                sans: ["Open Sans", "sans-serif"],
+                handwriting: ["Shadows Into Light", "cursive"],
+            },
+            colors: {
+                primary: "#E04622",
+                secondary: "#EEAB26",
+                tertiary: "#EAEFF3",
+                quaternary: "#080808",
             },
         },
     },

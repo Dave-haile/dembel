@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('position');
-            $table->text('testimon');
+            $table->text('testimonial');
             $table->boolean('approval')->default(false);
             $table->timestamps();
         });
