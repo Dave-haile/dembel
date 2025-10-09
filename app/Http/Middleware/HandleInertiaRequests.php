@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -35,9 +36,10 @@ class HandleInertiaRequests extends Middleware
         //         'user' => $request->user(),
         //     ],
         // ];
-        return array_merge(parent::share($request),[
+        return array_merge(parent::share($request), [
             'appname' => config('app.name'),
-            'auth.user' => fn() => $request->user()
+            'auth.user' => fn() => $request->user(),
+            'services' => Service::approved()->orderBy('id', 'DESC')->get(),
         ]);
     }
 }

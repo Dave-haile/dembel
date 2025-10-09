@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Gallery extends Model
 {
-    protected $fillable = ['id', 'title', 'floor_id', 'sector', 'description', 'image', 'approval', 'created_by', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'title', 'category', 'floor_id', 'sector', 'description', 'image', 'approval', 'created_by', 'created_at', 'updated_at'];
 
     public function scopeApproved($query)
     {
