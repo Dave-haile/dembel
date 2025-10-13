@@ -14,8 +14,6 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         DB::table('categories')->insert([
-            ['name' => 'Test', 'icon' => '✅'],
-            ['name' => 'All', 'icon' => '🛍️'],
             ['name' => 'Fashion', 'icon' => '👗'],
             ['name' => 'Jewelry', 'icon' => '💍'],
             ['name' => 'Beauty', 'icon' => '💄'],

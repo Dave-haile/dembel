@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 const Slider = ({ slides, language = "en" }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  const defaultSlides = [];
   const displaySlides =
     slides.length > 0
       ? slides
@@ -18,7 +19,7 @@ const Slider = ({ slides, language = "en" }) => {
     return () => clearInterval(timer);
   }, [displaySlides.length]);
 
-  const goToSlide = () => {
+  const goToSlide = (index) => {
     setCurrentSlide(index);
   };
 
@@ -52,7 +53,7 @@ const Slider = ({ slides, language = "en" }) => {
           >
             <div
               className="w-full h-full bg-cover bg-center bg-no-repeat"
-              style={{ backgroundImage: `url(storage/${slide.image})` }}
+              style={{ backgroundImage: `url(${slide.image})` }}
             >
               <div className="absolute inset-0 bg-black/30"></div>
               <div className="absolute bottom-8 right-8 text-right">

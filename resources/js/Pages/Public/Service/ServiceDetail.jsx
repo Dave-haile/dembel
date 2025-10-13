@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Head, Link, useForm } from "@inertiajs/react";
 import MainLayout from "../Shared/MainLayout";
 
@@ -13,6 +13,7 @@ const ServiceDetail = ({ service, allServices }) => {
 
   const submit = (e) => {
     e.preventDefault();
+    // eslint-disable-next-line no-undef
     post(route("services.contact"));
   };
 
@@ -218,7 +219,11 @@ const ServiceDetail = ({ service, allServices }) => {
               {service.image && (
                 <div className="mb-8">
                   <img
-                    src={`/storage/${service.image}`}
+                    src={
+                      service.image.startsWith("http")
+                        ? service.image
+                        : `/${service.image.replace(/^\/+/, "")}`
+                    }
                     alt={service.title_en}
                     className="w-full h-64 object-cover rounded-lg"
                   />
@@ -327,4 +332,3 @@ const ServiceDetail = ({ service, allServices }) => {
 };
 
 export default ServiceDetail;
-

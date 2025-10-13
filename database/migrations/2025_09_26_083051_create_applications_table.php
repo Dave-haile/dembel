@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('subcity', 50)->nullable();
             $table->string('woreda', 50)->nullable();
             $table->string('city', 100)->nullable();
-            $table->enum('marital_status', ['single', 'married', 'divorced', 'widowed'])->nullable();
+            $table->enum('marital_status', ['Single', 'Married', 'Divorced', 'Widowed'])->nullable();
             $table->string('education_background', 100)->nullable();
             $table->foreignId('vacancy_id')->constrained('vacancies')->onDelete('cascade');
             $table->string('cv')->nullable(); // file path to CV

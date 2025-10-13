@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -53,8 +54,8 @@ class DatabaseSeeder extends Seeder
         $sliders = [
             [
                 'title_en' => 'Welcome to Our Platform',
-                'title_am' => 'Բարի գալուստ մեր պլատֆորմ',
-                'image' => 'sliders/welcome-banner.jpg',
+                'title_am' => 'እንኳን ወደ መድረካችን በደህና መጡ',
+                'image' => 'storage/sliders/welcome-banner.jpg',
                 'priority' => 1,
                 'created_by' => 1,
                 'approval' => true,
@@ -63,8 +64,8 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'title_en' => 'Special Offers',
-                'title_am' => 'Հատուկ առաջարկներ',
-                'image' => 'sliders/special-offers.jpg',
+                'title_am' => 'ልዩ ቅናሾች',
+                'image' => 'storage/sliders/special-offers.jpg',
                 'priority' => 2,
                 'created_by' => 1,
                 'approval' => true,
@@ -73,8 +74,8 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'title_en' => 'New Arrivals',
-                'title_am' => 'Նոր ժամանումներ',
-                'image' => 'sliders/new-arrivals.jpg',
+                'title_am' => 'አዲስ የተመጣጡ እቃዎች',
+                'image' => 'storage/sliders/new-arrivals.jpg',
                 'priority' => 3,
                 'created_by' => 1,
                 'approval' => true,
@@ -83,8 +84,8 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'title_en' => 'Summer Collection',
-                'title_am' => 'Ամառային հավաքածու',
-                'image' => 'sliders/summer-collection.jpg',
+                'title_am' => 'የበጋ ስብስቦች',
+                'image' => 'storage/sliders/summer-collection.jpg',
                 'priority' => 4,
                 'created_by' => 1,
                 'approval' => false,
@@ -93,8 +94,8 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'title_en' => 'Limited Time Deal',
-                'title_am' => 'Սահմանափակ ժամկետով գործարք',
-                'image' => 'sliders/limited-deal.jpg',
+                'title_am' => 'ለአንደኛ ጊዜ የተወሰነ ድርጅት',
+                'image' => 'storage/sliders/limited-deal.jpg',
                 'priority' => 5,
                 'created_by' => 1,
                 'approval' => true,
@@ -103,7 +104,7 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'title_en' => 'Premium Services',
-                'title_am' => 'Պրեմիում ծառայություններ',
+                'title_am' => 'የፕሪሚየም አገልግሎቶች',
                 'image' => null,
                 'priority' => 0,
                 'created_by' => 1,
@@ -113,8 +114,8 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'title_en' => 'Customer Reviews',
-                'title_am' => 'Հաճախորդների ակնարկներ',
-                'image' => 'sliders/customer-reviews.jpg',
+                'title_am' => 'የደንበኞች አስተያየቶች',
+                'image' => 'storage/sliders/customer-reviews.jpg',
                 'priority' => 6,
                 'created_by' => 1,
                 'approval' => true,
@@ -123,14 +124,54 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'title_en' => 'Join Our Community',
-                'title_am' => 'Միացեք մեր համայնքին',
-                'image' => 'sliders/join-community.jpg',
+                'title_am' => 'እንቁላል ወደ እኛ ማህበረሰብ',
+                'image' => 'storage/sliders/join-community.jpg',
                 'priority' => 7,
                 'created_by' => 1,
                 'approval' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'title_en' => 'Explore New Features',
+                'title_am' => 'አዲስ ባህሪያትን ያስሱ',
+                'image' => 'storage/sliders/new-features.jpg',
+                'priority' => 8,
+                'created_by' => 1,
+                'approval' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'title_en' => 'Thank You for Visiting',
+                'title_am' => 'ለማግኘትዎ እናመሰግናለን',
+                'image' => 'storage/sliders/thank-you.jpg',
+                'priority' => 9,
+                'created_by' => 1,
+                'approval' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'title_en' => 'Exclusive Member Benefits',
+                'title_am' => 'የተለየ የአባል ጥቅሞች',
+                'image' => 'storage/sliders/member-benefits.jpg',
+                'priority' => 10,
+                'created_by' => 1,
+                'approval' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'title_en' => 'Holiday Specials',
+                'title_am' => 'የበዓል ልዩ ነገሮች',
+                'image' => 'storage/sliders/holiday-specials.jpg',
+                'priority' => 11,
+                'created_by' => 1,
+                'approval' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
         ];
         $gallery = [
             [
@@ -139,7 +180,7 @@ class DatabaseSeeder extends Seeder
                 'floor_id' => 1,
                 'sector' => 'Main Hall',
                 'description' => 'The stunning central atrium with natural lighting and modern design elements',
-                'image' => 'gallery/image001.jpg',
+                'image' => 'storage/gallery/image001.jpg',
                 'approval' => true,
                 'created_by' => 1,
             ],
@@ -149,7 +190,7 @@ class DatabaseSeeder extends Seeder
                 'floor_id' => 2,
                 'sector' => 'Fashion Zone',
                 'description' => 'Premium fashion stores and boutiques featuring international brands',
-                'image' => 'gallery/image002.jpg',
+                'image' => 'storage/gallery/image002.jpg',
                 'approval' => true,
                 'created_by' => 1,
             ],
@@ -159,7 +200,7 @@ class DatabaseSeeder extends Seeder
                 'floor_id' => 3,
                 'sector' => 'Food Court',
                 'description' => 'Diverse dining options in our modern food court with international cuisine',
-                'image' => 'gallery/image003.jpg',
+                'image' => 'storage/gallery/image003.jpg',
                 'approval' => true,
                 'created_by' => 1,
             ],
@@ -169,7 +210,7 @@ class DatabaseSeeder extends Seeder
                 'floor_id' => 1,
                 'sector' => 'Central Plaza',
                 'description' => 'Annual holiday decorations and festivities bringing joy to visitors',
-                'image' => 'gallery/image004.jpg',
+                'image' => 'storage/gallery/image004.jpg',
                 'approval' => true,
                 'created_by' => 1,
             ],
@@ -179,7 +220,7 @@ class DatabaseSeeder extends Seeder
                 'floor_id' => 2,
                 'sector' => 'Luxury Wing',
                 'description' => 'High-end retail spaces with modern design and premium shopping experience',
-                'image' => 'gallery/image005.jpg',
+                'image' => 'storage/gallery/image005.jpg',
                 'approval' => true,
                 'created_by' => 1,
             ],
@@ -189,7 +230,7 @@ class DatabaseSeeder extends Seeder
                 'floor_id' => 4,
                 'sector' => 'Rooftop',
                 'description' => 'Elegant rooftop restaurant with panoramic city views and fine dining',
-                'image' => 'gallery/image006.jpg',
+                'image' => 'storage/gallery/image006.jpg',
                 'approval' => true,
                 'created_by' => 1,
             ],
@@ -199,7 +240,7 @@ class DatabaseSeeder extends Seeder
                 'floor_id' => 1,
                 'sector' => 'Entrance',
                 'description' => 'Contemporary architectural design elements showcasing modern mall aesthetics',
-                'image' => 'gallery/image019.jpg',
+                'image' => 'storage/gallery/image019.jpg',
                 'approval' => true,
                 'created_by' => 1,
             ],
@@ -209,7 +250,7 @@ class DatabaseSeeder extends Seeder
                 'floor_id' => 1,
                 'sector' => 'Event Hall',
                 'description' => 'Annual fashion week showcase featuring latest trends and designer collections',
-                'image' => 'gallery/image014.jpg',
+                'image' => 'storage/gallery/image014.jpg',
                 'approval' => true,
                 'created_by' => 1,
             ],
@@ -219,7 +260,7 @@ class DatabaseSeeder extends Seeder
                 'floor_id' => 2,
                 'sector' => 'Boutique Area',
                 'description' => 'Curated boutique shopping experience with unique and exclusive brands',
-                'image' => 'gallery/image013.jpg',
+                'image' => 'storage/gallery/image013.jpg',
                 'approval' => true,
                 'created_by' => 1,
             ],
@@ -229,7 +270,7 @@ class DatabaseSeeder extends Seeder
                 'floor_id' => 2,
                 'sector' => 'Café Corner',
                 'description' => 'Artisan coffee culture and casual dining in a relaxed atmosphere',
-                'image' => 'gallery/image020.jpg',
+                'image' => 'storage/gallery/image020.jpg',
                 'approval' => true,
                 'created_by' => 1,
             ],
@@ -239,7 +280,7 @@ class DatabaseSeeder extends Seeder
                 'floor_id' => 3,
                 'sector' => 'Skylight Area',
                 'description' => 'Stunning glass ceiling architecture allowing natural light throughout the mall',
-                'image' => 'gallery/image022.jpg',
+                'image' => 'storage/gallery/image022.jpg',
                 'approval' => true,
                 'created_by' => 1,
             ],
@@ -249,7 +290,7 @@ class DatabaseSeeder extends Seeder
                 'floor_id' => 1,
                 'sector' => 'Performance Stage',
                 'description' => 'Live entertainment and cultural events bringing community together',
-                'image' => 'gallery/image012.jpg',
+                'image' => 'storage/gallery/image012.jpg',
                 'approval' => true,
                 'created_by' => 1,
             ],
@@ -259,7 +300,7 @@ class DatabaseSeeder extends Seeder
                 'category' => 'Office',
                 'sector' => 2,
                 'description' => 'Beautifully designed modern office spaces with natural lighting',
-                'image' => 'gallery/office-spaces.jpg',
+                'image' => 'storage/gallery/office-spaces.jpg',
                 'approval' => true,
                 'created_by' => 1
             ],
@@ -269,7 +310,7 @@ class DatabaseSeeder extends Seeder
                 'category' => 'Dining',
                 'sector' => 3,
                 'description' => 'State-of-the-art conference and meeting rooms',
-                'image' => 'gallery/conference-rooms.jpg',
+                'image' => 'storage/gallery/conference-rooms.jpg',
                 'approval' => true,
                 'created_by' => 2
             ],
@@ -279,7 +320,7 @@ class DatabaseSeeder extends Seeder
                 'category' => 'Office',
                 'sector' => null, // Added missing key
                 'description' => 'Comfortable break rooms and recreational spaces',
-                'image' => 'gallery/break-areas.jpg',
+                'image' => 'storage/gallery/break-areas.jpg',
                 'approval' => false,
                 'created_by' => 1
             ],
@@ -289,7 +330,7 @@ class DatabaseSeeder extends Seeder
                 'category' => 'Office',
                 'sector' => 4,
                 'description' => 'Luxurious boardroom for executive meetings',
-                'image' => 'gallery/boardroom.jpg',
+                'image' => 'storage/gallery/boardroom.jpg',
                 'approval' => true,
                 'created_by' => 2
             ],
@@ -299,7 +340,7 @@ class DatabaseSeeder extends Seeder
                 'category' => 'Shopping',
                 'sector' => null, // Added missing key
                 'description' => 'Spacious and welcoming main lobby area',
-                'image' => 'gallery/main-lobby.jpg',
+                'image' => 'storage/gallery/main-lobby.jpg',
                 'approval' => true,
                 'created_by' => 1
             ]
@@ -313,7 +354,7 @@ class DatabaseSeeder extends Seeder
                 'sub_title_am' => 'ለሚመጣው የቡድን ግንባታ ክስተታችን ይቀላቀሉን',
                 'description_en' => 'We are excited to announce our annual company retreat scheduled for next month. This event will focus on team building and strategic planning for the upcoming year.',
                 'description_am' => 'ለሚቀጥለው ወር የታሰበውን ዓመታዊ የኩባንያ ስብሰባችን ለማስተዋወቅ ተለዛጅተናል። ይህ ዝግጅት በቡድን ግንባታ እና ለሚመጣው ዓመት በስትራቴጂክ ዕቅድ ላይ ያተኮረ ነው።',
-                'image' => 'news/retreat-2024.jpg',
+                'image' => 'storage/news/retreat-2024.jpg',
                 'pdf_file' => 'retreat-schedule.pdf',
                 'created_by' => 1,
                 'approval' => true
@@ -326,7 +367,33 @@ class DatabaseSeeder extends Seeder
                 'sub_title_am' => 'አገልግሎታችንን ወደ አዲስ ክልሎች ማስፋፋት',
                 'description_en' => 'We are proud to announce the opening of our new office location in the heart of the city, providing better access to our clients and partners.',
                 'description_am' => 'ከደምበኞቻችን እና ከጉልበተኞቻችን ጋር የተሻለ መዳረሻ ለማቅረብ በከተማዋ ማዕከል አዲስ የቢሮ መቀመጫ መከፈታችንን ለማስተዋወቅ እንትሞጣለን።',
-                'image' => 'news/new-office.jpg',
+                'image' => 'storage/news/new-office.jpg',
+                'pdf_file' => null,
+                'created_by' => 2,
+                'approval' => true
+            ],
+            [
+                'category' => 'Announcements',
+                'title_en' => 'Product Launch Event',
+                'title_am' => 'የምርት መከፈቻ ክስተት',
+                'sub_title_en' => 'Introducing our latest innovations',
+                'sub_title_am' => 'የቅርብ ጊዜ አዳዲስ ነገሮቻችንን ማስተዋወቅ',
+                'description_en' => 'Join us for the launch of our new product line, featuring cutting-edge technology and innovative design. The event will include live demonstrations and Q&A sessions.',
+                'description_am' => 'የአዲሱን የምርት መስመር ለማከፈቻችን ይቀላቀሉን፣ የቅርብ ጊዜ ቴክኖሎጂና አዳዲስ ንድፍ ያሳያል። በዝግጅቱ ቀጥታ ማሳያዎችና ጥያቄና መልስ ክፍሎች ይካሄዳሉ።',
+                'image' => 'storage/news/product-launch.jpg',
+                'pdf_file' => 'product-brochure.pdf',
+                'created_by' => 1,
+                'approval' => true
+            ],
+            [
+                'category' => 'Events',
+                'title_en' => 'Community Outreach Program',
+                'title_am' => 'የማህበረሰብ ድጋፍ እቅድ',
+                'sub_title_en' => 'Making a difference together',
+                'sub_title_am' => 'በአንድነት ለማህበረሰብ ልዩነት ማድረግ',
+                'description_en' => 'We are launching a new community outreach program aimed at supporting local initiatives and fostering positive change. Get involved and help us make a difference.',
+                'description_am' => 'በአካባቢ ድርጅቶችን ለመደገፍና አዎንታዊ ለውጥ ለማስፋፋት የተጠቃሚ የማህበረሰብ ድጋፍ እቅድ እንጀምራለን። ተሳትፎ ይውሉና ልዩነት ለማድረግ ይረዱን።',
+                'image' => 'storage/news/community-outreach.jpg',
                 'pdf_file' => null,
                 'created_by' => 2,
                 'approval' => true
@@ -341,7 +408,7 @@ class DatabaseSeeder extends Seeder
                 'sub_title_am' => 'ለንግድ ድርጅቶች ተለዋዋጭ የቢሮ መፍትሄዎች',
                 'description_en' => 'We offer fully furnished office spaces with modern amenities, high-speed internet, and 24/7 security. Perfect for startups and established businesses.',
                 'description_am' => 'ሙሉ በሙሉ የተገነቡ የቢሮ ቦታዎችን ከዘመናዊ አገልግሎቶች፣ ከፍተኛ ፍጥነት ያለው ኢንተርኔት እና 24/7 ደህንነት እናቀርባለን። ለጀማሪ እና ለተመሠረቱ ንግዶች ተስማሚ።',
-                'image' => 'service/office-rental.jpg',
+                'image' => 'storage/service/office-rental.jpg',
                 'approval' => true,
                 'created_by' => 1
             ],
@@ -352,10 +419,43 @@ class DatabaseSeeder extends Seeder
                 'sub_title_am' => 'ለአስፈላጊ ስብሰባዎችዎ ሙያዊ ቦታዎች',
                 'description_en' => 'Book our professionally equipped meeting rooms for your presentations, client meetings, and team discussions. Available in various sizes to suit your needs.',
                 'description_am' => 'ለዝግጅትዎ፣ ለደምበኞች ስብሰባ እና ለቡድን ውይይቶች የተጠናከረ የሆኑ የመገናኛ ክፍሎቻችንን ያስይዙ። እንደ ፍላጎትዎ በተለያዩ መጠኖች ይገኛሉ።',
-                'image' => 'service/meeting-rooms.jpg',
+                'image' => 'storage/service/meeting-rooms.jpg',
                 'approval' => true,
                 'created_by' => 2
-            ]
+            ],
+            [
+                'title_en' => 'Virtual Office Services',
+                'title_am' => 'የእውነተኛ ቢሮ አገልግሎቶች',
+                'sub_title_en' => 'Professional business address and support',
+                'sub_title_am' => 'ሙያዊ የንግድ አድራሻ እና ድጋፍ',
+                'description_en' => 'Our virtual office services provide you with a prestigious business address, mail handling, and phone answering services without the need for physical office space.',
+                'description_am' => 'የእውነተኛ የቢሮ አገልግሎቶቻችን ለእርስዎ ከፍተኛ የንግድ አድራሻ፣ የፖስታ አስተዳደር እና የስልክ መልስ አገልግሎቶችን ያቀርባሉ ያለ ፊዚካል የቢሮ ቦታ።',
+                'image' => 'storage/service/virtual-office.jpg',
+                'approval' => false,
+                'created_by' => 1
+            ],
+            [
+                'title_en' => 'Coworking Spaces',
+                'title_am' => 'የተሠራተኞች ቦታዎች',
+                'sub_title_en' => 'Collaborative work environments',
+                'sub_title_am' => 'የተሠራተኞች የሥራ አካባቢዎች',
+                'description_en' => 'Our coworking spaces offer a dynamic and collaborative environment for freelancers, entrepreneurs, and remote workers. Enjoy high-speed internet, meeting rooms, and networking opportunities.',
+                'description_am' => 'የተሠራተኞች ቦታዎቻችን ለነጻ ስራ አዋጅ፣ ለንግድ እና ለሩቅ እንደሚሰሩ ሰዎች የሚገኝ እና የሚጋራ አካባቢ ይሰጣል። ፍጥነታማ ኢንተርኔት፣ የመገናኛ ክፍሎች እና የመገናኛ ዕድሎችን ይዘው ይጠቀሙ።',
+                'image' => 'storage/service/coworking.jpg',
+                'approval' => true,
+                'created_by' => 2
+            ],
+            [
+                'title_en' => 'Business Support Services',
+                'title_am' => 'የንግድ ድጋፍ አገልግሎቶች',
+                'sub_title_en' => 'Comprehensive support for your business needs',
+                'sub_title_am' => 'ለየቢሮ ፍላጎቶችዎ አጠቃላይ ድጋፍ',
+                'description_en' => 'We provide a range of business support services including administrative assistance, IT support, and marketing services to help your business thrive.',
+                'description_am' => 'እኛ የንግድ ድጋፍ አገልግሎቶችን እንሰጣለን ከሚሆኑት የአስተዳደር እርዳታ፣ የIT ድጋፍ እና የማርኬቲንግ አገልግሎቶች ያሉት የቢሮ ፍላጎቶችዎ ለመፍጠር።',
+                'image' => 'storage/service/business-support.jpg',
+                'approval' => true,
+                'created_by' => 1
+            ],
         ];
         $events = [
             [
@@ -365,7 +465,7 @@ class DatabaseSeeder extends Seeder
                 'sub_title_am' => 'ከተማ ደረጃ ትዕይንት',
                 'description_en' => 'Join us for an exclusive fashion showcase featuring the latest collections from premier brands.',
                 'description_am' => 'ከፍተኛ ምርቶች የቅርብ ስብስቦችን የሚያቀርብ የፋሽን ትዕይንት ይቀላቀሉን።',
-                'image' => 'events/summer-fashion-week.jpg',
+                'image' => 'storage/events/summer-fashion-week.jpg',
                 'event_date' => '2025-07-15',
                 'created_by' => 1,
                 'approval' => true,
@@ -379,7 +479,7 @@ class DatabaseSeeder extends Seeder
                 'sub_title_am' => 'እስከ 70% ቅናሽ',
                 'description_en' => 'Massive discounts across electronics, fashion, and home living for a limited time.',
                 'description_am' => 'በኤሌክትሮኒክስ፣ ፋሽን እና የቤት እቃዎች ላይ ትልቅ ቅናሽ ለጊዜው ብቻ።',
-                'image' => 'events/weekend-super-sale.jpg',
+                'image' => 'storage/events/weekend-super-sale.jpg',
                 'event_date' => '2025-07-20',
                 'created_by' => 1,
                 'approval' => true,
@@ -393,7 +493,7 @@ class DatabaseSeeder extends Seeder
                 'sub_title_am' => 'ዓለምን ዝንብል',
                 'description_en' => 'Sample cuisines from around the world with live music and entertainment.',
                 'description_am' => 'ከዓለም አቀፍ ምግቦች ጋር በቀጥታ ሙዚቃ እና መዝናኛ ይደሰቱ።',
-                'image' => 'events/food-festival.jpg',
+                'image' => 'storage/events/food-festival.jpg',
                 'event_date' => '2025-08-05',
                 'created_by' => 2,
                 'approval' => false,
@@ -421,7 +521,7 @@ class DatabaseSeeder extends Seeder
                 'sub_title_am' => 'የማህበረሰብ ድጋፍ ክስተት',
                 'description_en' => 'Donate supplies and enjoy special deals on school essentials.',
                 'description_am' => 'ዕቃዎች ይለግሱ እና በት/ቤት እቃዎች ላይ ልዩ ቅናሽ ይውሰዱ።',
-                'image' => 'events/back-to-school.jpg',
+                'image' => 'storage/events/back-to-school.jpg',
                 'event_date' => '2025-09-01',
                 'created_by' => 1,
                 'approval' => false,
@@ -435,7 +535,7 @@ class DatabaseSeeder extends Seeder
                 'sub_title_am' => 'የቆጣሪ ክብረ በዓል',
                 'description_en' => 'Ring in the new year with fireworks, live bands, and surprises.',
                 'description_am' => 'ከእሳት እንቁራሪት፣ በቀጥታ ባንዶች እና ልዩ ዝግጅቶች ጋር አዲስ ዓመቱን በደስታ ተቀበሉ።',
-                'image' => 'events/new-year-gala.jpg',
+                'image' => 'storage/events/new-year-gala.jpg',
                 'event_date' => '2025-12-31',
                 'created_by' => 1,
                 'approval' => true,
@@ -468,11 +568,47 @@ class DatabaseSeeder extends Seeder
                 'position' => 'Freelance Consultant',
                 'testimonial' => 'As a freelancer, having access to professional meeting spaces when needed has been invaluable. The booking system is easy to use and the locations are convenient.',
                 'approval' => true
-            ]
+            ],
+            [
+                'name' => 'David Lee',
+                'position' => 'IT Specialist',
+                'testimonial' => 'The virtual office services have given my business a professional edge. The prestigious address and mail handling services are top-notch.',
+                'approval' => true
+            ],
+            [
+                'name' => 'Anna Kim',
+                'position' => 'Entrepreneur',
+                'testimonial' => 'The coworking space is vibrant and inspiring. It\'s a great place to network and collaborate with other professionals.',
+                'approval' => false
+            ],
+            [
+                'name' => 'Emily Davis',
+                'position' => 'Graphic Designer',
+                'testimonial' => 'A fantastic place to work! The community is supportive and the facilities are top-notch.',
+                'approval' => true
+            ],
+            [
+                'name' => 'James Wilson',
+                'position' => 'Financial Analyst',
+                'testimonial' => 'The business support services have been a game-changer for my consultancy. The administrative assistance has allowed me to focus more on my clients.',
+                'approval' => true
+            ],
+            [
+                'name' => 'Olivia Martinez',
+                'position' => 'HR Manager',
+                'testimonial' => 'Booking meeting rooms has never been easier. The staff is friendly and the rooms are always well-prepared.',
+                'approval' => false
+            ],
+            [
+                'name' => 'Liam Brown',
+                'position' => 'Project Manager',
+                'testimonial' => 'The office rental options are flexible and affordable. The location is perfect for our team, and the amenities are excellent.',
+                'approval' => true
+            ],
         ];
         $tenants = [
             [
-                'category_id' => 2,
+                'category_id' => 1,
                 'name' => 'Zara',
                 'description' => 'Contemporary fashion and trendy apparel for men and women.',
                 'logo' => 'storage/tenants/651493pexels-solliefoto-298863.jpg',
@@ -485,7 +621,7 @@ class DatabaseSeeder extends Seeder
                 'website' => 'www.zara.com',
             ],
             [
-                'category_id' => 3,
+                'category_id' => 2,
                 'name' => 'Swarovski',
                 'description' => 'Luxury crystal jewelry, watches, and elegant accessories.',
                 'logo' => 'storage/tenants/415793pexels-pixabay-248077.jpg',
@@ -498,7 +634,7 @@ class DatabaseSeeder extends Seeder
                 'website' => 'www.swarovski.com',
             ],
             [
-                'category_id' => 8,
+                'category_id' => 7,
                 'name' => 'Starbucks',
                 'description' => 'Premium coffee, pastries, and light refreshments.',
                 'logo' => 'storage/tenants/110697pexels-larissafarber-33794536.jpg',
@@ -511,7 +647,7 @@ class DatabaseSeeder extends Seeder
                 'website' => 'www.starbucks.com',
             ],
             [
-                'category_id' => 5,
+                'category_id' => 4,
                 'name' => 'Apple Store',
                 'description' => 'Latest iPhones, MacBooks, iPads, and premium tech accessories.',
                 'logo' => 'storage/tenants/284500pexels-gabriel-freytez-110599-341523.jpg',
@@ -524,7 +660,7 @@ class DatabaseSeeder extends Seeder
                 'website' => 'www.apple.com',
             ],
             [
-                'category_id' => 4,
+                'category_id' => 3,
                 'name' => 'Sephora',
                 'description' => 'Premium cosmetics, skincare, and beauty products.',
                 'logo' => 'storage/tenants/339633pexels-paduret-1377034.jpg',
@@ -537,7 +673,7 @@ class DatabaseSeeder extends Seeder
                 'website' => 'www.sephora.com',
             ],
             [
-                'category_id' => 4,
+                'category_id' => 3,
                 'name' => 'Nike',
                 'description' => 'Athletic wear, sneakers, and sports equipment.',
                 'logo' => 'storage/tenants/987600pexels-melvin-buezo-1253763-2529148.jpg',
@@ -550,7 +686,7 @@ class DatabaseSeeder extends Seeder
                 'website' => 'www.nike.com',
             ],
             [
-                'category_id' => 6,
+                'category_id' => 5,
                 'name' => 'IKEA Express',
                 'description' => 'Modern furniture, home decor, and storage solutions.',
                 'logo' => 'storage/tenants/707168pexels-eric-mufasa-578798-1350789.jpg',
@@ -563,7 +699,7 @@ class DatabaseSeeder extends Seeder
                 'website' => 'www.ikea.com',
             ],
             [
-                'category_id' => 7,
+                'category_id' => 6,
                 'name' => 'GameStop',
                 'description' => 'Video games, consoles, and gaming accessories.',
                 'logo' => 'storage/tenants/830791pexels-jeshoots-com-147458-442576.jpg',
@@ -576,7 +712,7 @@ class DatabaseSeeder extends Seeder
                 'website' => 'www.gamestop.com',
             ],
             [
-                'category_id' => 9,
+                'category_id' => 8,
                 'name' => 'GNC',
                 'description' => 'Health supplements, vitamins, and fitness nutrition.',
                 'logo' => 'storage/tenants/857802pexels-element5-775032.jpg',
@@ -589,7 +725,7 @@ class DatabaseSeeder extends Seeder
                 'website' => 'www.gnc.com',
             ],
             [
-                'category_id' => 3,
+                'category_id' => 2,
                 'name' => 'Pandora',
                 'description' => 'Handcrafted jewelry, charms, and personalized accessories.',
                 'logo' => 'storage/tenants/145092pexels-leah-newhouse-50725-691046.jpg',
@@ -602,7 +738,7 @@ class DatabaseSeeder extends Seeder
                 'website' => 'www.pandora.com',
             ],
             [
-                'category_id' => 8,
+                'category_id' => 7,
                 'name' => 'Five Guys',
                 'description' => 'Fresh burgers, fries, and milkshakes made to order.',
                 'logo' => 'storage/tenants/534306pexels-chanwalrus-958545.jpg',
@@ -615,7 +751,7 @@ class DatabaseSeeder extends Seeder
                 'website' => 'www.fiveguys.com',
             ],
             [
-                'category_id' => 2,
+                'category_id' => 1,
                 'name' => 'H&M',
                 'description' => 'Affordable fashion for men, women, and children.',
                 'logo' => 'storage/tenants/759087pexels-lum3n-44775-322207.jpg',
@@ -663,6 +799,676 @@ class DatabaseSeeder extends Seeder
             ]
         ];
 
+        $application = [
+            [
+                'first_name' => 'John',
+                'last_name' => 'Doe',
+                'phone' => '+1 (555) 123-4567',
+                'alt_phone' => '+1 (555) 987-6543',
+                'birth_date' => '1990-05-15',
+                'email' => 'john.doe@example.com',
+                'photo' => 'storage/applications/john_doe.jpg',
+                'subcity' => 'Addis Ketema',
+                'woreda' => 'Woreda 10',
+                'city' => 'Addis Ababa',
+                'marital_status' => 'Single',
+                'education_background' => 'Bachelor\'s Degree in Business Administration',
+                'vacancy_id' => 1,
+                'cv' => 'storage/applications/john_doe_cv.pdf',
+            ],
+            [
+                'first_name' => 'Jane',
+                'last_name' => 'Smith',
+                'phone' => '+1 (555) 234-5678',
+                'alt_phone' => '+1 (555) 876-5432',
+                'birth_date' => '1988-11-22',
+                'email' => 'jane.smith@example.com',
+                'photo' => 'storage/applications/jane_smith.jpg',
+                'subcity' => 'Addis Ketema',
+                'woreda' => 'Woreda 10',
+                'city' => 'Addis Ababa',
+                'marital_status' => 'Married',
+                'education_background' => 'Master\'s Degree in Computer Science',
+                'vacancy_id' => 2,
+                'cv' => 'storage/applications/jane_smith_cv.pdf',
+            ],
+            [
+                'first_name' => 'Michael',
+                'last_name' => 'Johnson',
+                'phone' => '+1 (555) 345-6789',
+                'alt_phone' => '+1 (555) 765-4321',
+                'birth_date' => '1992-07-30',
+                'email' => 'michael.johnson@example.com',
+                'photo' => 'storage/applications/michael_johnson.jpg',
+                'subcity' => 'Addis Ketema',
+                'woreda' => 'Woreda 10',
+                'city' => 'Addis Ababa',
+                'marital_status' => 'Single',
+                'education_background' => 'Bachelor\'s Degree in Information Technology',
+                'vacancy_id' => 3,
+                'cv' => 'storage/applications/michael_johnson_cv.pdf',
+            ]
+        ];
+
+        $Client = [
+            [
+                'image' => 'storage/clients/client1.png',
+                'title' => 'Client One'
+            ],
+            [
+                'image' => 'storage/clients/client2.png',
+                'title' => 'Client Two'
+            ],
+            [
+                'image' => 'storage/clients/client3.png',
+                'title' => 'Client Three'
+            ]
+        ];
+
+        $department = [
+            [
+                'title_en' => 'Human Resources',
+                'title_am' => 'የሰብ ኃይይ ኃላፊነት',
+                'sub_title_en' => 'Managing People and Culture',
+                'sub_title_am' => 'ሰዎችንን እና ባህላችን ማስተዳደር',
+                'body_en' => 'The Human Resources department is responsible for recruiting, training, and supporting employees. They ensure a positive work environment and compliance with labor laws.',
+                'body_am' => 'የሰብ ኃይይ ኃላፊነት ክፍል ሰራተኞችን ማሰብ፣ ማማርና ማደግ ይጠብቃል። አዎንታዊ የሥራ አካባቢን እና ከሥራ ሕጎች ጋር መስማማት ያረጋግጣል።',
+                'icon' => 'fa fa-users',
+                'image' => 'storage/department/hr.jpg',
+                'created_by' => 1,
+                'approval' => true
+            ],
+            [
+                'title_en' => 'Information Technology',
+                'title_am' => 'ቴክኖሎጂ መረጃ',
+                'sub_title_en' => 'Supporting Tech Infrastructure',
+                'sub_title_am' => 'የቴክኖሎጂ አውታረ መረብን ድጋፍ',
+                'body_en' => 'The IT department manages the company\'s technology infrastructure, including hardware, software, and network systems. They provide technical support and ensure data security.',
+                'body_am' => 'የIT ክፍል የኩባንያውን የቴክኖሎጂ አውታረ መረብ ያስተዳደራል፣ እንደ ሃርድዌር፣ ሶፍትዌር እና የኔትወርክ ስርዓቶች። ቴክኒካዊ ድጋፍ ያቀርባሉ እና የመረጃ ደህንነትን ያረጋግጣሉ።',
+                'icon' => 'fa fa-laptop',
+                'image' => 'storage/department/it.jpg',
+                'created_by' => 2,
+                'approval' => true
+            ],
+            [
+                'title_en' => 'Marketing',
+                'title_am' => 'ገበያ ማስታወቂያ',
+                'sub_title_en' => 'Promoting Products and Services',
+                'sub_title_am' => 'ምርቶችንና አገልግሎቶችን መፋፋት',
+                'body_en' => 'The Marketing department develops strategies to promote the company\'s products and services. They handle advertising, social media, and market research to reach target audiences.',
+                'body_am' => 'የገበያ ማስታወቂያ ክፍል የኩባንያውን ምርቶችንና አገልግሎቶችን ለማስተዋወቅ ዘዴዎችን ያቀናብራል። ማስታወቂያ፣ ማህበራዊ ሚዲያ እና የገበያ ምርምር ለመድረስ ይወዳሉ።',
+                'icon' => 'fa fa-bullhorn',
+                'image' => 'storage/department/marketing.jpg',
+                'created_by' => 1,
+                'approval' => false
+            ],
+            [
+                'title_en' => 'Finance',
+                'title_am' => 'ፋይናንስ',
+                'sub_title_en' => 'Managing Company Finances',
+                'sub_title_am' => 'የኩባንያ ፋይናንስ ማስተዳደር',
+                'body_en' => 'The Finance department oversees budgeting, accounting, and financial planning. They ensure the company\'s financial health and compliance with regulations.',
+                'body_am' => 'የፋይናንስ ክፍል በጀት ማዋቀር፣ በመለያ መስራት እና በፋይናንስ እቅድ ላይ ተጠቃሚ ነው። የኩባንያውን የፋይናንስ ጤና እና ከህጎች ጋር መስማማት ያረጋግጣል።',
+                'icon' => 'fa fa-calculator',
+                'image' => 'storage/department/finance.jpg',
+                'created_by' => 2,
+                'approval' => true
+            ],
+            [
+                'title_en' => 'Customer Service',
+                'title_am' => 'የደንበኞች አገልግሎት',
+                'sub_title_en' => 'Ensuring Customer Satisfaction',
+                'sub_title_am' => 'የደንበኞች ደስታ ማረጋገጥ',
+                'body_en' => 'The Customer Service department handles inquiries, complaints, and support requests. They aim to provide excellent service and maintain strong customer relationships.',
+                'body_am' => 'የደንበኞች አገልግሎት ክፍል ጥያቄዎች፣ ክስተቶች እና የድጋፍ ጥያቄዎችን ያስተዳደራል። ጥሩ አገልግሎት ለመስጠት እና ጠንካራ የደንበኞች ግንኙነቶችን ለመጠበቅ ይጠብቃል።',
+                'icon' => 'fa fa-headset',
+                'image' => 'storage/department/customer_service.jpg',
+                'created_by' => 1,
+                'approval' => false
+            ]
+        ];
+
+        $team = [
+            [
+                'name_en' => 'Alice Johnson',
+                'name_am' => 'አሊስ ጆንሰን',
+                'position' => 'Chief Executive Officer',
+                'email' => 'alice.johnson@example.com',
+                'phone' => '+1 (555) 111-2222',
+                'photo' => 'storage/team/alice_johnson.jpg',
+                'created_by' => 1,
+                'approval' => true
+            ],
+            [
+                'name_en' => 'Bob Smith',
+                'name_am' => 'ቦብ ስሚዝ',
+                'position' => 'Chief Technology Officer',
+                'email' => 'bob.smith@example.com',
+                'phone' => '+1 (555) 222-3333',
+                'photo' => 'storage/team/bob_smith.jpg',
+                'created_by' => 1,
+                'approval' => true
+            ],
+            [
+                'name_en' => 'Catherine Lee',
+                'name_am' => 'ካትሪን ሊ',
+                'position' => 'Chief Marketing Officer',
+                'email' => 'catherine.lee@example.com',
+                'phone' => '+1 (555) 333-4444',
+                'photo' => 'storage/team/catherine_lee.jpg',
+                'created_by' => 1,
+                'approval' => true
+            ],
+            [
+                'name_en' => 'David Brown',
+                'name_am' => 'ዴቪድ ብራውን',
+                'position' => 'Chief Financial Officer',
+                'email' => 'david.brown@example.com',
+                'phone' => '+1 (555) 444-5555',
+                'photo' => 'storage/team/david_brown.jpg',
+                'created_by' => 1,
+                'approval' => true
+            ],
+            [
+                'name_en' => 'Eva Green',
+                'name_am' => 'ኢቫ ግሪን',
+                'position' => 'Head of Human Resources',
+                'email' => 'eva.green@example.com',
+                'phone' => '+1 (555) 555-6666',
+                'photo' => 'storage/team/eva_green.jpg',
+                'created_by' => 1,
+                'approval' => true
+            ]
+        ];
+
+        $vacancies = [
+            [
+                'title' => 'Software Engineer',
+                'place_of_work' => 'Addis Ababa',
+                'category' => 'IT',
+                'employment_type' => 'Full-time',
+                'posted_date' => '2024-06-01',
+                'closing_date' => '2024-06-30',
+                'job_description' => 'Develop and maintain web applications using modern frameworks and technologies.',
+                'how_to_apply' => 'Submit your resume and cover letter to hr@example.com',
+                'qualification' => 'Bachelor\'s degree in Computer Science or related field.',
+                'skill_req' => 'Proficiency in PHP, JavaScript, and SQL.',
+                'salary' => '$60,000 - $80,000 per year',
+                'term_of_employment' => 'Permanent',
+                'contact' => '+1 (555) 123-4567',
+                'address' => '123 Main St, Addis Ababa',
+                'required_candidates' => 3,
+                'approval' => true,
+            ],
+            [
+                'title' => 'Marketing Specialist',
+                'place_of_work' => 'Addis Ababa',
+                'category' => 'Marketing',
+                'employment_type' => 'Full-time',
+                'posted_date' => '2024-06-05',
+                'closing_date' => '2024-07-05',
+                'job_description' => 'Plan and execute marketing campaigns to promote our products and services.',
+                'how_to_apply' => 'Send your CV to hr@example.com',
+                'qualification' => 'Bachelor\'s degree in Marketing or related field.',
+                'skill_req' => 'Experience with digital marketing and social media platforms.',
+                'salary' => '$50,000 - $70,000 per year',
+                'term_of_employment' => 'Permanent',
+                'contact' => '+1 (555) 234-5678',
+                'address' => '123 Main St, Addis Ababa',
+                'required_candidates' => 2,
+                'approval' => true,
+            ],
+            [
+                'title' => 'Customer Service Representative',
+                'place_of_work' => 'Addis Ababa',
+                'category' => 'Customer Service',
+                'employment_type' => 'Part-time',
+                'posted_date' => '2024-06-10',
+                'closing_date' => '2024-07-10',
+                'job_description' => 'Assist customers with inquiries and provide excellent service.',
+                'how_to_apply' => 'Apply online at our website.',
+                'qualification' => 'High school diploma or equivalent.',
+                'skill_req' => 'Strong communication and problem-solving skills.',
+                'salary' => '$15 per hour',
+                'term_of_employment' => 'Temporary',
+                'contact' => '+1 (555) 345-6789',
+                'address' => '123 Main St, Addis Ababa',
+                'required_candidates' => 5,
+                'approval' => false,
+            ],
+            [
+                'title' => 'Data Analyst',
+                'place_of_work' => 'Addis Ababa',
+                'category' => 'IT',
+                'employment_type' => 'Full-time',
+                'posted_date' => '2024-06-15',
+                'closing_date' => '2024-07-15',
+                'job_description' => 'Analyze data to provide insights and support business decisions.',
+                'how_to_apply' => 'Email your resume to hr@example.com',
+                'qualification' => 'Bachelor\'s degree in Statistics, Mathematics, or related field.',
+                'skill_req' => 'Experience with data analysis tools such as Excel, SQL, and Python.',
+                'salary' => '$55,000 - $75,000 per year',
+                'term_of_employment' => 'Permanent',
+                'contact' => '+1 (555) 456-7890',
+                'address' => '123 Main St, Addis Ababa',
+                'required_candidates' => 2,
+                'approval' => true,
+            ]
+        ];
+
+        $freeSpaces = [
+            [
+                'name' => 'Office Space A1',
+                'floor_id' => 1,
+                'wing_or_zone' => 'North Wing',
+                'area_sqm' => 50,
+                'dimensions' => '5m x 10m',
+                'has_window' => true,
+                'has_ventilation' => true,
+                'has_plumbing' => false,
+                'has_electricity' => true,
+                'features' => json_encode(['Air Conditioning', 'High-Speed Internet', 'Conference Room Access']),
+                'monthly_rent' => 1200,
+                'rent_currency' => 'USD',
+                'rent_includes' => json_encode(['Utilities', 'Maintenance']),
+                'negotiable' => true,
+                'thumbnail' => 'storage/free_spaces/office_a1.jpg',
+                'gallery' => json_encode(['storage/free_spaces/office_a1_1.jpg', 'storage/free_spaces/office_a1_2.jpg']),
+                'virtual_tour_url' => 'https://virtualtour.example.com/office_a1',
+                'short_description' => 'A modern office space located in the North Wing with great amenities.',
+                'full_description' => 'This office space offers a comfortable working environment with access to conference rooms, high-speed internet, and air conditioning. Perfect for small to medium-sized teams.',
+                'contact_person' => 'Jane Doe',
+                'contact_phone' => '+1 (555) 123-4567',
+                'contact_email' => 'jane.doe@example.com',
+                'meta_title' => 'Office Space A1 for Rent',
+                'meta_description' => 'Rent a modern office space in the North Wing with great amenities.',
+                'slug' => 'office-space-a1',
+                'availability_status' => 'available',
+            ],
+            [
+                'name' => 'Office Space B2',
+                'floor_id' => 2,
+                'wing_or_zone' => 'East Wing',
+                'area_sqm' => 75,
+                'dimensions' => '7.5m x 10m',
+                'has_window' => true,
+                'has_ventilation' => true,
+                'has_plumbing' => true,
+                'has_electricity' => true,
+                'features' => json_encode(['Air Conditioning', 'High-Speed Internet', 'Private Restroom']),
+                'monthly_rent' => 1800,
+                'rent_currency' => 'USD',
+                'rent_includes' => json_encode(['Utilities', 'Maintenance', 'Cleaning Services']),
+                'negotiable' => false,
+                'thumbnail' => 'storage/free_spaces/office_b2.jpg',
+                'gallery' => json_encode(['storage/free_spaces/office_b2_1.jpg', 'storage/free_spaces/office_b2_2.jpg']),
+                'virtual_tour_url' => 'https://virtualtour.example.com/office_b2',
+                'short_description' => 'Spacious office space in the East Wing with private restroom.',
+                'full_description' => 'This spacious office space is ideal for growing businesses. It includes a private restroom, high-speed internet, and access to all building amenities.',
+                'contact_person' => 'John Smith',
+                'contact_phone' => '+1 (555) 234-5678',
+                'contact_email' => 'john.smith@example.com',
+                'meta_title' => 'Office Space B2 for Rent',
+                'meta_description' => 'Rent a spacious office space in the East Wing with private restrooms.',
+                'slug' => 'office-space-b2',
+                'availability_status' => 'available',
+            ],
+            [
+                'name' => 'Office Space C3',
+                'floor_id' => 3,
+                'wing_or_zone' => 'South Wing',
+                'area_sqm' => 100,
+                'dimensions' => '10m x 10m',
+                'has_window' => false,
+                'has_ventilation' => true,
+                'has_plumbing' => true,
+                'has_electricity' => true,
+                'features' => json_encode(['Air Conditioning', 'High-Speed Internet', 'Conference Room Access', 'Private Restroom']),
+                'monthly_rent' => 2500,
+                'rent_currency' => 'USD',
+                'rent_includes' => json_encode(['Utilities', 'Maintenance', 'Cleaning Services', '24/7 Access']),
+                'negotiable' => true,
+                'thumbnail' => 'storage/free_spaces/office_c3.jpg',
+                'gallery' => json_encode(['storage/free_spaces/office_c3_1.jpg', 'storage/free_spaces/office_c3_2.jpg']),
+                'virtual_tour_url' => 'https://virtualtour.example.com/office_c3',
+                'short_description' => 'Large office space in the South Wing with full amenities.',
+                'full_description' => 'This large office space is perfect for established businesses looking for a professional environment. It includes access to conference rooms, private restrooms, and 24/7 building access.',
+                'contact_person' => 'Emily Davis',
+                'contact_phone' => '+1 (555) 345-6789',
+                'contact_email' => 'emily.davis@example.com',
+                'meta_title' => 'Office Space C3 for Rent',
+                'meta_description' => 'Rent a large office space in the South Wing with full amenities.',
+                'slug' => 'office-space-c3',
+                'availability_status' => 'occupied',
+            ],
+            [
+                'name' => 'Office Space D4',
+                'floor_id' => 4,
+                'wing_or_zone' => 'West Wing',
+                'area_sqm' => 60,
+                'dimensions' => '6m x 10m',
+                'has_window' => true,
+                'has_ventilation' => true,
+                'has_plumbing' => false,
+                'has_electricity' => true,
+                'features' => json_encode(['Air Conditioning', 'High-Speed Internet']),
+                'monthly_rent' => 1400,
+                'rent_currency' => 'USD',
+                'rent_includes' => json_encode(['Utilities', 'Maintenance']),
+                'negotiable' => false,
+                'thumbnail' => 'storage/free_spaces/office_d4.jpg',
+                'gallery' => json_encode(['storage/free_spaces/office_d4_1.jpg', 'storage/free_spaces/office_d4_2.jpg']),
+                'virtual_tour_url' => 'https://virtualtour.example.com/office_d4',
+                'short_description' => 'Cozy office space in the West Wing with essential amenities.',
+                'full_description' => 'This cozy office space is ideal for small teams or startups. It offers essential amenities such as high-speed internet and air conditioning in a professional setting.',
+                'contact_person' => 'Michael Brown',
+                'contact_phone' => '+1 (555) 456-7890',
+                'contact_email' => 'michael.brown@example.com',
+                'meta_title' => 'Office Space D4 for Rent',
+                'meta_description' => 'Rent a cozy office space in the West Wing with essential amenities.',
+                'slug' => 'office-space-d4',
+                'availability_status' => 'available',
+            ],
+            [
+                'name' => 'Office Space E5',
+                'floor_id' => 5,
+                'wing_or_zone' => 'Central Zone',
+                'area_sqm' => 80,
+                'dimensions' => '8m x 10m',
+                'has_window' => true,
+                'has_ventilation' => true,
+                'has_plumbing' => true,
+                'has_electricity' => true,
+                'features' => json_encode(['Air Conditioning', 'High-Speed Internet', 'Private Restroom']),
+                'monthly_rent' => 2000,
+                'rent_currency' => 'USD',
+                'rent_includes' => json_encode(['Utilities', 'Maintenance', 'Cleaning Services']),
+                'negotiable' => true,
+                'thumbnail' => 'storage/free_spaces/office_e5.jpg',
+                'gallery' => json_encode(['storage/free_spaces/office_e5_1.jpg', 'storage/free_spaces/office_e5_2.jpg']),
+                'virtual_tour_url' => 'https://virtualtour.example.com/office_e5',
+                'short_description' => 'Modern office space in the Central Zone with private restroom.',
+                'full_description' => 'This modern office space is perfect for businesses seeking a central location. It includes a private restroom, high-speed internet, and access to all building amenities.',
+                'contact_person' => 'Sarah Wilson',
+                'contact_phone' => '+1 (555) 567-8901',
+                'contact_email' => 'sarah.wilson@example.com',
+                'meta_title' => 'Office Space E5 for Rent',
+                'meta_description' => 'Rent a modern office space in the Central Zone with private restroom.',
+                'slug' => 'office-space-e5',
+                'availability_status' => 'available',
+            ],
+            [
+                'name' => "Office Space A1",
+                'floor_id' => 1,
+                'wing_or_zone' => "North Wing",
+                'area_sqm' => "50.00",
+                'dimensions' => "5m x 10m",
+                'has_window' => true,
+                'has_ventilation' => true,
+                'has_plumbing' => false,
+                'has_electricity' => true,
+                'features' => json_encode(
+                    ["Air Conditioning", "High-Speed Internet", "Conference Room Access"]
+                ),
+                'monthly_rent' => "1200.00",
+                'rent_currency' => "USD",
+                'rent_includes' => json_encode(
+                    ["Utilities", "Maintenance"]
+                ),
+                'negotiable' => true,
+                'thumbnail' => "storage/free_spaces/image.jpg",
+                'gallery' => json_encode(
+                    [
+                        "storage/free_spaces/image001.jpg",
+                        "storage/free_spaces/image002.jpg",
+                        "storage/free_spaces/image003.jpg"
+                    ]
+                ),
+                'virtual_tour_url' => "https://virtualtour.example.com/office_a1",
+                'short_description' => "A modern office space located in the North Wing with great amenities.",
+                'full_description' => "This office space offers a comfortable working environment with access to conference rooms, high-speed internet, and air conditioning. Perfect for small to medium-sized teams.",
+                'contact_person' => "Jane Doe",
+                'contact_phone' => "+1 (555) 123-4567",
+                'contact_email' => "jane.doe@example.com",
+                'availability_status' => "available",
+            ],
+            [
+                'name' => "Retail Shop B2",
+                'floor_id' => 1,
+                'wing_or_zone' => "South Wing",
+                'area_sqm' => "75.00",
+                'dimensions' => "7.5m x 10m",
+                'has_window' => true,
+                'has_ventilation' => true,
+                'has_plumbing' => true,
+                'has_electricity' => true,
+                'features' => json_encode(["Street Facing", "Glass Storefront", "Display Windows", "Storage Room"]),
+                'monthly_rent' => "2500.00",
+                'rent_currency' => "USD",
+                'rent_includes' => json_encode(["Utilities", "Maintenance", "Cleaning Services"]),
+                'negotiable' => false,
+                'thumbnail' => "storage/free_spaces/image004.jpg",
+                'gallery' => json_encode([
+                    "storage/free_spaces/image005.jpg",
+                    "storage/free_spaces/image006.jpg",
+                    "storage/free_spaces/image007.jpg"
+                ]),
+                'virtual_tour_url' => null,
+                'short_description' => "Prime retail location with excellent foot traffic and visibility.",
+                'full_description' => "Located in the high-traffic South Wing, this retail space features large glass storefronts, perfect for fashion, electronics, or specialty stores. Includes a dedicated storage area.",
+                'contact_person' => "John Smith",
+                'contact_phone' => "+1 (555) 987-6543",
+                'contact_email' => "john.smith@example.com",
+                'availability_status' => "available",
+            ],
+            [
+                'name' => "Food Kiosk C3",
+                'floor_id' => 2,
+                'wing_or_zone' => "Food Court",
+                'area_sqm' => "25.00",
+                'dimensions' => "5m x 5m",
+                'has_window' => false,
+                'has_ventilation' => true,
+                'has_plumbing' => true,
+                'has_electricity' => true,
+                'features' => json_encode(["Commercial Kitchen Equipment", "Grease Trap", "Exhaust System", "Serving Counter"]),
+                'monthly_rent' => "1800.00",
+                'rent_currency' => "USD",
+                'rent_includes' => json_encode(["Utilities", "Waste Management"]),
+                'negotiable' => true,
+                'thumbnail' => "storage/free_spaces/image008.jpg",
+                'gallery' => json_encode([
+                    "storage/free_spaces/image009.jpg",
+                    "storage/free_spaces/image010.jpg"
+                ]),
+                'virtual_tour_url' => "https://virtualtour.example.com/kiosk_c3",
+                'short_description' => "Fully equipped food kiosk in the bustling food court area.",
+                'full_description' => "This kiosk comes with all necessary equipment for food preparation and service. Located in the center of our food court with high customer traffic throughout the day.",
+                'contact_person' => "Maria Garcia",
+                'contact_phone' => "+1 (555) 456-7890",
+                'contact_email' => "maria.garcia@example.com",
+                'availability_status' => "reserved",
+            ],
+            [
+                'name' => "Luxury Boutique D4",
+                'floor_id' => 2,
+                'wing_or_zone' => "East Wing",
+                'area_sqm' => "120.00",
+                'dimensions' => "10m x 12m",
+                'has_window' => true,
+                'has_ventilation' => true,
+                'has_plumbing' => true,
+                'has_electricity' => true,
+                'features' => json_encode(["High Ceilings", "Designer Lighting", "Fitting Rooms", "VIP Area", "Security System"]),
+                'monthly_rent' => "4500.00",
+                'rent_currency' => "USD",
+                'rent_includes' => json_encode(["Climate Control", "Security", "Cleaning"]),
+                'negotiable' => false,
+                'thumbnail' => "storage/free_spaces/image011.jpg",
+                'gallery' => json_encode([
+                    "storage/free_spaces/image012.jpg",
+                    "storage/free_spaces/image013.jpg",
+                    "storage/free_spaces/image014.jpg"
+                ]),
+                'virtual_tour_url' => "https://virtualtour.example.com/boutique_d4",
+                'short_description' => "Premium space ideal for high-end fashion and luxury brands.",
+                'full_description' => "A stunning boutique space with architectural details and premium finishes. Features high ceilings, designer lighting, and a dedicated VIP area for exclusive clientele.",
+                'contact_person' => "David Lee",
+                'contact_phone' => "+1 (555) 234-5678",
+                'contact_email' => "david.lee@example.com",
+                'availability_status' => "available",
+            ],
+            [
+                'name' => "Tech Store E5",
+                'floor_id' => 1,
+                'wing_or_zone' => "West Wing",
+                'area_sqm' => "90.00",
+                'dimensions' => "9m x 10m",
+                'has_window' => true,
+                'has_ventilation' => true,
+                'has_plumbing' => false,
+                'has_electricity' => true,
+                'features' => json_encode(["Extra Power Outlets", "Network Infrastructure", "Display Shelving", "Demo Area"]),
+                'monthly_rent' => "3200.00",
+                'rent_currency' => "USD",
+                'rent_includes' => json_encode(["Internet", "Utilities"]),
+                'negotiable' => true,
+                'thumbnail' => "storage/free_spaces/image015.jpg",
+                'gallery' => json_encode([
+                    "storage/free_spaces/image016.jpg",
+                    "storage/free_spaces/image017.jpg"
+                ]),
+                'virtual_tour_url' => null,
+                'short_description' => "Modern space perfect for electronics and technology retail.",
+                'full_description' => "Designed specifically for tech retailers with enhanced electrical infrastructure, network capabilities, and demo areas for product displays and customer interactions.",
+                'contact_person' => "Sarah Johnson",
+                'contact_phone' => "+1 (555) 345-6789",
+                'contact_email' => "sarah.johnson@example.com",
+                'availability_status' => "occupied",
+            ],
+            [
+                'name' => "Wellness Studio F6",
+                'floor_id' => 3,
+                'wing_or_zone' => "North Wing",
+                'area_sqm' => "100.00",
+                'dimensions' => "10m x 10m",
+                'has_window' => true,
+                'has_ventilation' => true,
+                'has_plumbing' => true,
+                'has_electricity' => true,
+                'features' => json_encode(["Mirrors", "Rubber Flooring", "Storage Lockers", "Reception Area", "Changing Rooms"]),
+                'monthly_rent' => "2800.00",
+                'rent_currency' => "USD",
+                'rent_includes' => json_encode(["Water", "Climate Control"]),
+                'negotiable' => true,
+                'thumbnail' => "storage/free_spaces/image018.jpg",
+                'gallery' => json_encode([
+                    "storage/free_spaces/image018.jpg",
+                    "storage/free_spaces/image019.jpg"
+                ]),
+                'virtual_tour_url' => "https://virtualtour.example.com/wellness_f6",
+                'short_description' => "Spacious studio ideal for fitness, yoga, or wellness services.",
+                'full_description' => "A versatile wellness space with natural light, mirrors, and specialized flooring. Perfect for yoga studios, fitness centers, dance classes, or health clinics.",
+                'contact_person' => "Emily Chen",
+                'contact_phone' => "+1 (555) 567-8901",
+                'contact_email' => "emily.chen@example.com",
+                'availability_status' => "available",
+            ],
+            [
+                'name' => 'Premium Office Suite A1',
+                'floor_id' => 1,
+                'wing_or_zone' => 'North Wing',
+                'area_sqm' => '50.00',
+                'dimensions' => '5m x 10m',
+                'has_window' => true,
+                'has_ventilation' => true,
+                'has_plumbing' => false,
+                'has_electricity' => true,
+                'features' => json_encode(["Air Conditioning", "High-Speed Internet", "Conference Room Access"]),
+                'monthly_rent' => '1200.00',
+                'rent_currency' => 'USD',
+                'rent_includes' => json_encode(["Utilities", "Maintenance"]),
+                'negotiable' => true,
+                'thumbnail' => 'storage/free_spaces/image020.jpg',
+                'gallery' => json_encode([
+                    'storage/free_spaces/image021.jpg',
+                    'storage/free_spaces/image022.jpg',
+                    'storage/free_spaces/image023.jpg',
+                ]),
+                'virtual_tour_url' => 'https://virtualtour.example.com/office_a1',
+                'short_description' => 'A modern office space located in the North Wing with great amenities.',
+                'full_description' => 'This office space offers a comfortable working environment with access to conference rooms, high-speed internet, and air conditioning. Perfect for small to medium-sized teams looking for a professional workspace in a prime location.',
+                'contact_person' => 'Jane Doe',
+                'contact_phone' => '+1 (555) 123-4567',
+                'contact_email' => 'jane.doe@dembelmall.com',
+                'meta_title' => 'Office Space A1 for Rent',
+                'meta_description' => 'Rent a modern office space in the North Wing with great amenities.',
+                'slug' => 'office-space-a1',
+                'availability_status' => 'available',
+            ],
+            [
+                'name' => 'Retail Shop B2',
+                'floor_id' => 2,
+                'wing_or_zone' => 'South Wing',
+                'area_sqm' => '75.00',
+                'dimensions' => '7.5m x 10m',
+                'has_window' => true,
+                'has_ventilation' => true,
+                'has_plumbing' => true,
+                'has_electricity' => true,
+                'features' => json_encode(["Street Facing", "Storage Room", "Security System"]),
+                'monthly_rent' => '2500.00',
+                'rent_currency' => 'USD',
+                'rent_includes' => json_encode(["Security", "Cleaning"]),
+                'negotiable' => false,
+                'thumbnail' => 'storage/free_spaces/image024.jpg',
+                'gallery' => json_encode([
+                    'storage/free_spaces/image024.jpg',
+                    'storage/free_spaces/image025.jpg',
+                ]),
+                'virtual_tour_url' => null,
+                'short_description' => 'Prime retail location with high foot traffic and excellent visibility.',
+                'full_description' => 'This retail space is perfectly positioned in the South Wing with maximum visibility and foot traffic. Features include a storage room, security system, and street-facing windows. Ideal for fashion, electronics, or specialty retail businesses.',
+                'contact_person' => 'Mike Johnson',
+                'contact_phone' => '+1 (555) 234-5678',
+                'contact_email' => 'mike.johnson@dembelmall.com',
+                'meta_title' => 'Retail Shop B2 for Rent',
+                'meta_description' => 'Prime retail location with high foot traffic.',
+                'slug' => 'retail-shop-b2',
+                'availability_status' => 'reserved',
+            ],
+            [
+                'name' => 'Food Court Kiosk C1',
+                'floor_id' => 3,
+                'wing_or_zone' => 'Central Plaza',
+                'area_sqm' => '25.00',
+                'dimensions' => '5m x 5m',
+                'has_window' => false,
+                'has_ventilation' => true,
+                'has_plumbing' => true,
+                'has_electricity' => true,
+                'features' => json_encode(["Kitchen Equipment", "Exhaust System", "Refrigeration"]),
+                'monthly_rent' => '1800.00',
+                'rent_currency' => 'USD',
+                'rent_includes' => json_encode(["Utilities", "Equipment Maintenance"]),
+                'negotiable' => true,
+                'thumbnail' => 'storage/free_spaces/image026.jpg',
+                'gallery' => json_encode([
+                    'storage/free_spaces/image026.jpg',
+                ]),
+                'virtual_tour_url' => 'https://virtualtour.example.com/kiosk_c1',
+                'short_description' => 'Compact food service space in the busy Central Plaza food court.',
+                'full_description' => 'This food court kiosk is strategically located in the Central Plaza, offering maximum exposure to hungry shoppers. Comes fully equipped with kitchen facilities, exhaust system, and refrigeration. Perfect for quick-service restaurants, coffee shops, or specialty food vendors.',
+                'contact_person' => 'Sarah Wilson',
+                'contact_phone' => '+1 (555) 345-6789',
+                'contact_email' => 'sarah.wilson@dembelmall.com',
+                'meta_title' => 'Food Court Kiosk C1 for Rent',
+                'meta_description' => 'Food service space in Central Plaza food court.',
+                'slug' => 'food-court-kiosk-c1',
+                'availability_status' => 'available',
+            ],
+
+        ];
 
         // DB::table('sliders')->insert($sliders);
         // DB::table('floors')->insert($floor);
@@ -672,5 +1478,41 @@ class DatabaseSeeder extends Seeder
         // DB::table('testimonials')->insert($testimonials);
         // DB::table('events')->insert($events);
         // DB::table('tenants')->insert($tenants);
+        // DB::table('vacancies')->insert($vacancies);
+        // DB::table('applications')->insert($application);
+        // DB::table('clients')->insert($Client);
+        // DB::table('departments')->insert($department);
+        // DB::table('teams')->insert($team);
+        // Insert free_spaces rows one-by-one to avoid SQLite "all VALUES must have the same number of terms" error
+        // and to guarantee unique slugs
+        // $usedSlugs = [];
+        // foreach ($freeSpaces as $space) {
+        //     $baseSlug = !empty($space['slug'])
+        //         ? Str::slug($space['slug'])
+        //         : (!empty($space['name']) ? Str::slug($space['name']) : null);
+
+        //     if ($baseSlug) {
+        //         $uniqueSlug = $baseSlug;
+        //         $suffix = 2;
+        //         while (
+        //             DB::table('free_spaces')->where('slug', $uniqueSlug)->exists() ||
+        //             in_array($uniqueSlug, $usedSlugs, true)
+        //         ) {
+        //             $uniqueSlug = $baseSlug . '-' . $suffix;
+        //             $suffix++;
+        //         }
+        //         $space['slug'] = $uniqueSlug;
+        //         $usedSlugs[] = $uniqueSlug;
+        //     }
+        //     $normalize = function ($value) {
+        //         if ($value === '?' || $value === '') return null;
+        //         return $value;
+        //     };
+        //     $space['virtual_tour_url'] = $normalize($space['virtual_tour_url'] ?? null);
+        //     $space['meta_title'] = $normalize($space['meta_title'] ?? null);
+        //     $space['meta_description'] = $normalize($space['meta_description'] ?? null);
+
+        //     DB::table('free_spaces')->insert($space);
+        // }
     }
 }

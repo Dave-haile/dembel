@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  ShoppingBag,
-  Car,
-  Coffee,
-  Users,
-  Shield,
-  Headphones,
-  ArrowRight,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const Services = ({ services, language = "en" }) => {
   return (
@@ -31,7 +23,7 @@ const Services = ({ services, language = "en" }) => {
             >
               <div className="w-64 h-44 bg-gray-200 mb-4 mx-auto flex items-center justify-center overflow-hidden">
                 <img
-                  src={`storage/${service.image}`}
+                  src={`${service.image}`}
                   className="object-cover w-full h-full transform group-hover:scale-110 transition duration-300 rounded-lg hover:rounded-xl"
                   alt=""
                 />

@@ -5,6 +5,7 @@ import { Link } from "@inertiajs/react";
 export default function Gallery({ galleries, language = "en" }) {
   const [selectedImage, setSelectedImage] = useState(null);
 
+  const defaultImages = [];
   const displayImages =
     galleries.length > 0
       ? galleries.filter((gallery) => gallery.approval)

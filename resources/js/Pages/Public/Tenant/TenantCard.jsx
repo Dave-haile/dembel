@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 import { MapPin, Clock } from "lucide-react";
 
 const TenantCard = ({ tenant }) => {
@@ -20,22 +20,28 @@ const TenantCard = ({ tenant }) => {
   // Use the correct route name
   const getTenantDetailUrl = (tenantId) => {
     try {
+      // eslint-disable-next-line no-undef
       return route("tenant.show", tenantId);
     } catch (error) {
-      console.warn("Route not found, using fallback URL");
+      console.warn("Route not found, using fallback URL", error);
       return `/tenant/${tenantId}`;
     }
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden group">
+    <div
+      onClick={() => {
+        router.visit(getTenantDetailUrl(tenant.id));
+      }}
+      className="bg-white rounded-2xl shadow-lg hover:cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden group"
+    >
       <div className="relative overflow-hidden">
         <img
-          src={tenant.logo || "/images/default-tenant-logo.png"}
+          src={tenant.logo || "https://placehold.co/1200x800?text=No+Image"}
           alt={tenant.name}
           className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
           onError={(e) => {
-            e.target.src = "/images/default-tenant-logo.png";
+            e.target.src = "https://placehold.co/1200x800?text=No+Image";
           }}
         />
         <div className="absolute top-4 right-4">
@@ -44,7 +50,7 @@ const TenantCard = ({ tenant }) => {
               tenant.category
             )}`}
           >
-            {tenant.category_name || "General"}
+            {tenant.category.name || "General"}
           </span>
         </div>
       </div>

@@ -21,7 +21,7 @@ const Tenant = ({ tenants, categories }) => {
         tenant.description?.toLowerCase().includes(searchTerm.toLowerCase());
 
       const matchesCategory =
-        selectedCategory === "all" || tenant.category === selectedCategory;
+        selectedCategory === "all" || tenant.category?.id === selectedCategory;
 
       return matchesSearch && matchesCategory;
     });

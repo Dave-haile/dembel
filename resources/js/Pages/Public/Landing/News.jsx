@@ -3,6 +3,7 @@ import { Calendar, ArrowRight } from "lucide-react";
 import { Link } from "@inertiajs/react";
 
 const News = ({ news, language = "en" }) => {
+  const defaultNews = [];
   const displayNews =
     news.length > 0 ? news.filter((item) => item.approval) : defaultNews;
 
@@ -36,9 +37,7 @@ const News = ({ news, language = "en" }) => {
               <div className="relative overflow-hidden">
                 <img
                   src={
-                    item.image.includes("https")
-                      ? item.image
-                      : `storage/${item.image}`
+                    item.image.includes("https") ? item.image : `${item.image}`
                   }
                   alt={language === "am" ? item.title_am : item.title_en}
                   className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"

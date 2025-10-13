@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FreeSpaceController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
@@ -32,4 +33,10 @@ Route::get('/tenant', [TenantController::class, 'index'])->name('tenant.index');
 Route::get('/tenant/{tenant}', [TenantController::class, 'show'])->name('tenant.show');
 
 Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
+
+
+Route::get('/space', [FreeSpaceController::class, 'index'])->name('free-space.index');
+Route::get('/space/{freeSpace:slug}', [FreeSpaceController::class, 'show'])->name('free-space.show');
+Route::get('/spaces/load', [FreeSpaceController::class, 'loadMore'])->name('free-spaces.load');
+
 require __DIR__ . '/auth.php';

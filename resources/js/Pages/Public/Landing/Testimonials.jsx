@@ -48,7 +48,7 @@ const Testimonials = ({ testimonials, language = "en" }) => {
   }
 
   return (
-    <section className="relative py-20 overflow-hidden mt-[40rem] ">
+    <section className="relative py-20 overflow-hidden mt-[27rem] ">
       <div
         className="absolute inset-0 bg-cover bg-center bg-fixed"
         style={{

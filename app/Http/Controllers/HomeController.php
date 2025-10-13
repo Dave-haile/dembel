@@ -20,8 +20,8 @@ class HomeController extends Controller
         $sliders = Slider::approved()->ordered()->get();
         $testimonials = Testimonial::approved()->get();
         $news = News::approved()->orderBy('created_at', 'DESC')->limit(3)->get();
-        $services = Service::approved()->orderBy('id', 'DESC')->get();
-        $gallery = Gallery::approved()->orderBy('id', 'DESC')->limit(7)->get();
+        $services = Service::approved()->orderBy('id', 'DESC')->limit(3)->get();
+        $gallery = Gallery::approved()->orderBy('id', 'DESC')->limit(6)->get();
         $event = Event::approved()->orderBy('created_at', 'DESC')->limit(3)->get();
         $tenants = Tenant::with('category')->orderBy('id', 'ASC')->limit(3)->get();
 
