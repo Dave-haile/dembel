@@ -86,3 +86,8 @@ html {
 .scrollbar-hide::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
 }
+body.no-scroll {
+    overflow: hidden;
+    /* Prevent layout shift when scrollbar disappears */
+    padding-right: calc(100vw - 100%);
+}

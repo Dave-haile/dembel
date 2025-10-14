@@ -13,26 +13,32 @@ return new class extends Migration
     {
         Schema::create('vacancies', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 100);
-            $table->string('place_of_work', 50);
-            $table->string('category', 100);
-            $table->string('employment_type', 20);
+            $table->string('title', 150);
+
+            $table->string('department', 100)->nullable(); // optional: e.g. "Marketing", "Security"
+            $table->string('employment_type', 30); // e.g. Full-time, Part-time, Contract
+            $table->string('work_location', 100); // better than "place_of_work"
+            $table->decimal('salary_min', 10, 2)->nullable();
+            $table->decimal('salary_max', 10, 2)->nullable();
+            $table->string('currency', 10)->default('ETB');
+
+            $table->text('job_description');
+            $table->text('requirements')->nullable();
+            $table->text('benefits')->nullable();
+            $table->text('how_to_apply');
 
             $table->date('posted_date');
             $table->date('closing_date');
 
-            $table->text('job_description');
-            $table->text('how_to_apply');
-            $table->text('qualification');
-            $table->text('skill_req');
+            $table->integer('number_of_positions')->default(1);
+            $table->string('contact_email')->nullable();
+            $table->string('contact_phone', 20)->nullable();
+            $table->text('address')->nullable();
+            $table->boolean('is_approved')->default(false);
 
-            $table->string('salary', 50);
-            $table->string('term_of_employment', 50);
-            $table->string('contact', 20);
-            $table->text('address');
+            $table->string('slug')->unique();
+            $table->string('thumbnail')->nullable(); // show job image or company logo
 
-            $table->integer('required_candidates');
-            $table->boolean('approval')->default(false);
             $table->timestamps();
         });
     }
@@ -42,6 +48,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('vacancy');
+        Schema::dropIfExists('vacancies');
     }
 };

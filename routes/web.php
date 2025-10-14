@@ -7,6 +7,7 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TenantController;
+use App\Http\Controllers\VacancyController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -42,5 +43,11 @@ Route::get('/spaces/load', [FreeSpaceController::class, 'loadMore'])->name('free
 
 Route::get('/news-events', [NewsController::class, 'index'])->name('news.index');
 Route::get('/news-events/load', [NewsController::class, 'loadMore'])->name('news.load');
+
+Route::get('/vacancies', [VacancyController::class, 'index'])->name('vacancies.index');
+// Route::prefix('admin')->middleware(['auth'])->group(function() {
+//     Route::resource('tenants', AdminTenantController::class);
+//     Route::resource('news', AdminNewsController::class);
+// });
 
 require __DIR__ . '/auth.php';

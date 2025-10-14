@@ -209,9 +209,9 @@ export default function Header() {
                     News and Events
                   </Link>
                   <Link
-                    href="/vacancy"
+                    href="/vacancies"
                     className={`block px-4 py-2 text-sm text-gray-700 hover:text-[#F05A7E] transition duration-150 ${
-                      url === "/vacancy"
+                      url === "/vacancies"
                         ? "text-[#F05A7E] border-[#F05A7E] border-b-2 pb-1"
                         : "text-gray-700"
                     }`}

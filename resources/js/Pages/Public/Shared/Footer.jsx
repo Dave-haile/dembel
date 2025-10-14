@@ -3,19 +3,6 @@ import { Phone, Mail, MapPin } from "lucide-react";
 import { Link } from "@inertiajs/react";
 
 const Footer = () => {
-  const navigationLinks = [
-    "Home",
-    "About",
-    "Services",
-    "Gallery",
-    "Tenants",
-    "News",
-    "Events",
-    "Vacancy",
-    "Free Space",
-    "Contact",
-  ];
-
   const sisterCompanies = [
     { name: "Yencomad Construction", target: "https://www.yencomad.com" },
     {
