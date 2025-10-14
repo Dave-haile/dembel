@@ -20,11 +20,15 @@ return new class extends Migration
             $table->string('sub_title_en')->nullable();
             $table->string('sub_title_am')->nullable();
 
-            $table->longText('description_en');
-            $table->longText('description_am');
-
             $table->string('image')->nullable();
             $table->string('pdf_file')->nullable();
+
+            $table->json('gallery')->nullable();
+
+            $table->text('excerpt_en')->nullable(); // short summary
+            $table->text('excerpt_am')->nullable(); // short summary
+            $table->longText('content_en')->nullable();
+            $table->longText('content_am')->nullable();
 
             $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
 

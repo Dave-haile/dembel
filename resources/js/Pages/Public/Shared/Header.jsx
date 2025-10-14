@@ -199,24 +199,14 @@ export default function Header() {
                     Free Space
                   </Link>
                   <Link
-                    href="/news"
+                    href="/news-events"
                     className={`block px-4 py-2 text-sm text-gray-700 hover:text-[#F05A7E] transition duration-150 ${
-                      url === "/news"
+                      url === "/news-events"
                         ? "text-[#F05A7E] border-[#F05A7E] border-b-2 pb-1"
                         : "text-gray-700"
                     }`}
                   >
-                    News
-                  </Link>
-                  <Link
-                    href="/event"
-                    className={`block px-4 py-2 text-sm text-gray-700 hover:text-[#F05A7E] transition duration-150 ${
-                      url === "/event"
-                        ? "text-[#F05A7E] border-[#F05A7E] border-b-2 pb-1"
-                        : "text-gray-700"
-                    }`}
-                  >
-                    Event
+                    News and Events
                   </Link>
                   <Link
                     href="/vacancy"

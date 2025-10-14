@@ -70,9 +70,7 @@ const News = ({ news, language = "en" }) => {
                 )}
 
                 <p className="text-gray-600 leading-relaxed mb-6">
-                  {language === "am"
-                    ? item.description_am
-                    : item.description_en}
+                  {language === "am" ? item.excerpt_am : item.excerpt_en}
                 </p>
 
                 <div className="flex items-center justify-between">

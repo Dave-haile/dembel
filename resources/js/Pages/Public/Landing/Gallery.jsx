@@ -58,7 +58,7 @@ export default function Gallery({ galleries, language = "en" }) {
               }}
             >
               <img
-                src={`storage/${image.image}`}
+                src={`${image.image}`}
                 alt={image.title}
                 className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
               />
@@ -105,7 +105,7 @@ export default function Gallery({ galleries, language = "en" }) {
             onClick={(e) => e.stopPropagation()} // Prevent click from bubbling to outer div
           >
             <img
-              src={`storage/${displayImages[selectedImage].image}`}
+              src={`${displayImages[selectedImage].image}`}
               alt={displayImages[selectedImage].title}
               className="max-w-full max-h-[80vh] object-contain"
             />
@@ -122,28 +122,27 @@ export default function Gallery({ galleries, language = "en" }) {
                 {displayImages[selectedImage].sector}
               </p>
             </div>
-
-            <button
-              onClick={closeLightbox}
-              className="absolute top-4 right-4 text-white bg-black/50 hover:bg-black/70 p-2 rounded-full transition-colors duration-200"
-            >
-              <X size={24} />
-            </button>
-
-            <button
-              onClick={goToPrev}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white bg-black/50 hover:bg-black/70 p-2 rounded-full transition-colors duration-200"
-            >
-              <ChevronLeft size={24} />
-            </button>
-
-            <button
-              onClick={goToNext}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white bg-black/50 hover:bg-black/70 p-2 rounded-full transition-colors duration-200"
-            >
-              <ChevronRight size={24} />
-            </button>
           </div>
+          <button
+            onClick={closeLightbox}
+            className="absolute top-4 right-4 text-white bg-black/50 hover:bg-black/70 p-2 rounded-full transition-colors duration-200"
+          >
+            <X size={24} />
+          </button>
+
+          <button
+            onClick={goToPrev}
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white bg-black/50 hover:bg-black/70 p-2 rounded-full transition-colors duration-200"
+          >
+            <ChevronLeft size={24} />
+          </button>
+
+          <button
+            onClick={goToNext}
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white bg-black/50 hover:bg-black/70 p-2 rounded-full transition-colors duration-200"
+          >
+            <ChevronRight size={24} />
+          </button>
         </div>
       )}
     </section>

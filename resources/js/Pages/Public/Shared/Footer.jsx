@@ -1,5 +1,6 @@
 import React from "react";
 import { Phone, Mail, MapPin } from "lucide-react";
+import { Link } from "@inertiajs/react";
 
 const Footer = () => {
   const navigationLinks = [
@@ -53,54 +54,92 @@ const Footer = () => {
           {/* Navigation Links */}
           <div className="lg:col-span-1">
             <h3 className="text-lg font-semibold mb-6 ml-10">Quick Links</h3>
-            {/* <ul className="space-y-3">
-              {navigationLinks.map((link) => (
-                <li key={link}>
-                  <a
-                    href={`#${link.toLowerCase().replace(' ', '-')}`}
-                    className="text-gray-300 hover:text-white transition-colors duration-200"
-                  >
-                    {link}
-                  </a>
-                </li>
-              ))}
-            </ul> */}
-            {/* <ul className="grid grid-cols-2 gap-y-2 gap-x-6">
-              {navigationLinks.map((link, index) => (
-                <li key={link} className={index === 4 ? "col-span-2" : ""}>
-                  <a
-                    href={`#${link.toLowerCase().replace(" ", "-")}`}
-                    className="text-gray-300 hover:text-white transition-colors duration-200"
-                  >
-                    {link}
-                  </a>
-                </li>
-              ))}
-            </ul> */}
             <div className="flex gap-16">
               <ul className="space-y-3">
-                {navigationLinks.slice(0, 5).map((link) => (
+                {/* {navigationLinks.slice(0, 5).map((link) => (
                   <li key={link}>
                     <a
-                      href={`#${link.toLowerCase().replace(" ", "-")}`}
+                      href={`/${link.toLowerCase().replace(" ", "-")}`}
                       className="text-gray-300 hover:text-white transition-colors duration-200"
                     >
                       {link}
                     </a>
                   </li>
-                ))}
+                ))} */}
+                <li>
+                  <Link
+                    href="/"
+                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/about"
+                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/services"
+                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    Services
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/gallery"
+                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    Gallery
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/tenant"
+                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    Tenants
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/news-events"
+                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    News & Events
+                  </Link>
+                </li>
               </ul>
               <ul className="space-y-3">
-                {navigationLinks.slice(5).map((link) => (
-                  <li key={link}>
-                    <a
-                      href={`#${link.toLowerCase().replace(" ", "-")}`}
-                      className="text-gray-300 hover:text-white transition-colors duration-200"
-                    >
-                      {link}
-                    </a>
-                  </li>
-                ))}
+                <li>
+                  <Link
+                    href="/vacancy"
+                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    Vacancy
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/space"
+                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    Free Space
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/contact"
+                    className="text-gray-300 hover:text-white transition-colors duration-200"
+                  >
+                    Contact Us
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>

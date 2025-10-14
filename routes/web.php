@@ -3,6 +3,7 @@
 use App\Http\Controllers\FreeSpaceController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TenantController;
@@ -38,5 +39,8 @@ Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index
 Route::get('/space', [FreeSpaceController::class, 'index'])->name('free-space.index');
 Route::get('/space/{freeSpace:slug}', [FreeSpaceController::class, 'show'])->name('free-space.show');
 Route::get('/spaces/load', [FreeSpaceController::class, 'loadMore'])->name('free-spaces.load');
+
+Route::get('/news-events', [NewsController::class, 'index'])->name('news.index');
+Route::get('/news-events/load', [NewsController::class, 'loadMore'])->name('news.load');
 
 require __DIR__ . '/auth.php';

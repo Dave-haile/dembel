@@ -347,15 +347,61 @@ class DatabaseSeeder extends Seeder
         ];
         $news = [
             [
+                'category' => "Event",
+                'title_en' => "Grand Opening of the New Fashion Wing",
+                'title_am' => "የአዲሱ ፋሽን ዊንግ ትልቅ መክፈቻ",
+                'sub_title_en' => "Discover world-class brands now at Dembel City Center",
+                'sub_title_am' => "በዴምቤል ሲቲ ሴንተር ዓለም አቀፍ የሆኑ ብራንዶችን ያግኙ",
+                'image' => "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80",
+                'pdf_file' => "https://example.com/news/grand-opening-flyer.pdf",
+                'gallery' => json_encode([
+                    "https://images.unsplash.com/photo-1534452203293-494d7ddbf7e0?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1481349518771-20055b2a7b24?auto=format&fit=crop&w=800&q=80",
+                ]),
+                'excerpt_en' => "We're excited to announce the grand opening of Dembel City Center's new Fashion Wing, featuring 20+ international brands and exclusive launch offers.",
+                'excerpt_am' => "ዴምቤል ሲቲ ሴንተር አዲሱን የፋሽን ዊንግ በ20 በላይ ዓለም አቀፍ ብራንዶችና ልዩ የመክፈቻ ቅናሽ ጋር እንደተከፈተ ደስ ይላል።",
+                'content_en' => 'The new Fashion Wing at Dembel City Center officially opened its doors on October 1st, 2025. This expansion introduces a premium shopping experience to our visitors, bringing over 20 new international fashion brands to Addis Ababa. The grand opening ceremony featured a live fashion show, celebrity guests, and exclusive launch offers for early shoppers. Visitors can now explore new collections from brands such as Zara, H&M, Mango, and more. Come and experience luxury shopping like never before at the Dembel City Center Fashion Wing',
+                'content_am' => "አዲሱ የፋሽን ዊንግ በኦክቶበር 1 2025 ቀን በዴምቤል ሲቲ ሴንተር መክፈቱን አውጥቷል።",
+                'created_by' => 1,
+                'approval' => true,
+
+            ],
+            [
+                'category' => "Offer",
+                'title_en' => "Spring Festival Sale - Up to 70% Off",
+                'title_am' => "የፀደይ ፌስቲቫል ሽያጭ",
+                'sub_title_en' => "Amazing discounts across all stores",
+                'sub_title_am' => "በሁሉም ሱቆች ላይ አስደናቂ ቅናሾች",
+                'image' => "https://images.unsplash.com/photo-1607083206968-13611e3d76db?auto=format&fit=crop&w=1200&q=80",
+                'pdf_file' => null,
+                'gallery' => json_encode([
+                    "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1607082349566-187342175e2f?auto=format&fit=crop&w=800&q=80",
+                ]),
+                'excerpt_en' => "Don't miss our biggest sale of the season! Get up to 70% off on fashion, electronics, home décor, and more at Dembel City Center.",
+                'excerpt_am' => "የወቅቱን ትልቁ ሽያጭ አያመልጡ!",
+                'content_en' => "Our Spring Festival Sale is here with unbeatable deals across all categories. From March 15th to March 30th, enjoy massive discounts on your favorite brands and products. Whether you're shopping for the latest fashion trends, upgrading your electronics, or refreshing your home décor, you'll find incredible savings throughout the mall. Special deals include buy-one-get-one offers, flash sales, and exclusive member discounts. Visit us today and make the most of this limited-time opportunity. Happy shopping!",
+                'content_am' => "የፀደይ ፌስቲቫል ሽያጭ ከሁሉም ምድቦች ጋር ከተለያዩ ውድድሮች ጋር ነው። ከምርቶች ላይ የሚደርሱ ትልቅ ቅናሾች እና የተለያዩ የሽያጭ ዕቅዶች ይገኛሉ። ይህ ዝግጅት በምርቶች ላይ የሚደርሱ ትልቅ ቅናሾች እና የተለያዩ የሽያጭ ዕቅዶች ይገኛሉ።",
+                'created_by' => 1,
+                'approval' => true,
+            ],
+            [
                 'category' => 'Events',
                 'title_en' => 'Annual Company Retreat 2024',
                 'title_am' => 'ዓመታዊ የኩባንያ ስብሰባ 2024',
                 'sub_title_en' => 'Join us for our upcoming team building event',
                 'sub_title_am' => 'ለሚመጣው የቡድን ግንባታ ክስተታችን ይቀላቀሉን',
-                'description_en' => 'We are excited to announce our annual company retreat scheduled for next month. This event will focus on team building and strategic planning for the upcoming year.',
-                'description_am' => 'ለሚቀጥለው ወር የታሰበውን ዓመታዊ የኩባንያ ስብሰባችን ለማስተዋወቅ ተለዛጅተናል። ይህ ዝግጅት በቡድን ግንባታ እና ለሚመጣው ዓመት በስትራቴጂክ ዕቅድ ላይ ያተኮረ ነው።',
                 'image' => 'storage/news/retreat-2024.jpg',
                 'pdf_file' => 'retreat-schedule.pdf',
+                'gallery' => json_encode([
+                    'storage/news/retreat1.jpg',
+                    'storage/news/retreat2.jpg'
+                ]),
+                'excerpt_en' => 'Our annual retreat is a time for reflection, learning, and fun. This year, we will be hosting the event at a scenic location with various activities planned to enhance team cohesion and morale.',
+                'excerpt_am' => 'ዓመታዊ ስብሰባችን ለማስተዋወቅ፣ ለመማርና ለመዝናናት ጊዜ ነው።',
+                'content_en' => 'The Annual Company Retreat 2024 is set to take place from July 10th to July 12th at the beautiful Lakeside Resort. Employees will have the opportunity to participate in various team-building exercises, workshops, and recreational activities designed to foster collaboration and innovation. The retreat will also include sessions for strategic planning and goal setting for the upcoming fiscal year. We encourage all employees to attend and make the most of this enriching experience',
+                'content_am' => 'ዓመታዊ የኩባንያ ስብሰባ 2024 ከጁላይ 10 እስከ ጁላይ 12 በተለያዩ ቡድን ግንባታ ሥራዎች፣ የስልጠና ምዕመናት እና የመዝናናት እንቅስቃሴዎች ይሳተፉ። ይህ ዝግጅት በስትራቴጂክ ዕቅድ እና የሚመጣው ዓመት ዕቅድ ላይ ይተኮር ይችላል። ሁሉም ሰራተኞች ይህን ዕቅድ ለማስተዋወቅ ይቀላቀሉን።',
                 'created_by' => 1,
                 'approval' => true
             ],
@@ -365,10 +411,16 @@ class DatabaseSeeder extends Seeder
                 'title_am' => 'አዲስ የቢሮ መቀመጫ ክፈት',
                 'sub_title_en' => 'Expanding our services to new regions',
                 'sub_title_am' => 'አገልግሎታችንን ወደ አዲስ ክልሎች ማስፋፋት',
-                'description_en' => 'We are proud to announce the opening of our new office location in the heart of the city, providing better access to our clients and partners.',
-                'description_am' => 'ከደምበኞቻችን እና ከጉልበተኞቻችን ጋር የተሻለ መዳረሻ ለማቅረብ በከተማዋ ማዕከል አዲስ የቢሮ መቀመጫ መከፈታችንን ለማስተዋወቅ እንትሞጣለን።',
                 'image' => 'storage/news/new-office.jpg',
                 'pdf_file' => null,
+                'gallery' => json_encode([
+                    'storage/news/office1.jpg',
+                    'storage/news/office2.jpg'
+                ]),
+                'excerpt_en' => 'The new office is equipped with state-of-the-art facilities and is designed to foster collaboration and innovation among our team members.',
+                'excerpt_am' => 'አዲሱ ቢሮ በዘመናዊ መሣሪያዎች የተሞላ እና በቡድን አባላት መካከል ትስስርና አዳዲስ ነገሮችን ለማፍራት የተነደፈ ነው።',
+                'content_en' => 'The new office is designed with an open layout to encourage teamwork and creativity. It features modern meeting rooms, collaborative workspaces, and relaxation areas for employees to recharge.',
+                'content_am' => 'አዲሱ ቢሮ በቡድን ሥራና ፈጠራ ለማስተካከል በክፍት ንድፍ የተነደፈ ነው። ይህ የዘመናዊ የስብሰባ ክፍሎች፣ የተባበሩ የሥራ ቦታዎችና ለሰራተኞች ለመዝገብ የሚያግዙ መዝገብ ክፍሎችን ይጠቀማል።',
                 'created_by' => 2,
                 'approval' => true
             ],
@@ -378,10 +430,16 @@ class DatabaseSeeder extends Seeder
                 'title_am' => 'የምርት መከፈቻ ክስተት',
                 'sub_title_en' => 'Introducing our latest innovations',
                 'sub_title_am' => 'የቅርብ ጊዜ አዳዲስ ነገሮቻችንን ማስተዋወቅ',
-                'description_en' => 'Join us for the launch of our new product line, featuring cutting-edge technology and innovative design. The event will include live demonstrations and Q&A sessions.',
-                'description_am' => 'የአዲሱን የምርት መስመር ለማከፈቻችን ይቀላቀሉን፣ የቅርብ ጊዜ ቴክኖሎጂና አዳዲስ ንድፍ ያሳያል። በዝግጅቱ ቀጥታ ማሳያዎችና ጥያቄና መልስ ክፍሎች ይካሄዳሉ።',
                 'image' => 'storage/news/product-launch.jpg',
                 'pdf_file' => 'product-brochure.pdf',
+                'gallery' => json_encode([
+                    'storage/news/product1.jpg',
+                    'storage/news/product2.jpg'
+                ]),
+                'excerpt_en' => 'Be the first to experience our latest products and innovations. The launch event will provide an exclusive look at the features and benefits of our new offerings.',
+                'excerpt_am' => 'አዲስ ምርቶቻችንን እና አዳዲስ ነገሮቻችንን ለመማስተዋወቅ የመጀም ሁሉ ይሁኑ።',
+                'content_en' => 'The Product Launch Event will take place on September 5th, 2024 at our headquarters. Attendees will have the opportunity to see live demonstrations of the new products, interact with the development team, and participate in Q&A sessions to learn more about the technology and design behind our latest innovations.',
+                'content_am' => 'የምርት መከፈቻ ክስተት በሴፕቴምበር 5 2024 ቀን በራሳችን ዋና ቦታ ይካሄዳል። ተሳትፎ ይውሉና ለአዳዲስ ምርቶች ምርጥ ዕድል ይሰጣል።',
                 'created_by' => 1,
                 'approval' => true
             ],
@@ -391,12 +449,96 @@ class DatabaseSeeder extends Seeder
                 'title_am' => 'የማህበረሰብ ድጋፍ እቅድ',
                 'sub_title_en' => 'Making a difference together',
                 'sub_title_am' => 'በአንድነት ለማህበረሰብ ልዩነት ማድረግ',
-                'description_en' => 'We are launching a new community outreach program aimed at supporting local initiatives and fostering positive change. Get involved and help us make a difference.',
-                'description_am' => 'በአካባቢ ድርጅቶችን ለመደገፍና አዎንታዊ ለውጥ ለማስፋፋት የተጠቃሚ የማህበረሰብ ድጋፍ እቅድ እንጀምራለን። ተሳትፎ ይውሉና ልዩነት ለማድረግ ይረዱን።',
                 'image' => 'storage/news/community-outreach.jpg',
                 'pdf_file' => null,
+                'gallery' => json_encode([
+                    'storage/news/community1.jpg',
+                    'storage/news/community2.jpg'
+                ]),
+                'excerpt_en' => 'Our community outreach program will focus on education, health, and environmental sustainability. We invite employees and community members to participate in various activities and initiatives throughout the year.',
+                'excerpt_am' => 'የማህበረሰብ ድጋፍ እቅዳችን በትምህርት፣ በጤና እና በአካባቢ ተጠቃሚነት ይመራል።',
+                'content_en' => 'The Community Outreach Program will kick off with a series of events and activities designed to engage and support local communities. Initiatives will include educational workshops, health clinics, environmental clean-up drives, and fundraising events to support local charities. We encourage all employees to get involved and contribute their time and skills to make a positive impact.',
+                'content_am' => 'የማህበረሰብ ድጋፍ እቅድ በተለያዩ ክስተቶችና እንቅስቃሴዎች በመጀመር ይጀምራል። ይህ ዝግጅት በትምህርት የስልጠና ውይይቶች፣ የጤና ክሊኒኮች፣ የአካባቢ ንጽህና እንቅስቃሴዎች እና ለአካባቢ ተቋማት የሚደርሱ የገንዘብ ስጦታ ክስተቶችን ያካትታል።',
                 'created_by' => 2,
                 'approval' => true
+            ],
+            [
+                'category' => "Announcement",
+                'title_en' => "New Parking Facilities Now Open",
+                'title_am' => "አዲስ የመኪና ማቆሚያ አገልግሎት ተከፈተ",
+                'sub_title_en' => "Enhanced convenience for all visitors",
+                'sub_title_am' => "ለሁሉም ጎብኚዎች የተሻሻለ ምቾት",
+                'image' => "https://images.unsplash.com/photo-1590674899484-d5640e854abe?auto=format&fit=crop&w=1200&q=80",
+                'pdf_file' => "https://example.com/news/parking-guide.pdf",
+                'gallery' => json_encode([]),
+                'excerpt_en' => "We've expanded our parking facilities with 500 new spaces, featuring covered parking, EV charging stations, and improved security.",
+                'excerpt_am' => "የመኪና ማቆሚያ አገልግሎታችንን በ500 አዳዲስ ቦታዎች አስፋፍተናል።",
+                'content_en' => ' Dembel City Center is pleased to announce the opening of our new multi-level parking facility. This state-of-the-art structure adds 500 additional parking spaces, including 50 dedicated EV charging stations. The new facility features covered parking to protect your vehicle from the elements, enhanced lighting for safety, and a modern payment system that accepts both cash and digital payments. Premium parking spots are also available for monthly subscribers. All parking areas are monitored 24/7 with advanced security cameras and trained security personnel to ensure your peace of mind while you shop.',
+                'content_am' => "አዲስ የመኪና ማቆሚያ አገልግሎት በዴምቤል ሲቲ ሴንተር መክፈቻን ለማሳወቅ ደስ ይላል።",
+                'created_by' => 1,
+                'approval' => true,
+            ],
+            [
+                'category' => "Lifestyle",
+                'title_en' => "Kids Play Zone Grand Launch",
+                'title_am' => "የህጻናት መጫወቻ ዞን ትልቅ መክፈቻ",
+                'sub_title_en' => "A world of fun for children ages 2-12",
+                'sub_title_am' => "ከ2-12 ዓመት ለሆኑ ህጻናት አስደሳች ዓለም",
+                'image' => "https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=1200&q=80",
+                'pdf_file' => null,
+                'gallery' => json_encode([
+                    "https://images.unsplash.com/photo-1576782187843-cc9009e0f2b0?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1564053489984-317bbd824340?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=800&q=80",
+                ]),
+                'excerpt_en' =>
+                "Introducing our brand new supervised play area featuring climbing structures, soft play zones, and educational activities for kids.",
+                'excerpt_am' => "አዳዲስ የመውጫ መዋቅሮችን፣ ለስላሳ የመጫወቻ ዞኖችን እና ትምህርታዊ እንቅስቃሴዎችን የያዘ አዲስ ቁጥጥር የሚደረግበት የመጫወቻ ቦታን እናቀርባለን።",
+                'content_en' => 'Parents can now shop with peace of mind knowing their children are having a great time in our professionally supervised Kids Play Zone. Located on the second floor, this 2,000 square meter facility is designed to provide safe, engaging entertainment for children ages 2 to 12. The play zone features age-appropriate activities including climbing walls, ball pits, interactive learning stations, and creative arts corners. All staff members are trained in child safety and first aid, and the entire area is monitored with CCTV cameras. Admission is affordable at just 50 Birr per child for 2 hours. Special packages and memberships are also available. Open daily from 10 AM to 8 PM.',
+                'content_am' => "የህጻናት መጫወቻ ዞን በሙያዊ ሁኔታ ተቆጣጣሪ ስለሆነ ልጆቻችሁ እየደሰቱ እንደሚገኙ በመረዳት ከፍተኛ ደህንነት ጋር መገባባት ይችላሉ።",
+                'created_by' => 1,
+                'approval' => true,
+            ],
+            [
+                'category' => "Event",
+                'title_en' => "Live Music Weekends - Every Saturday",
+                'title_am' => "የቀጥታ ሙዚቃ ቅዳሜዎች - በየቅዳሜው",
+                'sub_title_en' => "Enjoy live performances while you shop and dine",
+                'sub_title_am' => "ሲገበያዩና ሲመገቡ የቀጥታ ትርኢቶችን ይደሰቱ",
+                'image' => "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=1200&q=80",
+                'pdf_file' => null,
+                'gallery' => json_encode([
+                    "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1511735111819-9a3f7709049c?auto=format&fit=crop&w=800&q=80",
+                ]),
+                'excerpt_en' =>
+                "Experience vibrant live music performances every Saturday evening at our Central Plaza. Free entry for all visitors!",
+                'excerpt_am' =>
+                "በየቅዳሜው ምሽት በማእከላዊ አደባባያችን ላይ ንቁ የቀጥታ ሙዚቃ ትርኢቶችን ይለማመዱ። ለሁሉም ጎብኚዎች ነፃ መግቢያ!",
+                'content_en' => "Starting this month, Dembel City Center is proud to present Live Music Weekends! Every Saturday from 5 PM to 8 PM, talented local and international artists will perform at our Central Plaza. The lineup features a diverse range of genres including jazz, pop, traditional Ethiopian music, and contemporary fusion. It's the perfect way to unwind after a week of work while enjoying great food from our restaurants and cafés. Seating is available on a first-come, first-served basis, so arrive early to get the best spots. Bring your family and friends for an unforgettable evening of music and community.",
+                'content_am' => "የቀጥታ ሙዚቃ ቅዳሜዎች በየቅዳሜው ምሽት በማእከላዊ አደባባያችን ላይ ንቁ የቀጥታ ሙዚቃ ትርኢቶችን ይለማመዱ። ለሁሉም ጎብኚዎች ነፃ መግቢያ!",
+                'created_by' => 1,
+                'approval' => true,
+            ],
+            [
+                'category' => "Announcement",
+                'title_en' => "Mobile App Launch - Shop Smarter",
+                'title_am' => "የሞባይል መተግበሪያ መክፈቻ",
+                'sub_title_en' => "Download now for exclusive deals and rewards",
+                'sub_title_am' => "ልዩ ቅናሾችና ሽልማቶች ለማግኘት አሁን ያውርዱ",
+                'image' => "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1200&q=80",
+                'pdf_file' => null,
+                'gallery' => json_encode([
+                    "https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&w=800&q=80",
+                ]),
+                'excerpt_en' =>
+                "Our new mobile app makes shopping easier with store directories, parking assistance, exclusive promotions, and a loyalty rewards program.",
+                'excerpt_am' => "አዲሱ የሞባይል መተግበሪያችን ግብይትን ቀላል ያደርጋል።",
+                'content_en' => "We're thrilled to announce the launch of the official Dembel City Center mobile app, now available for download on iOS and Android devices. The app is designed to enhance your shopping experience with a host of convenient features. Key features include: interactive store directory with navigation, real-time parking availability, personalized offers based on your preferences, mobile payment integration, and a loyalty rewards program where you earn points with every purchase. Download the app today and receive a welcome bonus of 500 points, redeemable at participating stores. Simply search for \"Dembel City Center\" in the App Store or Google Play.",
+                'content_am' => "የሞባይል መተግበሪያ...",
+                'created_by' => 1,
+                'approval' => true,
+
             ]
         ];
 
@@ -543,7 +685,6 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => now(),
             ],
         ];
-
         $testimonials = [
             [
                 'name' => 'John Smith',
@@ -1470,21 +1611,7 @@ class DatabaseSeeder extends Seeder
 
         ];
 
-        // DB::table('sliders')->insert($sliders);
-        // DB::table('floors')->insert($floor);
-        // DB::table('galleries')->insert($gallery);
-        // DB::table('news')->insert($news);
-        // DB::table('services')->insert($service);
-        // DB::table('testimonials')->insert($testimonials);
-        // DB::table('events')->insert($events);
-        // DB::table('tenants')->insert($tenants);
-        // DB::table('vacancies')->insert($vacancies);
-        // DB::table('applications')->insert($application);
-        // DB::table('clients')->insert($Client);
-        // DB::table('departments')->insert($department);
-        // DB::table('teams')->insert($team);
-        // Insert free_spaces rows one-by-one to avoid SQLite "all VALUES must have the same number of terms" error
-        // and to guarantee unique slugs
+
         // $usedSlugs = [];
         // foreach ($freeSpaces as $space) {
         //     $baseSlug = !empty($space['slug'])
@@ -1512,7 +1639,20 @@ class DatabaseSeeder extends Seeder
         //     $space['meta_title'] = $normalize($space['meta_title'] ?? null);
         //     $space['meta_description'] = $normalize($space['meta_description'] ?? null);
 
-        //     DB::table('free_spaces')->insert($space);
         // }
+        // DB::table('sliders')->insert($sliders);
+        // DB::table('floors')->insert($floor);
+        // DB::table('galleries')->insert($gallery);
+        // DB::table('news')->insert($news);
+        // DB::table('services')->insert($service);
+        // DB::table('testimonials')->insert($testimonials);
+        // DB::table('events')->insert($events);
+        // DB::table('tenants')->insert($tenants);
+        // DB::table('vacancies')->insert($vacancies);
+        // DB::table('applications')->insert($application);
+        // DB::table('clients')->insert($Client);
+        // DB::table('departments')->insert($department);
+        // DB::table('teams')->insert($team);
+        // DB::table('free_spaces')->insert($space);
     }
 }
