@@ -1813,7 +1813,123 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
-        // foreach ($vacancies as $index => $vacancy) {
+        $mall = [
+            [
+                "name" => "Dembel City Center",
+                "slug" => "dembel-city-center",
+                "year_built" => "2004",
+                "floors" => 8,
+                "total_area_sqm" => 25000,
+                "total_shops" => 320,
+                "facilities" => json_encode([
+                    "Parking",
+                    "Elevators",
+                    "24/7 Security",
+                    "Wi-Fi",
+                    "Power Backup",
+                    "Accessibility",
+                ]),
+                'gallery' => json_encode([
+                    'storage/mall/image001.jpg',
+                    'storage/mall/image002.jpg',
+                    'storage/mall/image003.jpg',
+                    'storage/mall/image004.jpg',
+                    'storage/mall/image005.jpg',
+                ]),
+                "virtual_tour_url" => "https://virtualtour.com/dembel",
+                "address" => "Africa Avenue, Addis Ababa, Ethiopia",
+                "contact_phone" => "+251 9XX XXX XXX",
+                "contact_email" => "info@dembel.com",
+                "description" => "Dembel City Center is one of the first modern commercial complexes in Addis Ababa, hosting a diverse mix of retail, dining, and corporate offices.",
+                "floors_directory" => json_encode([
+                    [
+                        "floor" => "Ground Floor",
+                        "highlights" => ["Banking", "Food Court", "Main Entrance"],
+                    ],
+                    [
+                        "floor" => "1st Floor",
+                        "highlights" => ["Fashion Boutiques", "Retail Stores", "Jewelry"],
+                    ],
+                    [
+                        "floor" => "2nd Floor",
+                        "highlights" => ["Electronics", "Home Goods", "Sports Retail"],
+                    ],
+                    [
+                        "floor" => "3rd-8th Floors",
+                        "highlights" => ["Corporate Offices", "Business Centers", "Services"],
+                    ],
+                ]),
+            ],
+            [
+                "name" => "Dembel Extension",
+                "slug" => "dembel-extension",
+                "year_built" => "2018",
+                "floors" => 9,
+                "total_area_sqm" => 30000,
+                "total_shops" => 360,
+                "facilities" => json_encode([
+                    "Parking",
+                    "Elevators",
+                    "24/7 Security",
+                    "Smart HVAC",
+                    "Wi-Fi",
+                    "Power Backup",
+                    "Accessibility",
+                    "EV Charging",
+                ]),
+                'gallery' => json_encode([
+                    'storage/mall/image006.jpg',
+                    'storage/mall/image007.jpg',
+                    'storage/mall/image008.jpg',
+                    'storage/mall/image009.jpg',
+                    'storage/mall/image010.jpg',
+                ]),
+                "virtual_tour_url" => "https://virtualtour.com/dembel-extension",
+                "address" => "Bole Road, Addis Ababa, Ethiopia",
+                "contact_phone" => "+251 9XX XXX XXX",
+                "contact_email" => "extension@dembel.com",
+                "description" => "Dembel Extension represents the modern evolution of the Dembel brand — combining luxury retail, spacious offices, and enhanced visitor experiences.",
+                "floors_directory" => json_encode([
+                    [
+                        "floor" => "Ground Floor",
+                        "highlights" => ["Luxury Retail", "Premium Dining", "Main Lobby"],
+                    ],
+                    [
+                        "floor" => "1st-2nd Floors",
+                        "highlights" => ["Fashion & Lifestyle", "International Brands", "Beauty & Wellness"],
+                    ],
+                    [
+                        "floor" => "3rd-4th Floors",
+                        "highlights" => ["Entertainment Zone", "Food Court", "Family Dining"],
+                    ],
+                    [
+                        "floor" => "5th-9th Floors",
+                        "highlights" => ["Modern Offices", "Conference Centers", "Business Services"],
+                    ],
+                ]),
+            ],
+        ];
+
+        // DB::table('users')->insert($users);
+        // DB::table('categories')->insert($category);
+        // DB::table('sliders')->insert($sliders);
+        // DB::table('floors')->insert($floor);
+        // DB::table('galleries')->insert($gallery);
+        // DB::table('news')->insert($news);
+        // DB::table('services')->insert($service);
+        // DB::table('testimonials')->insert($testimonials);
+        // DB::table('events')->insert($events);
+        // DB::table('tenants')->insert($tenants);
+        // DB::table('vacancies')->insert($vacancies);
+        // DB::table('applications')->insert($application);
+        // DB::table('clients')->insert($Client);
+        // DB::table('departments')->insert($department);
+        // DB::table('teams')->insert($team);
+        // DB::table('free_spaces')->insert($freeSpaces);
+        // DB::table('malls')->insert($mall);
+    }
+}
+ // foreach ($vacancies as $index => $vacancy) {
         //     $count = count($vacancy);
         //     echo "Row {$index} has {$count} fields\n";
         // }
@@ -1847,21 +1963,3 @@ class DatabaseSeeder extends Seeder
         //     $space['meta_title'] = $normalize($space['meta_title'] ?? null);
         //     $space['meta_description'] = $normalize($space['meta_description'] ?? null);
         // }
-        // DB::table('users')->insert($users);
-        // DB::table('categories')->insert($category);
-        // DB::table('sliders')->insert($sliders);
-        // DB::table('floors')->insert($floor);
-        // DB::table('galleries')->insert($gallery);
-        // DB::table('news')->insert($news);
-        // DB::table('services')->insert($service);
-        // DB::table('testimonials')->insert($testimonials);
-        // DB::table('events')->insert($events);
-        // DB::table('tenants')->insert($tenants);
-        // DB::table('vacancies')->insert($vacancies);
-        // DB::table('applications')->insert($application);
-        // DB::table('clients')->insert($Client);
-        // DB::table('departments')->insert($department);
-        // DB::table('teams')->insert($team);
-        DB::table('free_spaces')->insert($freeSpaces);
-    }
-}

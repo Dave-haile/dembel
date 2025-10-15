@@ -91,3 +91,33 @@ body.no-scroll {
     /* Prevent layout shift when scrollbar disappears */
     padding-right: calc(100vw - 100%);
 }
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.animate-fadeIn {
+    animation: fadeIn 0.2s ease-out forwards;
+}
+/* In your global CSS */
+@media (max-width: 1023px) {
+    .mobile-menu-scroll {
+        scrollbar-width: thin;
+        scrollbar-color: #f05a7e #f1f1f1;
+    }
+    .mobile-menu-scroll::-webkit-scrollbar {
+        width: 6px;
+    }
+    .mobile-menu-scroll::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    .mobile-menu-scroll::-webkit-scrollbar-thumb {
+        background-color: #f05a7e;
+        border-radius: 3px;
+    }
+}

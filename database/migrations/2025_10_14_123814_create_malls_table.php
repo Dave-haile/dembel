@@ -20,7 +20,8 @@ return new class extends Migration
             $table->decimal('total_area_sqm', 10, 2)->nullable();
             $table->integer('total_shops')->nullable();
             $table->text('description')->nullable();
-            $table->text('facilities')->nullable();
+            $table->json('floors_directory')->nullable();
+            $table->json('facilities')->nullable();
             $table->json('gallery')->nullable();
             $table->string('virtual_tour_url')->nullable();
             $table->string('address')->nullable();

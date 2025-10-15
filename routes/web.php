@@ -3,6 +3,7 @@
 use App\Http\Controllers\FreeSpaceController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MallController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServiceController;
@@ -49,5 +50,7 @@ Route::get('/vacancies', [VacancyController::class, 'index'])->name('vacancies.i
 //     Route::resource('tenants', AdminTenantController::class);
 //     Route::resource('news', AdminNewsController::class);
 // });
+
+Route::get('/mall', [MallController::class, 'index'])->name('mall.index');
 
 require __DIR__ . '/auth.php';
