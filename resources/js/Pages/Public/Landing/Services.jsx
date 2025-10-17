@@ -1,5 +1,6 @@
 import React from "react";
 import { ArrowRight } from "lucide-react";
+import { Link } from "@inertiajs/react";
 
 const Services = ({ services, language = "en" }) => {
   return (
@@ -47,7 +48,7 @@ const Services = ({ services, language = "en" }) => {
                   : service.description_en}
               </p>
               <a
-                href={`#service-${service.id}`}
+                href={`/services/${service.id}`}
                 className="inline-flex items-center text-blue-800 hover:text-blue-900 font-medium group/link transition-colors duration-200"
               >
                 {language === "am" ? "ተጨማሪ ይመልከቱ" : "Learn More"}
@@ -58,6 +59,14 @@ const Services = ({ services, language = "en" }) => {
               </a>
             </div>
           ))}
+        </div>
+        <div className="text-center mt-12">
+          <Link
+            href={"/services"}
+            className="bg-blue-800 hover:bg-blue-900 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-200"
+          >
+            {language === "am" ? "ሁሉንም አግልግሎት ይመልከቱ" : "View All Servies"}
+          </Link>
         </div>
       </div>
     </section>

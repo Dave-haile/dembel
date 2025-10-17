@@ -10,9 +10,9 @@ import {
   Star,
 } from "lucide-react";
 import MainLayout from "../Shared/MainLayout";
+import { Map } from "../Shared/Map";
 
 const TenantDetail = ({ tenant }) => {
-  console.log(tenant);
   const category = tenant.category?.slug || "";
   const categoryName = tenant.category?.name || "";
   if (!tenant) {
@@ -171,21 +171,16 @@ const TenantDetail = ({ tenant }) => {
             </div>
 
             {/* Location Map Placeholder */}
-            <div className="bg-white rounded-2xl shadow-lg p-8">
+            <div className="bg-white rounded-2xl shadow-lg p-8 h-96">
               <h2 className="text-3xl font-bold text-gray-900 mb-6">
                 Store Location
+                <span className="pl-11 text-xl text-gray-400 mt-2">
+                  {tenant.floor}, {tenant.location}
+                </span>
               </h2>
-              <div className="bg-gray-100 rounded-xl h-64 flex items-center justify-center">
-                <div className="text-center">
-                  <MapPin className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500 text-lg">
-                    Interactive Map Coming Soon
-                  </p>
-                  <p className="text-sm text-gray-400 mt-2">
-                    {tenant.floor}, {tenant.location}
-                  </p>
-                </div>
-              </div>
+              {/* <div className="bg-gray-100 rounded-xl h-64 flex items-center justify-center">
+                <div className="h-80 w-96"> */}
+              <Map />
             </div>
           </div>
 

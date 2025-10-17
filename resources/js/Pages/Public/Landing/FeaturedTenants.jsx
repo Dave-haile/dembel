@@ -1,27 +1,18 @@
 import React from "react";
-import {
-  ArrowRight,
-  Phone,
-  Mail,
-  Globe,
-  MapPin,
-  Clock,
-  Building2,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "@inertiajs/react";
 
 const FeaturedTenants = ({ tenants }) => {
-  console.log(tenants);
   const getLogo = (tenant) => {
     if (tenant && tenant.logo) return tenant.logo;
     return "https://placehold.co/600x400?text=No+Store+Logo";
   };
 
-  const normalizeWebsite = (website) => {
-    if (!website) return null;
-    if (/^https?:\/\//i.test(website)) return website;
-    return `https://${website}`;
-  };
+  // const normalizeWebsite = (website) => {
+  //   if (!website) return null;
+  //   if (/^https?:\/\//i.test(website)) return website;
+  //   return `https://${website}`;
+  // };
 
   return (
     <section className="py-20 bg-white">
@@ -85,7 +76,7 @@ const FeaturedTenants = ({ tenants }) => {
 
         <div className="text-center">
           <Link
-            href={"/tenants"}
+            href={"/tenant"}
             className="bg-blue-800 hover:bg-blue-900 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-200 inline-flex items-center group"
           >
             View All Tenants

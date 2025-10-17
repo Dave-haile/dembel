@@ -78,10 +78,10 @@ const About = () => {
   };
 
   const slides = [
-    "/about/image011.jpg",
-    "/about/image013.jpg",
-    "/about/image014.jpg",
-    "/about/image039.jpg",
+    "storage/about/image011.jpg",
+    "storage/about/image013.jpg",
+    "storage/about/image014.jpg",
+    "storage/about/image039.jpg",
   ];
 
   const [currentSlide, setCurrentSlide] = useState(0);

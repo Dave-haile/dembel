@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import defaultTheme from "tailwindcss/defaultTheme";
 import forms from "@tailwindcss/forms";
 
@@ -39,11 +40,45 @@ export default {
           900: "#713f12",
         },
       },
+      keyframes: {
+        fadeInUp: {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(100px)",
+            filter: "blur(33px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+            filter: "blur(0)",
+          },
+        },
+      },
+      animationDelay: {
+        300: "0.3s",
+        600: "0.6s",
+      },
+      animation: {
+        "fade-in-up": "fadeInUp 1s ease-in-out forwards",
+      },
       scrollMargin: {
         24: "6rem",
       },
     },
   },
 
-  plugins: [forms],
+  plugins: [
+    forms,
+    function ({ addUtilities }) {
+      const newUtilities = {
+        ".animation-delay-300": {
+          "animation-delay": "0.3s",
+        },
+        ".animation-delay-600": {
+          "animation-delay": "0.6s",
+        },
+      };
+      addUtilities(newUtilities, ["responsive", "hover"]);
+    },
+  ],
 };

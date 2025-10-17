@@ -20,7 +20,7 @@ const News = ({ news, language = "en" }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-            Latest News
+            Latest News & Events
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Stay updated with the latest happenings, events, and announcements
@@ -75,7 +75,7 @@ const News = ({ news, language = "en" }) => {
 
                 <div className="flex items-center justify-between">
                   <Link
-                    href={`/news/${item.id}`}
+                    href={`/news-events`}
                     className="inline-flex items-center text-blue-800 hover:text-blue-900 font-medium group/link transition-colors duration-200"
                   >
                     {language === "am" ? "ተጨማሪ ያንብቡ" : "Read More"}
@@ -101,9 +101,12 @@ const News = ({ news, language = "en" }) => {
         </div>
 
         <div className="text-center mt-12">
-          <button className="bg-blue-800 hover:bg-blue-900 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-200">
+          <Link
+            href={"/news-events"}
+            className="bg-blue-800 hover:bg-blue-900 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-200"
+          >
             {language === "am" ? "ሁሉንም ዜናዎች ይመልከቱ" : "View All News"}
-          </button>
+          </Link>
         </div>
       </div>
     </section>

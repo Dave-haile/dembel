@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\FreeSpaceController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\HomeController;
@@ -37,7 +38,7 @@ Route::get('/tenant/{tenant}', [TenantController::class, 'show'])->name('tenant.
 
 Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
 
-
+Route::get('/announcement', [FreeSpaceController::class, 'index'])->name('free-space.index');
 Route::get('/space', [FreeSpaceController::class, 'index'])->name('free-space.index');
 Route::get('/space/{freeSpace:slug}', [FreeSpaceController::class, 'show'])->name('free-space.show');
 Route::get('/spaces/load', [FreeSpaceController::class, 'loadMore'])->name('free-spaces.load');
@@ -52,5 +53,9 @@ Route::get('/vacancies', [VacancyController::class, 'index'])->name('vacancies.i
 // });
 
 Route::get('/mall', [MallController::class, 'index'])->name('mall.index');
+
+Route::get('/contact', fn() => Inertia::render('Public/Contact/ContactUs'))->name('contact.index');
+
+Route::get('/announcement', [AnnouncementController::class, 'index'])->name('announcements.index');
 
 require __DIR__ . '/auth.php';

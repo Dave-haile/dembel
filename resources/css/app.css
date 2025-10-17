@@ -87,7 +87,7 @@ html {
     display: none; /* Chrome, Safari, Opera*/
 }
 body.no-scroll {
-    overflow: hidden;
+    /* overflow: hidden; */
     /* Prevent layout shift when scrollbar disappears */
     padding-right: calc(100vw - 100%);
 }
@@ -119,5 +119,22 @@ body.no-scroll {
     .mobile-menu-scroll::-webkit-scrollbar-thumb {
         background-color: #f05a7e;
         border-radius: 3px;
+    }
+}
+@layer utilities {
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 }
