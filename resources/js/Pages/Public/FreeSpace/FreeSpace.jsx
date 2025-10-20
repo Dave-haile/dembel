@@ -11,6 +11,7 @@ import SpaceDetailsSidebar from "./components/SpaceDetailsSidebar";
 const FreeSpaces = () => {
   const { spaces: initialSpaces, pagination: initialPagination } =
     usePage().props;
+  console.log(initialSpaces);
   const [spaces, setSpaces] = useState([]);
   const [filteredSpaces, setFilteredSpaces] = useState([]);
   const [selectedSpace, setSelectedSpace] = useState(null);

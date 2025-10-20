@@ -5,6 +5,7 @@ import MainLayout from "../Shared/MainLayout";
 import TenantCard from "./TenantCard";
 
 const Tenant = ({ tenants, categories }) => {
+  console.log(tenants, categories);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
 

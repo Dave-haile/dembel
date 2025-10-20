@@ -1910,23 +1910,23 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
-        // DB::table('users')->insert($users);
-        // DB::table('categories')->insert($category);
-        // DB::table('sliders')->insert($sliders);
-        // DB::table('floors')->insert($floor);
-        // DB::table('galleries')->insert($gallery);
-        // DB::table('news')->insert($news);
-        // DB::table('services')->insert($service);
-        // DB::table('testimonials')->insert($testimonials);
-        // DB::table('events')->insert($events);
-        // DB::table('tenants')->insert($tenants);
-        // DB::table('vacancies')->insert($vacancies);
-        // DB::table('applications')->insert($application);
-        // DB::table('clients')->insert($Client);
-        // DB::table('departments')->insert($department);
-        // DB::table('teams')->insert($team);
-        // DB::table('free_spaces')->insert($freeSpaces);
-        // DB::table('malls')->insert($mall);
+        DB::table('users')->insert($users);
+        DB::table('categories')->insert($category);
+        DB::table('sliders')->insert($sliders);
+        DB::table('floors')->insert($floor);
+        DB::table('galleries')->insert($gallery);
+        DB::table('news')->insert($news);
+        DB::table('services')->insert($service);
+        DB::table('testimonials')->insert($testimonials);
+        DB::table('events')->insert($events);
+        DB::table('tenants')->insert($tenants);
+        DB::table('vacancies')->insert($vacancies);
+        DB::table('applications')->insert($application);
+        DB::table('clients')->insert($Client);
+        DB::table('departments')->insert($department);
+        DB::table('teams')->insert($team);
+        DB::table('free_spaces')->insert($freeSpaces);
+        DB::table('malls')->insert($mall);
     }
 }
  // foreach ($vacancies as $index => $vacancy) {

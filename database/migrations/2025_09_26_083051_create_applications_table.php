@@ -26,12 +26,8 @@ return new class extends Migration
             $table->enum('marital_status', ['Single', 'Married', 'Divorced', 'Widowed'])->nullable();
             $table->string('education_background', 100)->nullable();
             $table->foreignId('vacancy_id')->constrained('vacancies')->onDelete('cascade');
-            $table->string('cv')->nullable(); // file path to CV
-            $table->timestamps();
-        });
-        Schema::create('application_experiences', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('application_id')->constrained('applications')->onDelete('cascade');
+            $table->string('cv')->nullable(); // file path to CV 
+            //experiance
             $table->string('company', 150)->nullable();
             $table->string('position', 100)->nullable();
             $table->text('description')->nullable();
@@ -47,6 +43,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('applications');
-        Schema::dropIfExists('application_experiences');
     }
 };
