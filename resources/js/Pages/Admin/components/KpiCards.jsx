@@ -7,8 +7,6 @@ import {
   Images,
   FileText,
   Store,
-  TrendingUp,
-  TrendingDown,
   Database,
   User,
   Mail,
@@ -21,64 +19,91 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-function KPICard({ title, value, icon, change, description, color }) {
+// function KPICard({ title, value, icon, change, description, color }) {
+//   const isPositive = change >= 0;
+
+//   return (
+//     <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 hover:-translate-y-1">
+//       <div className="flex items-center justify-between mb-4">
+//         <div className={`p-3 rounded-lg ${color}`}>{icon}</div>
+//         <div
+//           className={`flex items-center space-x-1 ${
+//             isPositive ? "text-green-600" : "text-red-600"
+//           }`}
+//         >
+//           {isPositive ? <TrendingUp size={20} /> : <TrendingDown size={20} />}
+//           <span className="font-semibold">{Math.abs(change)}%</span>
+//         </div>
+//       </div>
+
+//       <h3 className="text-gray-600 text-sm font-medium mb-1">{title}</h3>
+//       <div className="text-3xl font-bold text-gray-900 mb-2">{value}</div>
+//       <p className="text-xs text-gray-500">{description}</p>
+//     </div>
+//   );
+// }
+const KPICard = ({ title, value, change, description, icon: Icon, color, iconColor }) => {
   const isPositive = change >= 0;
 
   return (
-    <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6 hover:-translate-y-1">
-      <div className="flex items-center justify-between mb-4">
-        <div className={`p-3 rounded-lg ${color}`}>{icon}</div>
+    <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 p-6 border border-gray-100 group">
+      <div className="flex items-start justify-between mb-4">
+        <div>
+          <p className="text-sm font-medium text-gray-600 mb-1">{title}</p>
+          <h3 className="text-3xl font-bold text-gray-800">{value}</h3>
+        </div>
         <div
-          className={`flex items-center space-x-1 ${
-            isPositive ? "text-green-600" : "text-red-600"
-          }`}
+          className={`p-3 ${color} rounded-lg ${iconColor || 'text-gray-600'} group-hover:scale-110 transition-transform duration-300`}
         >
-          {isPositive ? <TrendingUp size={20} /> : <TrendingDown size={20} />}
-          <span className="font-semibold">{Math.abs(change)}%</span>
+          {Icon ? <Icon className={`w-6 h-6 text-white`} /> : null}
         </div>
       </div>
 
-      <h3 className="text-gray-600 text-sm font-medium mb-1">{title}</h3>
-      <div className="text-3xl font-bold text-gray-900 mb-2">{value}</div>
-      <p className="text-xs text-gray-500">{description}</p>
+      <div className="flex items-center gap-2">
+        <span
+          className={`text-sm font-semibold px-2 py-1 rounded ${
+            isPositive
+              ? "bg-green-100 text-green-700"
+              : "bg-red-100 text-red-700"
+          }`}
+        >
+          {isPositive ? "+" : ""}
+          {change}%
+        </span>
+        <span className="text-sm text-gray-500">{description}</span>
+      </div>
     </div>
   );
-}
+};
 
 export default function KPICards({ tables = [], counts = {} }) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const initialCardLimit = 6; // Show 6 cards initially
-  // Icon mapping for different table types
+  const initialCardLimit = 4; 
   const getTableIcon = (tableName) => {
     const iconMap = {
-      users: <User size={24} className="text-blue-600" />,
-      tenants: <Users size={24} className="text-blue-600" />,
-      applications: <FileText size={24} className="text-yellow-600" />,
-      categories: <Database size={24} className="text-gray-600" />,
-      clients: <User size={24} className="text-green-600" />,
-      contacts: <Mail size={24} className="text-purple-600" />,
-      departments: <Building size={24} className="text-orange-600" />,
-      events: <Calendar size={24} className="text-pink-600" />,
-      floors: <MapPin size={24} className="text-indigo-600" />,
-      galleries: <Camera size={24} className="text-teal-600" />,
-      news: <Bell size={24} className="text-red-600" />,
-      services: <Wrench size={24} className="text-orange-600" />,
-      sliders: <Images size={24} className="text-purple-600" />,
-      teams: <Users size={24} className="text-blue-600" />,
-      testimonials: <Star size={24} className="text-yellow-600" />,
-      vacancy: <Briefcase size={24} className="text-green-600" />,
-      free_spaces: <Building size={24} className="text-cyan-600" />,
-      malls: <Store size={24} className="text-teal-600" />,
+      users: User,
+      tenants: Users,
+      applications: FileText,
+      categories: Database,
+      clients: User,
+      contacts: Mail,
+      departments: Building,
+      events: Calendar,
+      floors: MapPin,
+      galleries: Camera,
+      news: Bell,
+      services: Wrench,
+      sliders: Images,
+      teams: Users,
+      testimonials: Star,
+      vacancies: Briefcase,
+      free_spaces: Building,
+      malls: Store,
     };
 
-    return (
-      iconMap[tableName.toLowerCase()] || (
-        <Database size={24} className="text-gray-600" />
-      )
-    );
+    return iconMap[tableName.toLowerCase()] || Database;
   };
 
-  // Color mapping for different table types
   const getTableColor = (tableName) => {
     const colorMap = {
       users: "bg-blue-100",
@@ -104,7 +129,31 @@ export default function KPICards({ tables = [], counts = {} }) {
     return colorMap[tableName.toLowerCase()] || "bg-gray-100";
   };
 
-  // Get count for a table from the counts data
+  const getTableIconColor = (tableName) => {
+    const iconColorMap = {
+      users: "bg-blue-600",
+      tenants: "bg-blue-600",
+      applications: "bg-yellow-600",
+      categories: "bg-gray-600",
+      clients: "bg-green-600",
+      contacts: "bg-purple-600",
+      departments: "bg-orange-600",
+      events: "bg-pink-600",
+      floors: "bg-indigo-600",
+      galleries: "bg-teal-600",
+      news: "bg-red-600",
+      services: "bg-orange-600",
+      sliders: "bg-purple-600",
+      teams: "bg-blue-600",
+      testimonials: "bg-yellow-600",
+      vacancies: "bg-emerald-600",
+      free_spaces: "bg-cyan-600",
+      malls: "bg-teal-600",
+    };
+
+    return iconColorMap[tableName.toLowerCase()] || "text-gray-600";
+  };
+
   const getTableCount = (tableName) => {
     const countMap = {
       users: counts.users || 0,
@@ -130,7 +179,6 @@ export default function KPICards({ tables = [], counts = {} }) {
     return countMap[tableName.toLowerCase()] || 0;
   };
 
-  // Generate KPI cards from tables data
   const kpis = tables.map((table) => {
     const tableName = table.name || table;
     const count = getTableCount(tableName);
@@ -144,10 +192,10 @@ export default function KPICards({ tables = [], counts = {} }) {
       change: Math.floor(Math.random() * 20) - 10, // Random change for demo (you can implement real change calculation later)
       description: `Total ${tableName} records`,
       color: getTableColor(tableName),
+      iconColor: getTableIconColor(tableName),
     };
   });
 
-  // Determine which cards to show
   const visibleKpis = isExpanded ? kpis : kpis.slice(0, initialCardLimit);
   const hasMoreCards = kpis.length > initialCardLimit;
 

@@ -1,175 +1,702 @@
-import React, { useState } from "react";
-import { useCrud } from "../Shared/useCrud";
-import { initialTenants } from "../Shared/moke";
-import DataTable from "../Shared/DataTable";
-import ActivityLog from "../Shared/ActivityLog";
-import ModalForm from "../Shared/ModalForm";
-import DeleteConfirmModal from "../Shared/DeleteConfirmModal";
+import { useState, useEffect, useRef } from "react";
+//
+import Toast from "../components/Toast";
+import DeleteConfirmation from "../components/DeleteConfirmation";
+import FormInput from "../components/FormInput";
+import RecentActivities from "../components/RecentActivities";
+import Modal from "../components/Modal";
 import AdminLayout from "../Shared/AdminLayout";
+import { Head, usePage, router } from "@inertiajs/react";
+import HeaderBar from "./components/HeaderBar";
+import StatsCards from "./components/StatsCards";
+import ControlsBar from "./components/ControlsBar";
+import TenantsTable from "./components/TenantsTable";
 
-const TenantsPage = () => {
-  const {
-    currentItems,
-    searchTerm,
-    setSearchTerm,
-    currentPage,
-    setCurrentPage,
-    totalPages,
-    createItem,
-    updateItem,
-    deleteItem,
-    activityLog,
-  } = useCrud(initialTenants, "Tenant");
-
+const Tenants = () => {
+  const { tenants: tenantsData, categories, activities, count } = usePage().props;
+  const [tenants, setTenants] = useState(tenantsData);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState(null);
-  const [editingItem, setEditingItem] = useState(null);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [selectedTenant, setSelectedTenant] = useState(null);
+  const [toast, setToast] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    category_id: 0,
+    description: "",
+    logo: "",
+    location: "",
+    hours: "",
+    fullDescription: "",
+    floor: "",
+    phone: "",
+    email: "",
+    website: "",
+  });
+  const [errors, setErrors] = useState({});
+  const fileInputRef = useRef(null);
+  const [logoPreview, setLogoPreview] = useState(null);
+  const [perPage, setPerPage] = useState(null); // null = client mode; number|'all' = server mode
+  const [loading, setLoading] = useState(false);
+
+  // Keep local tenants state in sync with latest server props after Inertia responses
+  useEffect(() => {
+    setTenants(tenantsData);
+  }, [tenantsData]);
+
+  const fetchTenants = async (size) => {
+    try {
+      setLoading(true);
+      setPerPage(size);
+      const url = window.route('admin.tenants.list', {
+        per_page: size === 'all' ? 'all' : String(size),
+        search: searchTerm || undefined,
+        category_id: filterCategory || undefined,
+      });
+      const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const items = Array.isArray(data) ? data : (data.data || []);
+      setTenants(items);
+      setCurrentPage(1);
+    } catch (e) {
+      console.error('Failed to load tenants:', e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // When server mode active, refetch on search/category changes
+  useEffect(() => {
+    if (perPage) fetchTenants(perPage);
+  }, [searchTerm, filterCategory]);
+
+  const handleLogoFile = (file) => {
+    if (!file) return;
+    // Frontend validation: only images and max 5MB
+    const MAX_SIZE = 5 * 1024 * 1024;
+    if (!file.type.startsWith('image/')) {
+      setErrors((prev) => ({ ...prev, logo: 'Please select a valid image file.' }));
+      setToast({ message: 'Invalid file type. Please select an image.', type: 'error' });
+      return;
+    }
+    if (file.size > MAX_SIZE) {
+      setErrors((prev) => ({ ...prev, logo: 'Image must be 5MB or smaller.' }));
+      setToast({ message: 'Image is too large (max 5MB).', type: 'error' });
+      return;
+    }
+    setFormData((prev) => ({ ...prev, logo: file }));
+    const url = URL.createObjectURL(file);
+    setLogoPreview(url);
+    console.log("SELECTED LOGO FILE:", file);
+  };
+
+  const onLogoInputChange = (e) => {
+    const file = e.target.files?.[0];
+    handleLogoFile(file);
+  };
+
+  const onLogoDrop = (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files?.[0];
+    handleLogoFile(file);
+  };
+
+  const onLogoDragOver = (e) => e.preventDefault();
+
+  useEffect(() => {
+    return () => {
+      if (logoPreview) {
+        URL.revokeObjectURL(logoPreview);
+      }
+    };
+  }, [logoPreview]);
+
+  const maxColumns = 5;
+  const [isColumnMenuOpen, setIsColumnMenuOpen] = useState(false);
+  const [selectedColumns, setSelectedColumns] = useState([
+    'tenant',
+    'category',
+    'location',
+    'floor',
+    'contact',
+  ]);
+  const columnMenuRef = useRef(null);
+
+  const toggleColumn = (key) => {
+    setSelectedColumns((prev) => {
+      const exists = prev.includes(key);
+      if (exists) return prev.filter((k) => k !== key);
+      if (prev.length >= maxColumns) return prev; // enforce limit
+      return [...prev, key];
+    });
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (isColumnMenuOpen && columnMenuRef.current && !columnMenuRef.current.contains(e.target)) {
+        setIsColumnMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isColumnMenuOpen]);
+
+  const allColumns = [
+    {
+      key: 'tenant',
+      label: 'Tenant',
+      render: (tenant) => (
+        <div className="flex items-center gap-3">
+          <img
+            src={tenant.logo ? `/${tenant.logo}` : 'https://via.placeholder.com/300x200?text=No+Image'}
+            alt={tenant.name}
+            className="w-10 h-10 rounded-lg object-cover"
+          />
+          <div>
+            <p className="font-medium text-gray-800">{tenant.name}</p>
+            <p className="text-sm text-gray-500">{tenant.description}</p>
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: 'category',
+      label: 'Category',
+      render: (tenant) => (
+        <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-sm">
+          {tenant.category?.icon} {tenant.category?.name}
+        </span>
+      ),
+    },
+    { key: 'location', label: 'Location', render: (t) => t.location },
+    { key: 'floor', label: 'Floor', render: (t) => t.floor },
+    {
+      key: 'contact',
+      label: 'Contact',
+      render: (t) => (
+        <div className="text-sm">
+          <p className="text-gray-800">{t.phone}</p>
+          <p className="text-gray-500">{t.email}</p>
+        </div>
+      ),
+    },
+    { key: 'hours', label: 'Hours', render: (t) => t.hours },
+    {
+      key: 'website',
+      label: 'Website',
+      render: (t) => (
+        t.website ? (
+          <a href={`https://${t.website.replace(/^https?:\/\//, '')}`} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">
+            {t.website}
+          </a>
+        ) : '—'
+      ),
+    },
+    { key: 'description', label: 'Description', render: (t) => t.description || '—' },
+    { key: 'email', label: 'Email', render: (t) => t.email || '—' },
+    { key: 'phone', label: 'Phone', render: (t) => t.phone || '—' },
+    { key: 'fullDescription', label: 'Full Description', render: (t) => t.fullDescription || '—' },
+    { key: 'logo', label: 'Logo', render: (t) => (
+      <img
+        src={t.logo ? `/${t.logo}` : 'https://via.placeholder.com/300x200?text=No+Image'}
+        alt={t.name}
+        className="w-10 h-10 rounded-lg object-cover"
+      />
+    ) },
+  ];
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.name?.trim()) newErrors.name = "Name is required";
+    if (!formData.category_id) newErrors.category_id = "Category is required";
+    if (!formData.description?.trim())
+      newErrors.description = "Description is required";
+    if (!formData.location?.trim()) newErrors.location = "Location is required";
+    if (!formData.hours?.trim()) newErrors.hours = "Hours are required";
+    if (!formData.floor?.trim()) newErrors.floor = "Floor is required";
+    if (!formData.phone?.trim()) newErrors.phone = "Phone is required";
+    if (!formData.email?.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Email is invalid";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "category_id" ? Number(value) : value,
+    }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const handleCreate = () => {
+    setFormData({
+      name: "",
+      category_id: 0,
+      description: "",
+      logo: "",
+      location: "",
+      hours: "",
+      fullDescription: "",
+      floor: "",
+      phone: "",
+      email: "",
+      website: "",
+    });
+    setSelectedTenant(null);
+    setErrors({});
+    setLogoPreview(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEdit = (tenant) => {
+    setFormData(tenant);
+    setSelectedTenant(tenant);
+    setErrors({});
+    setLogoPreview(null);
+    setIsModalOpen(true);
+  };
+
+  const handleView = (tenant) => {
+    setSelectedTenant(tenant);
+    setIsViewModalOpen(true);
+  };
+
+  const handleDelete = (tenant) => {
+    setSelectedTenant(tenant);
+    setIsDeleteModalOpen(true);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
 
-    if (editingItem) {
-      updateItem(editingItem.id, data);
-    } else {
-      createItem(data);
+    if (!validateForm()) {
+      setToast({ message: "Please fix the errors in the form", type: "error" });
+      return;
     }
-    setIsModalOpen(false);
-    setEditingItem(null);
+
+    const isFileLogo = formData.logo instanceof File;
+    const fd = new FormData();
+    fd.append('name', formData.name ?? '');
+    if (formData.category_id) fd.append('category_id', String(formData.category_id));
+    fd.append('description', formData.description ?? '');
+    fd.append('location', formData.location ?? '');
+    fd.append('hours', formData.hours ?? '');
+    fd.append('fullDescription', formData.fullDescription ?? '');
+    fd.append('floor', formData.floor ?? '');
+    fd.append('phone', formData.phone ?? '');
+    fd.append('email', formData.email ?? '');
+    fd.append('website', formData.website ?? '');
+    if (isFileLogo) fd.append('logo', formData.logo);
+
+    // Debug: Inspect FormData contents before sending
+    for (const [key, val] of fd.entries()) {
+      if (val instanceof File) {
+        console.log(key, '(File)', { name: val.name, type: val.type, size: val.size });
+      } else {
+        console.log(key, String(val));
+      }
+    }
+
+    if (selectedTenant) {
+      fd.append('_method', 'put');
+      router.post(
+        window.route('admin.tenants.update', selectedTenant.id),
+        fd,
+        {
+          onSuccess: () => {
+            setIsModalOpen(false);
+            setSelectedTenant(null);
+            setLogoPreview(null);
+            setToast({ message: 'Tenant updated successfully', type: 'success' });
+            router.reload({ only: ['tenants'] });
+          },
+        }
+      );
+    } else {
+      router.post(
+        window.route('admin.tenants.store'),
+        fd,
+        {
+          onSuccess: () => {
+            setIsModalOpen(false);
+            setSelectedTenant(null);
+            setLogoPreview(null);
+            setToast({ message: 'Tenant created successfully', type: 'success' });
+            router.reload({ only: ['tenants'] });
+          },
+        }
+      );
+    }
   };
 
-  const handleDelete = () => {
-    deleteItem(itemToDelete);
-    setIsDeleteModalOpen(false);
-    setItemToDelete(null);
+  const confirmDelete = () => {
+    if (selectedTenant) {
+      console.log("DELETE TENANT:", selectedTenant);
+      router.post(window.route('admin.tenants.destroy', selectedTenant.id), {
+        _method: 'delete',
+      }, {
+        onSuccess: () => {
+          setIsDeleteModalOpen(false);
+          setSelectedTenant(null);
+          setToast({ message: 'Tenant deleted successfully', type: 'success' });
+          router.reload({ only: ['tenants'] });
+        },
+      });
+    }
+  };
+  const itemsPerPage = 10;
+
+  const clientFiltered = tenants.filter((tenant) => {
+    const matchesSearch =
+      tenant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      tenant.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      tenant.location.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      !filterCategory || tenant.category_id === Number(filterCategory);
+    return matchesSearch && matchesCategory;
+  });
+  const effectiveList = perPage ? tenants : clientFiltered;
+
+  const totalPages = Math.ceil(effectiveList.length / itemsPerPage);
+  const paginatedTenants = effectiveList.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const LockBodyScroll = () => {
+    useEffect(() => {
+      if (isModalOpen) {
+        const prev = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        return () => {
+          document.body.style.overflow = prev;
+        };
+      }
+    }, [isModalOpen]);
   };
 
-  const columns = [
-    { header: "Name", accessor: "name" },
-    { header: "Category", render: (row) => row.category?.name || "—" },
-    { header: "Location", accessor: "location" },
-    { header: "Phone", accessor: "phone" },
-    { header: "Email", accessor: "email" },
-  ];
+  LockBodyScroll();
 
   return (
-    <AdminLayout
-      currentPage={"tenants"}
-      setCurrentPage={setCurrentPage}
-      setSidebarOpen={setSidebarOpen}
-      sidebarOpen={sidebarOpen}
-    >
-      <div className="p-4 md:p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Tenants</h1>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Add New Tenant
-          </button>
-        </div>
+    <AdminLayout>
+      <Head title="Admin Tenant"/>
+      <div className="space-y-6">
+        <HeaderBar title="Tenants Management" subtitle="Manage all mall tenants" onAdd={handleCreate} />
+        <StatsCards count={count} />
+        <div className="grid grid-cols-1">
+          <div className="lg:col-span-2 space-y-6 shadow-2xl rounded-xl p-6 min-h-[calc(100vh-16rem)] hover:shadow-none transition-all">
+            <ControlsBar
+              searchTerm={searchTerm}
+              onSearchChange={(v) => { setSearchTerm(v); setCurrentPage(1); }}
+              filterCategory={filterCategory}
+              onCategoryChange={(v) => { setFilterCategory(v); setCurrentPage(1); }}
+              categories={categories}
+              selectedColumns={selectedColumns}
+              maxColumns={maxColumns}
+              toggleColumn={toggleColumn}
+              isColumnMenuOpen={isColumnMenuOpen}
+              setIsColumnMenuOpen={setIsColumnMenuOpen}
+              allColumns={allColumns}
+              perPage={perPage}
+              loading={loading}
+              onFetchTenants={fetchTenants}
+            />
 
-        <input
-          type="text"
-          placeholder="Search tenants..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full md:w-1/3 p-2 mb-4 border rounded dark:bg-gray-700 dark:border-gray-600"
-        />
-
-        <DataTable
-          columns={columns}
-          data={currentItems}
-          onEdit={(item) => {
-            setEditingItem(item);
-            setIsModalOpen(true);
-          }}
-          onDelete={(id) => {
-            setItemToDelete(id);
-            setIsDeleteModalOpen(true);
-          }}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
-
-        <ActivityLog activities={activityLog} />
-
-        {/* Form Modal */}
-        <ModalForm
-          isOpen={isModalOpen}
-          onClose={() => {
-            setIsModalOpen(false);
-            setEditingItem(null);
-          }}
-          title={editingItem ? "Edit Tenant" : "Add New Tenant"}
-          onSubmit={handleSubmit}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input
-              name="name"
-              defaultValue={editingItem?.name || ""}
-              placeholder="Name *"
-              required
-              className="p-2 border rounded dark:bg-gray-700"
-            />
-            <input
-              name="location"
-              defaultValue={editingItem?.location || ""}
-              placeholder="Location"
-              className="p-2 border rounded dark:bg-gray-700"
-            />
-            <input
-              name="phone"
-              defaultValue={editingItem?.phone || ""}
-              placeholder="Phone"
-              className="p-2 border rounded dark:bg-gray-700"
-            />
-            <input
-              name="email"
-              defaultValue={editingItem?.email || ""}
-              placeholder="Email"
-              className="p-2 border rounded dark:bg-gray-700"
-            />
-            <input
-              name="website"
-              defaultValue={editingItem?.website || ""}
-              placeholder="Website"
-              className="p-2 border rounded dark:bg-gray-700"
-            />
-            <input
-              name="floor"
-              defaultValue={editingItem?.floor || ""}
-              placeholder="Floor"
-              className="p-2 border rounded dark:bg-gray-700"
-            />
-            <textarea
-              name="description"
-              defaultValue={editingItem?.description || ""}
-              placeholder="Description"
-              className="p-2 border rounded dark:bg-gray-700"
-              rows="2"
+            <TenantsTable
+              selectedColumns={selectedColumns}
+              allColumns={allColumns}
+              items={paginatedTenants}
+              onView={handleView}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              itemsPerPage={itemsPerPage}
+              onPrevPage={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              onNextPage={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              totalCount={effectiveList.length}
             />
           </div>
-        </ModalForm>
+        </div>
 
-        {/* Delete Modal */}
-        <DeleteConfirmModal
+          <div className="mt-6 shadow-[9px_9px_15px_5px_#c8bfbf] rounded-xl p-6 hover:shadow-none transition-all">
+            <RecentActivities
+  activities={activities}
+  subjectType="Tenant"
+  onViewMore={() => router.visit(window.route('admin.activity.index', { subject: 'Tenant' }))}
+/>
+          </div>
+
+        {isModalOpen && (
+          <Modal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            title={selectedTenant ? "Edit Tenant" : "Add New Tenant"}
+          >
+            <form onSubmit={handleSubmit} className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormInput
+                  label="Tenant Name"
+                  name="name"
+                  value={formData.name || ""}
+                  onChange={handleInputChange}
+                  error={errors.name}
+                  required
+                  placeholder="Enter tenant name"
+                />
+
+                <FormInput
+                  label="Category"
+                  name="category_id"
+                  type="select"
+                  value={formData.category_id || ""}
+                  onChange={handleInputChange}
+                  error={errors.category_id}
+                  required
+                  options={categories.map((cat) => ({
+                    value: cat.id,
+                    label: `${cat.icon} ${cat.name}`,
+                  }))}
+                />
+
+                <div className="md:col-span-2">
+                  <FormInput
+                    label="Description"
+                    name="description"
+                    value={formData.description || ""}
+                    onChange={handleInputChange}
+                    error={errors.description}
+                    required
+                    placeholder="Brief description"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="block text-sm font-medium text-gray-700">Logo</label>
+                  <div
+                    onDrop={onLogoDrop}
+                    onDragOver={onLogoDragOver}
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-full px-4 py-8 border-2 border-dashed rounded-lg text-center cursor-pointer hover:bg-gray-50"
+                  >
+                    {logoPreview ? (
+                      <img src={logoPreview} alt="Logo preview" className="mx-auto h-20 w-20 object-cover rounded" />
+                    ) : typeof formData.logo === "string" && formData.logo ? (
+                      <img src={`/${formData.logo}`} alt="Current logo" className="mx-auto h-20 w-20 object-cover rounded" />
+                    ) : (
+                      <div className="text-gray-500">
+                        Drag & drop logo here, or click to select
+                      </div>
+                    )}
+                  </div>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    name="logo"
+                    accept="image/*"
+                    onChange={onLogoInputChange}
+                    className="hidden"
+                  />
+                </div>
+
+                <FormInput
+                  label="Location"
+                  name="location"
+                  value={formData.location || ""}
+                  onChange={handleInputChange}
+                  error={errors.location}
+                  required
+                  placeholder="e.g., Fashion District"
+                />
+
+                <FormInput
+                  label="Floor"
+                  name="floor"
+                  value={formData.floor || ""}
+                  onChange={handleInputChange}
+                  error={errors.floor}
+                  required
+                  placeholder="e.g., Ground Floor"
+                />
+
+                <FormInput
+                  label="Operating Hours"
+                  name="hours"
+                  value={formData.hours || ""}
+                  onChange={handleInputChange}
+                  error={errors.hours}
+                  required
+                  placeholder="e.g., 10:00 AM - 9:00 PM"
+                />
+
+                <FormInput
+                  label="Phone"
+                  name="phone"
+                  type="tel"
+                  value={formData.phone || ""}
+                  onChange={handleInputChange}
+                  error={errors.phone}
+                  required
+                  placeholder="+1 (555) 123-4567"
+                />
+
+                <FormInput
+                  label="Email"
+                  name="email"
+                  type="email"
+                  value={formData.email || ""}
+                  onChange={handleInputChange}
+                  error={errors.email}
+                  required
+                  placeholder="contact@example.com"
+                />
+
+                <FormInput
+                  label="Website"
+                  name="website"
+                  value={formData.website || ""}
+                  onChange={handleInputChange}
+                  placeholder="www.example.com"
+                />
+
+                <div className="md:col-span-2">
+                  <FormInput
+                    label="Full Description"
+                    name="fullDescription"
+                    type="textarea"
+                    value={formData.fullDescription || ""}
+                    onChange={handleInputChange}
+                    placeholder="Detailed description of the tenant..."
+                    rows={4}
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 mt-6 pt-6 border-t">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  {selectedTenant ? "Update Tenant" : "Create Tenant"}
+                </button>
+              </div>
+            </form>
+          </Modal>
+        )}
+
+        {isViewModalOpen && selectedTenant && (
+          <Modal
+            isOpen={isViewModalOpen}
+            onClose={() => setIsViewModalOpen(false)}
+            title="Tenant Details"
+          >
+            <div className="p-6 space-y-4">
+              <div className="flex items-center gap-4 pb-4 border-b">
+                <img
+                  src={`/${selectedTenant.logo}`}
+                  alt={selectedTenant.name}
+                  className="w-20 h-20 rounded-lg object-cover"
+                />
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-800">
+                    {selectedTenant.name}
+                  </h3>
+                  <p className="text-gray-600">{selectedTenant.description}</p>
+                  <span className="inline-block mt-2 px-3 py-1 bg-blue-50 text-blue-700 rounded text-sm">
+                    {selectedTenant.category?.icon}{" "}
+                    {selectedTenant.category?.name}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-gray-500">Location</p>
+                  <p className="text-gray-800 font-medium">
+                    {selectedTenant.location}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Floor</p>
+                  <p className="text-gray-800 font-medium">
+                    {selectedTenant.floor}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Operating Hours</p>
+                  <p className="text-gray-800 font-medium">
+                    {selectedTenant.hours}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Phone</p>
+                  <p className="text-gray-800 font-medium">
+                    {selectedTenant.phone}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Email</p>
+                  <p className="text-gray-800 font-medium">
+                    {selectedTenant.email}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Website</p>
+                  <p className="text-blue-600 font-medium">
+                    {selectedTenant.website}
+                  </p>
+                </div>
+              </div>
+
+              {selectedTenant.fullDescription && (
+                <div className="pt-4 border-t">
+                  <p className="text-sm text-gray-500 mb-2">Full Description</p>
+                  <p className="text-gray-800">
+                    {selectedTenant.fullDescription}
+                  </p>
+                </div>
+              )}
+            </div>
+          </Modal>
+        )}
+
+        <DeleteConfirmation
           isOpen={isDeleteModalOpen}
           onClose={() => setIsDeleteModalOpen(false)}
-          onConfirm={handleDelete}
-          itemName={
-            currentItems.find((i) => i.id === itemToDelete)?.name ||
-            "this tenant"
-          }
+          onConfirm={confirmDelete}
+          itemName={selectedTenant?.name || ""}
         />
+
+        {toast && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)}
+          />
+        )}
       </div>
     </AdminLayout>
   );
 };
 
-export default TenantsPage;
+export default Tenants;

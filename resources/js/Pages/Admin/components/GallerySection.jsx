@@ -1,5 +1,5 @@
 import React from "react";
-import { mockGallery } from "../Dashboard/Dashboard";
+import { mockGallery } from "../Dashboard/Dashboar";
 
 const GallerySection = () => {
   return (

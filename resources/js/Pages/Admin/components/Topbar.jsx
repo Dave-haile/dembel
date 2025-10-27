@@ -1,18 +1,29 @@
-import { useState } from "react";
+/* eslint-disable no-undef */
+import { useEffect, useRef, useState } from "react";
 import { Search, Bell, Menu, User, Settings, LogOut } from "lucide-react";
 import { useForm, usePage } from "@inertiajs/react";
 
-export default function TopBar({ onMenuClick }) {
+export default function TopBar({ onMenuClick, sidebarOpen }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [notifications] = useState(3);
   const { auth } = usePage().props;
+  const dropDownRef = useRef(null);
 
   const { post } = useForm();
 
   const handleLogout = () => {
-    // eslint-disable-next-line no-undef
     post(route("logout"));
   };
+  useEffect(()=> {
+    const handleClickOutside = (e) => {
+      if (showDropdown && dropDownRef.current && !dropDownRef.current.contains(e.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showDropdown]);
+
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
       <div className="flex items-center justify-between px-4 py-3">
@@ -23,6 +34,14 @@ export default function TopBar({ onMenuClick }) {
           >
             <Menu size={24} />
           </button>
+          {!sidebarOpen && (
+            <button
+              onClick={onMenuClick}
+              className="hidden lg:inline-flex p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <Menu size={24} />
+            </button>
+          )}
 
           <div className="relative flex-1 max-w-md">
             <Search
@@ -33,6 +52,7 @@ export default function TopBar({ onMenuClick }) {
               type="text"
               placeholder="Search..."
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              name="search"
             />
           </div>
         </div>
@@ -46,10 +66,10 @@ export default function TopBar({ onMenuClick }) {
               </span>
             )}
           </button>
-
           <div className="relative">
             <button
               onClick={() => setShowDropdown(!showDropdown)}
+              ref={dropDownRef}
               className="flex items-center space-x-2 p-2 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold">

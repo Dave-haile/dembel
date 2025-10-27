@@ -68,6 +68,8 @@ export const useCrud = (initialData, entityName) => {
     currentPage,
     setCurrentPage,
     totalPages,
+    itemsPerPage,
+    filteredCount: filteredItems.length,
     createItem,
     updateItem,
     deleteItem,

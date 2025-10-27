@@ -14,6 +14,7 @@ export default defineConfig([
     rules: {
       "react/prop-types": "off",
       "react/react-in-jsx-scope": "off",
+      "react/no-unescaped-entities": "off",
     },
     languageOptions: { globals: globals.browser },
   },

@@ -1,46 +1,22 @@
-import React from "react";
-import Sidebar from "../components/Sidebar";
-import TopBar from "../components/Topbar";
 
-const AdminLayout = ({
-  setSidebarOpen,
-  currentPage,
-  sidebarOpen,
-  setCurrentPage,
-  children, // Fix the typo here
-}) => {
+import Sidebar from "../components/Sidebar";
+import TopBar from "../components/TopBar";
+import { useState } from "react";
+export default function AdminLayout({ children }) {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   return (
-    <div
-      className={`min-h-screen bg-gray-100 transition-all duration-300 ${
-        sidebarOpen ? "lg:ml-64" : "lg:ml-20"
-      }`}
-    >
-      <Sidebar
-        isOpen={sidebarOpen}
-        currentPage={currentPage}
-        onPageChange={setCurrentPage}
-        onToggle={() => setSidebarOpen(!sidebarOpen)}
-      />
-      <TopBar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
-      <main>{children}</main>
-      <footer className="bg-white border-t border-gray-200 py-6 px-6">
-        <div className="flex flex-col md:flex-row items-center justify-between text-sm text-gray-600">
-          <p>&copy; 2025 Dembel Mall Admin. All rights reserved.</p>
-          <div className="flex items-center space-x-4 mt-2 md:mt-0">
-            <a href="#" className="hover:text-blue-600 transition-colors">
-              Privacy Policy
-            </a>
-            <a href="#" className="hover:text-blue-600 transition-colors">
-              Terms of Service
-            </a>
-            <a href="#" className="hover:text-blue-600 transition-colors">
-              Help
-            </a>
-          </div>
+    <div className="h-screen overflow-hidden bg-gray-50">
+      <div className="flex h-full">
+        <Sidebar
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+          onToggle={() => setSidebarOpen((v) => !v)}
+        />
+        <div className={`flex-1 flex flex-col min-w-0 h-full ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-0'}`}>
+          <TopBar onMenuClick={() => setSidebarOpen(true)} sidebarOpen={sidebarOpen} />
+          <main className="flex-1 overflow-y-auto p-4 lg:p-6">{children}</main>
         </div>
-      </footer>
+      </div>
     </div>
   );
-};
-
-export default AdminLayout;
+}

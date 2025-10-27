@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Tenant extends Model
 {
+    use LogsActivity;
     protected $fillable = [
         'category_id',
         'name',

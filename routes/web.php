@@ -22,8 +22,31 @@ Route::get('/', [HomeController::class, 'index']);
 // Admin routes - protected by authentication
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
-    Route::get('/tenants', fn() => Inertia::render('Admin/Tenant/AdminTenant'));
+    Route::get('/tenants', [AdminController::class, 'tenants'])->name('admin.tenants');
+    Route::get('/free-spaces', [AdminController::class, 'freeSpaces'])->name('admin.free-spaces');
+    Route::get('/vacancies', [AdminController::class, 'vacancies'])->name('admin.vacancies');
+    Route::get('/gallery', [AdminController::class, 'gallery'])->name('admin.gallery');
+    // Tenants CRUD (JSON API)
+    Route::get('/tenants/list', [AdminController::class, 'tenantList'])->name('admin.tenants.list');
+    Route::get('/tenants/{tenant}', [AdminController::class, 'tenantShow'])->name('admin.tenants.show');
+    Route::post('/tenants', [AdminController::class, 'tenantStore'])->name('admin.tenants.store');
+    Route::match(['put', 'patch'], '/tenants/{tenant}', [AdminController::class, 'tenantUpdate'])->name('admin.tenants.update');
+    Route::delete('/tenants/{tenant}', [AdminController::class, 'tenantDestroy'])->name('admin.tenants.destroy');
+    // Free Spaces CRUD (JSON API)
+    Route::get('/free-spaces/list', [AdminController::class, 'freeSpacesList'])->name('admin.free-spaces.list');
+    Route::get('/free-spaces/{freeSpace}', [AdminController::class, 'freeSpaceShow'])->name('admin.free-spaces.show');
+    Route::post('/free-spaces', [AdminController::class, 'freeSpaceStore'])->name('admin.free-spaces.store');
+    Route::match(['put', 'patch'], '/free-spaces/{freeSpace}', [AdminController::class, 'freeSpaceUpdate'])->name('admin.free-spaces.update');
+    Route::delete('/free-spaces/{freeSpace}', [AdminController::class, 'freeSpaceDestroy'])->name('admin.free-spaces.destroy');
+    // Vacancies CRUD (JSON API)
+    Route::get('/vacancies/list', [AdminController::class, 'vacanciesList'])->name('admin.vacancies.list');
+    Route::get('/vacancies/{vacancy}', [AdminController::class, 'vacancyShow'])->name('admin.vacancies.show');
+    Route::post('/vacancies', [AdminController::class, 'vacancyStore'])->name('admin.vacancies.store');
+    Route::match(['put', 'patch'], '/vacancies/{vacancy}', [AdminController::class, 'vacancyUpdate'])->name('admin.vacancies.update');
+    Route::delete('/vacancies/{vacancy}', [AdminController::class, 'vacancyDestroy'])->name('admin.vacancies.destroy');
     // Add other admin routes here as needed
+    Route::get('/activity', [AdminController::class, 'activity'])->name('admin.activity.index');
+    Route::get('/activity/{subject}', [AdminController::class, 'activity'])->name('admin.activity.show');
 });
 
 
