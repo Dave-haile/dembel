@@ -8,6 +8,7 @@ import { useClickOutside } from "./Components/ClickOutside";
 export default function Header() {
   const { url, props } = usePage();
   const services = props.services || [];
+  const auth = props.auth || {};
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const headerRef = useRef(null);
@@ -110,6 +111,9 @@ export default function Header() {
               <NavLink href="/contact" active={url === "/contact"}>
                 Contact Us
               </NavLink>
+              {auth?.user?.role === "admin" ? <NavLink className="" href="/admin" active={url === "/admin"}>
+                Admin
+              </NavLink> : null}
             </nav>
 
             <button
@@ -242,6 +246,9 @@ export default function Header() {
               >
                 Contact Us
               </MobileNavLink>
+              {auth?.user?.role === "admin" && <MobileNavLink className="" href="/admin" active={url === "/admin"}>
+                Admin
+              </MobileNavLink>}
             </div>
           </div>
         </div>
@@ -263,3 +270,4 @@ function NavLink({ href, active, children }) {
     </Link>
   );
 }
+

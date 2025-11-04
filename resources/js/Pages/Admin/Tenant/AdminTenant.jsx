@@ -152,7 +152,7 @@ const Tenants = () => {
       render: (tenant) => (
         <div className="flex items-center gap-3">
           <img
-            src={tenant.logo ? `/${tenant.logo}` : 'https://via.placeholder.com/300x200?text=No+Image'}
+            src={tenant.logo ? `/${tenant.logo}` : 'https://placehold.co/600x400?text=No+Image'}
             alt={tenant.name}
             className="w-10 h-10 rounded-lg object-cover"
           />
@@ -202,7 +202,7 @@ const Tenants = () => {
     { key: 'fullDescription', label: 'Full Description', render: (t) => t.fullDescription || '—' },
     { key: 'logo', label: 'Logo', render: (t) => (
       <img
-        src={t.logo ? `/${t.logo}` : 'https://via.placeholder.com/300x200?text=No+Image'}
+        src={t.logo ? `/${t.logo}` : 'https://placehold.co/600x400?text=No+Image'}
         alt={t.name}
         className="w-10 h-10 rounded-lg object-cover"
       />

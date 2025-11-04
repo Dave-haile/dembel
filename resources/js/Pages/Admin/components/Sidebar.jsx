@@ -165,7 +165,6 @@ import {
   Store,
   MapPin,
   Briefcase,
-  Megaphone,
   Wrench,
   ImageIcon,
   Users,
@@ -174,19 +173,20 @@ import {
   Mail,
   Building2,
   Newspaper,
+  Calendar,
   Layers,
   Presentation,
   UsersRound,
   Building,
   Settings,
   ChevronLeft,
-  ChevronRight
+  Activity,
 } from 'lucide-react';
 import { useEffect } from 'react';
 import { usePage } from '@inertiajs/react';
 
 const Sidebar = ({ isOpen, onClose, onNavigate, onToggle }) => {
-  const {url} = usePage();
+  const { url } = usePage();
   // Lock body scroll when the sidebar is open on mobile
   useEffect(() => {
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
@@ -203,20 +203,22 @@ const Sidebar = ({ isOpen, onClose, onNavigate, onToggle }) => {
     { id: 'tenants', label: 'Tenants', icon: Store, link: '/admin/tenants' },
     { id: 'free-spaces', label: 'Free Spaces', icon: MapPin, link: '/admin/free-spaces' },
     { id: 'vacancies', label: 'Vacancies', icon: Briefcase, link: '/admin/vacancies' },
-    { id: 'announcements', label: 'Announcements', icon: Megaphone, link: '/admin/announcements' },
+    // { id: 'announcements', label: 'Announcements', icon: Megaphone, link: '/admin/announcements' },
     { id: 'services', label: 'Services', icon: Wrench, link: '/admin/services' },
     { id: 'gallery', label: 'Gallery', icon: ImageIcon, link: '/admin/gallery' },
     { id: 'users', label: 'Users', icon: Users, link: '/admin/users' },
+    { id: 'slides', label: 'Slides', icon: Presentation, link: '/admin/slides' },
+    { id: 'news', label: 'News', icon: Newspaper, link: '/admin/news' },
+    { id: 'events', label: 'Events', icon: Calendar, link: '/admin/events' },
     { id: 'applications', label: 'Applications', icon: FileText, link: '/admin/applications' },
     { id: 'categories', label: 'Categories', icon: Tags, link: '/admin/categories' },
     { id: 'contacts', label: 'Contacts', icon: Mail, link: '/admin/contacts' },
     { id: 'departments', label: 'Departments', icon: Building2, link: '/admin/departments' },
-    { id: 'news-events', label: 'News & Events', icon: Newspaper },
-    { id: 'floors', label: 'Floors', icon: Layers },
-    { id: 'slides', label: 'Slides', icon: Presentation },
-    { id: 'team', label: 'Team', icon: UsersRound },
-    { id: 'malls', label: 'Malls', icon: Building },
-    { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'floors', label: 'Floors', icon: Layers, link: '/admin/floors' },
+    { id: 'teams', label: 'Teams', icon: UsersRound, link: '/admin/teams' },
+    { id: 'malls', label: 'Malls', icon: Building, link: '/admin/malls' },
+    { id: 'activity-log', label: 'Activity Log', icon: Activity, link: '/admin/activity-log' },
+    { id: 'settings', label: 'Settings', icon: Settings, link: '/admin/settings' },
   ];
 
   return (
@@ -251,7 +253,7 @@ const Sidebar = ({ isOpen, onClose, onNavigate, onToggle }) => {
               onClick={onToggle}
               className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
             >
-              {isOpen && <ChevronLeft size={20} /> }
+              {isOpen && <ChevronLeft size={20} />}
             </button>
           </div>
           <nav className="flex-1 py-4 px-3">

@@ -14,7 +14,7 @@ export default function TopBar({ onMenuClick, sidebarOpen }) {
   const handleLogout = () => {
     post(route("logout"));
   };
-  useEffect(()=> {
+  useEffect(() => {
     const handleClickOutside = (e) => {
       if (showDropdown && dropDownRef.current && !dropDownRef.current.contains(e.target)) {
         setShowDropdown(false);
@@ -74,9 +74,9 @@ export default function TopBar({ onMenuClick, sidebarOpen }) {
             >
               <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold">
                 {auth?.user
-                  ? auth.user.name
-                    ? auth.user.name.charAt(0).toUpperCase()
-                    : auth.user.email.charAt(0).toUpperCase()
+                  ? auth.user.avatar
+                    ? <img src={`/${auth.user.avatar}`} alt="Avatar" className="w-full h-full rounded-full object-cover" />
+                    : auth.user.name.charAt(0).toUpperCase()
                   : "A"}
               </div>
               <div className="hidden md:block text-left">

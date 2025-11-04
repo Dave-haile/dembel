@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/react";
 import {
   Users,
   Building,
@@ -46,7 +47,7 @@ const KPICard = ({ title, value, change, description, icon: Icon, color, iconCol
   const isPositive = change >= 0;
 
   return (
-    <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 p-6 border border-gray-100 group">
+    <div onClick={() => router.visit('/admin/' + title.toLowerCase())} className="bg-white rounded-xl cursor-pointer shadow-sm hover:shadow-md transition-all duration-300 p-6 border border-gray-100 group">
       <div className="flex items-start justify-between mb-4">
         <div>
           <p className="text-sm font-medium text-gray-600 mb-1">{title}</p>
@@ -61,11 +62,10 @@ const KPICard = ({ title, value, change, description, icon: Icon, color, iconCol
 
       <div className="flex items-center gap-2">
         <span
-          className={`text-sm font-semibold px-2 py-1 rounded ${
-            isPositive
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-          }`}
+          className={`text-sm font-semibold px-2 py-1 rounded ${isPositive
+            ? "bg-green-100 text-green-700"
+            : "bg-red-100 text-red-700"
+            }`}
         >
           {isPositive ? "+" : ""}
           {change}%
@@ -78,7 +78,7 @@ const KPICard = ({ title, value, change, description, icon: Icon, color, iconCol
 
 export default function KPICards({ tables = [], counts = {} }) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const initialCardLimit = 4; 
+  const initialCardLimit = 4;
   const getTableIcon = (tableName) => {
     const iconMap = {
       users: User,

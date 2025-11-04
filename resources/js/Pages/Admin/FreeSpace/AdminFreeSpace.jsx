@@ -539,15 +539,15 @@ const FreeSpacesCRUD = () => {
     fd.append('wing_or_zone', formData.wing_or_zone ?? '');
     if (formData.area_sqm !== undefined && formData.area_sqm !== '') fd.append('area_sqm', String(formData.area_sqm));
     fd.append('dimensions', formData.dimensions ?? '');
-    fd.append('has_window', formData.has_window ? '1' : '0');
-    fd.append('has_ventilation', formData.has_ventilation ? '1' : '0');
-    fd.append('has_plumbing', formData.has_plumbing ? '1' : '0');
-    fd.append('has_electricity', formData.has_electricity ? '1' : '0');
+    fd.append('has_window', formData.has_window ? true : false);
+    fd.append('has_ventilation', formData.has_ventilation ? true : false);
+    fd.append('has_plumbing', formData.has_plumbing ? true : false);
+    fd.append('has_electricity', formData.has_electricity ? true : false);
     if (Array.isArray(formData.features)) fd.append('features', JSON.stringify(formData.features));
     if (formData.monthly_rent !== undefined && formData.monthly_rent !== '') fd.append('monthly_rent', String(formData.monthly_rent));
     fd.append('rent_currency', formData.rent_currency ?? '');
     if (Array.isArray(formData.rent_includes)) fd.append('rent_includes', JSON.stringify(formData.rent_includes));
-    fd.append('negotiable', formData.negotiable ? '1' : '0');
+    fd.append('negotiable', formData.negotiable ? true : false);
     // File
     if (formData.thumbnail instanceof File) {
       fd.append('thumbnail', formData.thumbnail);
@@ -1106,8 +1106,8 @@ const FreeSpacesCRUD = () => {
                         onDragLeave={onLogoDragLeave}
                         onClick={() => fileInputRef.current?.click()}
                         className={`w-full px-4 py-8 border-2 rounded-lg text-center cursor-pointer transition-colors ${isDragging
-                            ? 'border-green-400 bg-green-50 ring-2 ring-green-300'
-                            : 'border-dashed border-gray-300 hover:bg-gray-50'
+                          ? 'border-green-400 bg-green-50 ring-2 ring-green-300'
+                          : 'border-dashed border-gray-300 hover:bg-gray-50'
                           }`}
                       >
                         {logoPreview ? (

@@ -40,6 +40,10 @@ class HandleInertiaRequests extends Middleware
             'appname' => config('app.name'),
             'auth.user' => fn() => $request->user(),
             'services' => Service::approved()->orderBy('id', 'DESC')->get(),
+            'flash' => [
+                'success' => fn () => $request->session()->get('success'),
+                'error' => fn () => $request->session()->get('error'),
+            ],
         ]);
     }
 }

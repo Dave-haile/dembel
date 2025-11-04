@@ -73,59 +73,43 @@
 //   );
 // }
 
-import { useState } from 'react';
 import QuickActions from '../components/QuickActions';
 import DataTable from '../components/DataTable';
 import ActivityFeed from '../components/ActivityFeed';
-import Modal from '../components/Modal';
 import AdminLayout from '../Shared/AdminLayout';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import KPICards from '../components/KpiCards';
 import { BarChart, DonutChart, LineChart } from '../components/Charts';
 
 const Dashboard = () => {
   const { counts, tables, tenants, activities } = usePage().props;
-  console.log('activities',activities)
-  console.log('tenants',tenants);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState('');
+  console.log('activities', activities)
+  console.log('tenants', tenants);
 
   const quickActions = [
     {
       id: 'add-tenant',
       label: 'Add Tenant',
       color: 'blue',
-      onClick: () => {
-        setModalTitle('Add New Tenant');
-        setModalOpen(true);
-      },
+      onClick: () => { router.visit('/admin/tenants') },
     },
     {
       id: 'add-space',
       label: 'Add Free Space',
       color: 'green',
-      onClick: () => {
-        setModalTitle('Add Free Space');
-        setModalOpen(true);
-      },
+      onClick: () => { router.visit('/admin/free-spaces') },
     },
     {
       id: 'add-announcement',
       label: 'Post Announcement',
       color: 'orange',
-      onClick: () => {
-        setModalTitle('Post Announcement');
-        setModalOpen(true);
-      },
+      onClick: () => { router.visit('/admin/news') },
     },
     {
       id: 'add-vacancy',
       label: 'Add Vacancy',
       color: 'purple',
-      onClick: () => {
-        setModalTitle('Add Job Vacancy');
-        setModalOpen(true);
-      },
+      onClick: () => { router.visit('/admin/vacancies') },
     },
   ];
 
@@ -142,11 +126,10 @@ const Dashboard = () => {
       label: 'Status',
       render: (value) => (
         <span
-          className={`px-3 py-1 rounded-full text-xs font-medium ${
-            value === 'Active'
-              ? 'bg-green-100 text-green-700'
-              : 'bg-yellow-100 text-yellow-700'
-          }`}
+          className={`px-3 py-1 rounded-full text-xs font-medium ${value === 'Active'
+            ? 'bg-green-100 text-green-700'
+            : 'bg-yellow-100 text-yellow-700'
+            }`}
         >
           {value}
         </span>
@@ -165,74 +148,42 @@ const Dashboard = () => {
   return (
     <AdminLayout>
       <Head title="Dashboard" />
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-800">Dashboard Overview</h1>
-        <p className="text-gray-600 mt-1">Welcome back! Here's what's happening today.</p>
-      </div>
-
-      <KPICards tables={tables} counts={counts} />
-
-      <QuickActions actions={quickActions} />
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <LineChart />
-        <BarChart />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
-          <DonutChart />
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800">Dashboard Overview</h1>
+          <p className="text-gray-600 mt-1">Welcome back! Here's what's happening today.</p>
         </div>
-        <ActivityFeed activities={activities} />
-      </div>
 
-      <div>
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Recent Tenants</h2>
-        <DataTable
-          columns={tenantColumns}
-          data={tenants}
-          itemsPerPage={5}
-          onEdit={(item) => console.log('Edit', item)}
-          onDelete={(item) => console.log('Delete', item)}
-          onView={(item) => console.log('View', item)}
-        />
-      </div>
+        <KPICards tables={tables} counts={counts} />
 
-      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title={modalTitle}>
-        <div className="space-y-4">
-          <p className="text-gray-600">
-            This is a mock modal. In a real application, this would contain a form to {modalTitle.toLowerCase()}.
-          </p>
-          <div className="space-y-3">
-            <input
-              type="text"
-              placeholder="Enter details..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <textarea
-              placeholder="Additional information..."
-              rows={4}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        <QuickActions actions={quickActions} />
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <LineChart />
+          <BarChart />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <DonutChart
             />
           </div>
-          <div className="flex justify-end gap-3 pt-4">
-            <button
-              onClick={() => setModalOpen(false)}
-              className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={() => setModalOpen(false)}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Save
-            </button>
-          </div>
+          <ActivityFeed activities={activities} />
         </div>
-      </Modal>
-    </div></AdminLayout>
+
+        <div>
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Recent Tenants</h2>
+          <DataTable
+            columns={tenantColumns}
+            data={tenants}
+            itemsPerPage={5}
+            onEdit={(item) => console.log('Edit', item)}
+            onDelete={(item) => console.log('Delete', item)}
+            onView={(item) => console.log('View', item)}
+          />
+        </div>
+      </div>
+    </AdminLayout>
   );
 };
 

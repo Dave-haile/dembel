@@ -42,13 +42,13 @@ const Modal = ({ isOpen, onClose, title, children }) => {
     }
   }, [isOpen]);
 
-  if (!isOpen) return null;
-
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     const t = requestAnimationFrame(() => setMounted(true));
     return () => cancelAnimationFrame(t);
   }, []);
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end">

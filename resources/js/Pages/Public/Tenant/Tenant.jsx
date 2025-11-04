@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import { Head } from "@inertiajs/react";
-import { Search } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 import MainLayout from "../Shared/MainLayout";
 import TenantCard from "./TenantCard";
 
@@ -32,6 +32,14 @@ const Tenant = ({ tenants, categories }) => {
   const safeCategories = Array.isArray(categories) ? categories : [];
   const safeTenants = Array.isArray(tenants) ? tenants : [];
 
+  const catScrollRef = useRef(null);
+  const scrollByAmount = (dir) => {
+    if (catScrollRef.current) {
+      catScrollRef.current.scrollBy({ left: dir * 300, behavior: "smooth" });
+    }
+  };
+
+  console.log("safeCategories", safeCategories);
   return (
     <MainLayout>
       <Head>
@@ -74,8 +82,19 @@ const Tenant = ({ tenants, categories }) => {
         </div>
 
         {/* Category Filters */}
-        <div className="mb-12">
-          <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+        <div className="mb-12 relative">
+          <button
+            type="button"
+            onClick={() => scrollByAmount(-1)}
+            aria-label="Scroll left"
+            className="absolute -left-12 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white border border-gray-200 shadow hover:bg-gray-200"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <div
+            ref={catScrollRef}
+            className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide"
+          >
             {safeCategories.map((category) => (
               <button
                 key={category.id || category.name}
@@ -91,6 +110,14 @@ const Tenant = ({ tenants, categories }) => {
               </button>
             ))}
           </div>
+          <button
+            type="button"
+            onClick={() => scrollByAmount(1)}
+            aria-label="Scroll right"
+            className="absolute -right-12 border-2 border-gray-200 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white shadow hover:bg-gray-200"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
         </div>
 
         {/* Results Count */}
