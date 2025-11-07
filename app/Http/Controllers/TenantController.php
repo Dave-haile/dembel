@@ -4,35 +4,101 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Tenant;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class TenantController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tenants = Tenant::with('category')
-            ->orderBy('name')
-            ->get();
+        $perPage = $request->get('per_page', 12);
+        $page = $request->get('page', 1);
+        $category = $request->get('category', 'all');
+        $search = $request->get('search', '');
 
+        $query = Tenant::with('category', 'floor')
+            ->orderBy('name');
+
+        if ($category !== 'all') {
+            $query->where('category_id', $category);
+        }
+
+        if (!empty($search)) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        $tenants = $query->paginate($perPage, ['*'], 'page', $page);
         $categories = Category::orderBy('name')->get();
 
-        $allCategories = collect([
-            ['id' => 'all', 'name' => 'All', 'icon' => '🏬'],
-        ])->merge($categories);
+        // For AJAX requests (load more)
+        if ($request->expectsJson()) {
+            return response()->json([
+                'data' => $tenants->items(),
+                'current_page' => $tenants->currentPage(),
+                'last_page' => $tenants->lastPage(),
+                'per_page' => $tenants->perPage(),
+                'total' => $tenants->total(),
+                'has_more' => $tenants->hasMorePages(),
+            ]);
+        }
 
+        // For initial page load
         return Inertia::render('Public/Tenant/Tenant', [
-            'tenants' => $tenants,
-            'categories' => $allCategories,
+            'initialTenants' => $tenants->items(),
+            'pagination' => [
+                'current_page' => $tenants->currentPage(),
+                'last_page' => $tenants->lastPage(),
+                'per_page' => $tenants->perPage(),
+                'total' => $tenants->total(),
+                'has_more' => $tenants->hasMorePages(),
+            ],
+            'categories' => collect([
+                ['id' => 'all', 'name' => 'All', 'icon' => '🏬']
+            ])->merge($categories)
         ]);
     }
 
     public function show(Tenant $tenant)
     {
-
-        $tenant->load('category');
-
+        $tenant->load('category', 'floor');
         return Inertia::render('Public/Tenant/TenantDetail', [
             'tenant' => $tenant,
+        ]);
+    }
+    
+    public function loadMore(Request $request)
+    {
+        $perPage = $request->get('per_page', 12);
+        $page = $request->get('page', 1);
+        $category = $request->get('category', 'all');
+        $search = $request->get('search', '');
+
+        $query = Tenant::with('category', 'floor')
+            ->orderBy('name');
+
+        if ($category !== 'all') {
+            $query->where('category_id', $category);
+        }
+
+        if (!empty($search)) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        $tenants = $query->paginate($perPage, ['*'], 'page', $page);
+
+        return response()->json([
+            'data' => $tenants->items(),
+            'current_page' => $tenants->currentPage(),
+            'last_page' => $tenants->lastPage(),
+            'per_page' => $tenants->perPage(),
+            'total' => $tenants->total(),
+            'has_more' => $tenants->hasMorePages(),
         ]);
     }
 }

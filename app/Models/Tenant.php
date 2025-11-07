@@ -17,13 +17,24 @@ class Tenant extends Model
         'location',
         'hours',
         'fullDescription',
-        'floor',
+        'floor_id',
+        'room_no',
         'phone',
         'email',
         'website'
     ];
+
+    protected $casts = [
+        'floor_id' => 'integer',
+    ];
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function floor(): BelongsTo
+    {
+        return $this->belongsTo(Floor::class);
     }
 }

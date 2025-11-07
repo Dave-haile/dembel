@@ -153,6 +153,7 @@ Route::get('/services/{id}', [ServiceController::class, 'show'])->name('services
 Route::post('/services/contact', [ServiceController::class, 'contact'])->name('services.contact');
 
 Route::get('/tenant', [TenantController::class, 'index'])->name('tenant.index');
+Route::get('/tenant/load-more', [TenantController::class, 'loadMore'])->name('tenant.load-more');
 Route::get('/tenant/{tenant}', [TenantController::class, 'show'])->name('tenant.show');
 
 Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');

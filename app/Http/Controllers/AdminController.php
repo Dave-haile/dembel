@@ -168,7 +168,8 @@ class AdminController extends Controller
 
     public function tenants()
     {
-        $tenants = Tenant::with('category')->orderBy('created_at', 'desc')->limit(10)->get();
+        $tenants = Tenant::with(['category', 'floor'])->orderBy('created_at', 'desc')->limit(10)->get();
+        $floors = Floor::all();
         $count = DB::table('tenants')->count();
         $categories = Category::all();
         $activities = ActivityLog::with('user')
@@ -181,6 +182,7 @@ class AdminController extends Controller
             'tenants' => $tenants,
             'count' => $count,
             'categories' => $categories,
+            'floors' => $floors,
             'activities' => $activities,
         ]);
     }
@@ -1888,16 +1890,17 @@ class AdminController extends Controller
     public function tenantStore(Request $request)
     {
         $validated = $request->validate([
-            'category_id' => ['nullable', 'exists:categories,id'],
+            'category_id' => ['required', 'exists:categories,id'],
             'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
+            'description' => ['required', 'string'],
             'logo' => ['nullable', 'image', 'max:5120'], // max 5MB
-            'location' => ['nullable', 'string', 'max:255'],
-            'hours' => ['nullable', 'string', 'max:255'],
+            'location' => ['required', 'string', 'max:255'],
+            'hours' => ['required', 'string', 'max:255'],
             'fullDescription' => ['nullable', 'string'],
-            'floor' => ['nullable', 'string', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:255'],
-            'email' => ['nullable', 'email', 'max:255'],
+            'floor_id' => ['required', 'exists:floors,id'],
+            'room_no' => ['required', 'string', 'max:50'],
+            'phone' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
             'website' => ['nullable', 'string', 'max:255'],
         ]);
 
@@ -1935,16 +1938,17 @@ class AdminController extends Controller
     public function tenantUpdate(Request $request, Tenant $tenant)
     {
         $validated = $request->validate([
-            'category_id' => ['nullable', 'exists:categories,id'],
-            'name' => ['sometimes', 'required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
+            'category_id' => ['required', 'exists:categories,id'],
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
             'logo' => ['nullable', 'image', 'max:5120'], // max 5MB
-            'location' => ['nullable', 'string', 'max:255'],
-            'hours' => ['nullable', 'string', 'max:255'],
+            'location' => ['required', 'string', 'max:255'],
+            'hours' => ['required', 'string', 'max:255'],
             'fullDescription' => ['nullable', 'string'],
-            'floor' => ['nullable', 'string', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:255'],
-            'email' => ['nullable', 'email', 'max:255'],
+            'floor_id' => ['required', 'exists:floors,id'],
+            'room_no' => ['required', 'string', 'max:50'],
+            'phone' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
             'website' => ['nullable', 'string', 'max:255'],
         ]);
 
@@ -2501,7 +2505,7 @@ class AdminController extends Controller
         if ($request->has('action') && $request->action) {
             $query->where('action', $request->action);
         }
-        
+
         if ($request->has('subject_type') && $request->subject_type) {
             $query->where('subject_type', $request->subject_type);
         }
@@ -2519,10 +2523,10 @@ class AdminController extends Controller
         }
 
         // Handle per_page parameter
-        $perPage = $request->per_page && is_numeric($request->per_page) 
-            ? (int) $request->per_page 
+        $perPage = $request->per_page && is_numeric($request->per_page)
+            ? (int) $request->per_page
             : 15;
-            
+
         $perPage = max(1, min(100, $perPage)); // Ensure per_page is between 1 and 100
 
         // Return paginated results
@@ -2541,7 +2545,7 @@ class AdminController extends Controller
 
     public function tenantList(Request $request)
     {
-        $query = Tenant::with('category')->orderByDesc('created_at');
+        $query = Tenant::with(['category', 'floor'])->orderByDesc('created_at');
         $search = $request->query('search');
         $categoryId = $request->query('category_id');
         if ($search) {

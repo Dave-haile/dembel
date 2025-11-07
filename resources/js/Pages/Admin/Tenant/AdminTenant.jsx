@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-//
 import Toast from "../components/Toast";
 import DeleteConfirmation from "../components/DeleteConfirmation";
 import FormInput from "../components/FormInput";
@@ -14,6 +13,7 @@ import TenantsTable from "./components/TenantsTable";
 
 const Tenants = () => {
   const { tenants: tenantsData, categories, activities, count } = usePage().props;
+  // console.log(tenantsData);
   const [tenants, setTenants] = useState(tenantsData);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
@@ -31,7 +31,8 @@ const Tenants = () => {
     location: "",
     hours: "",
     fullDescription: "",
-    floor: "",
+    floor_id: "",
+    room_no: "",
     phone: "",
     email: "",
     website: "",
@@ -173,7 +174,8 @@ const Tenants = () => {
       ),
     },
     { key: 'location', label: 'Location', render: (t) => t.location },
-    { key: 'floor', label: 'Floor', render: (t) => t.floor },
+    { key: 'floor', label: 'Floor', render: (t) => t.floor?.name || '—' },
+    { key: 'room', label: 'Room', render: (t) => t.room_no || '—' },
     {
       key: 'contact',
       label: 'Contact',
@@ -200,13 +202,15 @@ const Tenants = () => {
     { key: 'email', label: 'Email', render: (t) => t.email || '—' },
     { key: 'phone', label: 'Phone', render: (t) => t.phone || '—' },
     { key: 'fullDescription', label: 'Full Description', render: (t) => t.fullDescription || '—' },
-    { key: 'logo', label: 'Logo', render: (t) => (
-      <img
-        src={t.logo ? `/${t.logo}` : 'https://placehold.co/600x400?text=No+Image'}
-        alt={t.name}
-        className="w-10 h-10 rounded-lg object-cover"
-      />
-    ) },
+    {
+      key: 'logo', label: 'Logo', render: (t) => (
+        <img
+          src={t.logo ? `/${t.logo}` : 'https://placehold.co/600x400?text=No+Image'}
+          alt={t.name}
+          className="w-10 h-10 rounded-lg object-cover"
+        />
+      )
+    },
   ];
 
   const validateForm = () => {
@@ -218,7 +222,8 @@ const Tenants = () => {
       newErrors.description = "Description is required";
     if (!formData.location?.trim()) newErrors.location = "Location is required";
     if (!formData.hours?.trim()) newErrors.hours = "Hours are required";
-    if (!formData.floor?.trim()) newErrors.floor = "Floor is required";
+    if (!formData.floor_id) newErrors.floor_id = "Floor is required";
+    if (!formData.room_no?.trim()) newErrors.room_no = "Room number is required";
     if (!formData.phone?.trim()) newErrors.phone = "Phone is required";
     if (!formData.email?.trim()) {
       newErrors.email = "Email is required";
@@ -250,7 +255,8 @@ const Tenants = () => {
       location: "",
       hours: "",
       fullDescription: "",
-      floor: "",
+      floor_id: "",
+      room_no: "",
       phone: "",
       email: "",
       website: "",
@@ -262,15 +268,30 @@ const Tenants = () => {
   };
 
   const handleEdit = (tenant) => {
-    setFormData(tenant);
+    // Extract only the necessary fields and handle the floor object
+    const { floor, ...tenantData } = tenant;
+
+    setFormData({
+      ...tenantData,
+      floor_id: floor?.id || '',
+      // Ensure we don't include the floor object in formData
+      floor: undefined
+    });
+
     setSelectedTenant(tenant);
     setErrors({});
-    setLogoPreview(null);
+    setLogoPreview(tenant.logo ? `/${tenant.logo}` : null);
     setIsModalOpen(true);
   };
 
   const handleView = (tenant) => {
-    setSelectedTenant(tenant);
+    // Create a new object without the floor object to prevent rendering issues
+    const { floor, ...tenantData } = tenant;
+    setSelectedTenant({
+      ...tenantData,
+      floor_name: floor?.name || 'N/A', // Add floor_name for display
+      floor_description: floor?.description || '' // Add floor_description if needed
+    });
     setIsViewModalOpen(true);
   };
 
@@ -295,7 +316,8 @@ const Tenants = () => {
     fd.append('location', formData.location ?? '');
     fd.append('hours', formData.hours ?? '');
     fd.append('fullDescription', formData.fullDescription ?? '');
-    fd.append('floor', formData.floor ?? '');
+    if (formData.floor_id) fd.append('floor_id', String(formData.floor_id));
+    fd.append('room_no', formData.room_no ?? '');
     fd.append('phone', formData.phone ?? '');
     fd.append('email', formData.email ?? '');
     fd.append('website', formData.website ?? '');
@@ -392,7 +414,7 @@ const Tenants = () => {
 
   return (
     <AdminLayout>
-      <Head title="Admin Tenant"/>
+      <Head title="Admin Tenant" />
       <div className="space-y-6">
         <HeaderBar title="Tenants Management" subtitle="Manage all mall tenants" onAdd={handleCreate} />
         <StatsCards count={count} />
@@ -432,13 +454,13 @@ const Tenants = () => {
           </div>
         </div>
 
-          <div className="mt-6 shadow-[9px_9px_15px_5px_#c8bfbf] rounded-xl p-6 hover:shadow-none transition-all">
-            <RecentActivities
-  activities={activities}
-  subjectType="Tenant"
-  onViewMore={() => router.visit(window.route('admin.activity.index', { subject: 'Tenant' }))}
-/>
-          </div>
+        <div className="mt-6 shadow-[9px_9px_15px_5px_#c8bfbf] rounded-xl p-6 hover:shadow-none transition-all">
+          <RecentActivities
+            activities={activities}
+            subjectType="Tenant"
+            onViewMore={() => router.visit(window.route('admin.activity.index', { subject: 'Tenant' }))}
+          />
+        </div>
 
         {isModalOpen && (
           <Modal
@@ -524,12 +546,27 @@ const Tenants = () => {
 
                 <FormInput
                   label="Floor"
-                  name="floor"
-                  value={formData.floor || ""}
+                  name="floor_id"
+                  type="select"
+                  value={formData.floor_id || ""}
                   onChange={handleInputChange}
-                  error={errors.floor}
+                  error={errors.floor_id}
                   required
-                  placeholder="e.g., Ground Floor"
+                  options={usePage().props.floors?.map(floor => ({
+                    value: floor.id,
+                    label: floor.name
+                  })) || []}
+                  placeholder="Select floor"
+                />
+
+                <FormInput
+                  label="Room Number"
+                  name="room_no"
+                  value={formData.room_no || ""}
+                  onChange={handleInputChange}
+                  error={errors.room_no}
+                  required
+                  placeholder="e.g., 101"
                 />
 
                 <FormInput
@@ -639,7 +676,7 @@ const Tenants = () => {
                 <div>
                   <p className="text-sm text-gray-500">Floor</p>
                   <p className="text-gray-800 font-medium">
-                    {selectedTenant.floor}
+                    {selectedTenant.floor_name}
                   </p>
                 </div>
                 <div>

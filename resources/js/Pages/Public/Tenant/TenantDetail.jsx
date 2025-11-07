@@ -105,11 +105,12 @@ const TenantDetail = ({ tenant }) => {
               </div>
               <p className="text-xl text-gray-200 mb-4">{tenant.description}</p>
               <div className="flex items-center gap-6 text-gray-300">
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-5 h-5" />
-                  <span>
-                    {tenant.floor}, {tenant.location}
-                  </span>
+                <div className="flex items-start gap-2">
+                  <MapPin className="w-5 h-5 mt-0.5 flex-shrink-0" />
+                  <div>
+                    {tenant.room_no && <div>Room: {tenant.room_no}</div>}
+                    <div>{tenant.floor?.name || tenant.floor}, {tenant.location}</div>
+                  </div>
                 </div>
                 {tenant.hours && (
                   <div className="flex items-center gap-2">
@@ -174,9 +175,10 @@ const TenantDetail = ({ tenant }) => {
             <div className="bg-white rounded-2xl shadow-lg p-8 h-96">
               <h2 className="text-3xl font-bold text-gray-900 mb-6">
                 Store Location
-                <span className="pl-11 text-xl text-gray-400 mt-2">
-                  {tenant.floor}, {tenant.location}
-                </span>
+                <div className="pl-11 text-xl text-gray-400 mt-2">
+                  {tenant.room_no && <div>Room: {tenant.room_no}</div>}
+                  <div>{tenant.floor?.name || tenant.floor}, {tenant.location}</div>
+                </div>
               </h2>
               {/* <div className="bg-gray-100 rounded-xl h-64 flex items-center justify-center">
                 <div className="h-80 w-96"> */}
@@ -195,7 +197,8 @@ const TenantDetail = ({ tenant }) => {
                 <div className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-gray-400 mt-1 flex-shrink-0" />
                   <div>
-                    <p className="font-medium text-gray-900">{tenant.floor}</p>
+                    {tenant.room_no && <p className="font-medium text-gray-900">Room: {tenant.room_no}</p>}
+                    <p className="font-medium text-gray-900">{tenant.floor?.name || tenant.floor}</p>
                     <p className="text-gray-600">{tenant.location}</p>
                   </div>
                 </div>
