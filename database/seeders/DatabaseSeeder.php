@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
                 'email_verified_at' => now(),
                 'phone' => '+251922334455',
                 'avatar' => 'users/default.png',
-                'role' => 'manager',
+                'role' => 'editor',
                 'check' => true,
                 'password' => Hash::make('password123'),
             ],
@@ -45,10 +45,10 @@ class DatabaseSeeder extends Seeder
                 'email_verified_at' => now(),
                 'phone' => '+251933445566',
                 'avatar' => 'users/default.png',
-                'role' => 'user',
+                'role' => 'viewer',
                 'check' => false,
                 'password' => Hash::make('password123'),
-            ]
+            ],
         ];
 
         $category = [
@@ -185,7 +185,7 @@ class DatabaseSeeder extends Seeder
                 'approval' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]
+            ],
         ];
         $gallery = [
             [
@@ -316,7 +316,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Beautifully designed modern office spaces with natural lighting',
                 'image' => 'storage/gallery/office-spaces.jpg',
                 'approval' => true,
-                'created_by' => 1
+                'created_by' => 1,
             ],
             [
                 'title' => 'Conference Rooms',
@@ -326,7 +326,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'State-of-the-art conference and meeting rooms',
                 'image' => 'storage/gallery/conference-rooms.jpg',
                 'approval' => true,
-                'created_by' => 2
+                'created_by' => 2,
             ],
             [
                 'title' => 'Recreational Areas',
@@ -336,7 +336,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Comfortable break rooms and recreational spaces',
                 'image' => 'storage/gallery/break-areas.jpg',
                 'approval' => false,
-                'created_by' => 1
+                'created_by' => 1,
             ],
             [
                 'title' => 'Executive Boardroom',
@@ -346,7 +346,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Luxurious boardroom for executive meetings',
                 'image' => 'storage/gallery/boardroom.jpg',
                 'approval' => true,
-                'created_by' => 2
+                'created_by' => 2,
             ],
             [
                 'title' => 'Main Lobby',
@@ -356,47 +356,47 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Spacious and welcoming main lobby area',
                 'image' => 'storage/gallery/main-lobby.jpg',
                 'approval' => true,
-                'created_by' => 1
-            ]
+                'created_by' => 1,
+            ],
         ];
         $news = [
             [
-                'category' => "Event",
-                'title_en' => "Grand Opening of the New Fashion Wing",
-                'title_am' => "የአዲሱ ፋሽን ዊንግ ትልቅ መክፈቻ",
-                'sub_title_en' => "Discover world-class brands now at Dembel City Center",
-                'sub_title_am' => "በዴምቤል ሲቲ ሴንተር ዓለም አቀፍ የሆኑ ብራንዶችን ያግኙ",
-                'image' => "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80",
-                'pdf_file' => "https://example.com/news/grand-opening-flyer.pdf",
+                'category' => 'Event',
+                'title_en' => 'Grand Opening of the New Fashion Wing',
+                'title_am' => 'የአዲሱ ፋሽን ዊንግ ትልቅ መክፈቻ',
+                'sub_title_en' => 'Discover world-class brands now at Dembel City Center',
+                'sub_title_am' => 'በዴምቤል ሲቲ ሴንተር ዓለም አቀፍ የሆኑ ብራንዶችን ያግኙ',
+                'image' => 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80',
+                'pdf_file' => 'https://example.com/news/grand-opening-flyer.pdf',
                 'gallery' => json_encode([
-                    "https://images.unsplash.com/photo-1534452203293-494d7ddbf7e0?auto=format&fit=crop&w=800&q=80",
-                    "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80",
-                    "https://images.unsplash.com/photo-1481349518771-20055b2a7b24?auto=format&fit=crop&w=800&q=80",
+                    'https://images.unsplash.com/photo-1534452203293-494d7ddbf7e0?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1481349518771-20055b2a7b24?auto=format&fit=crop&w=800&q=80',
                 ]),
                 'excerpt_en' => "We're excited to announce the grand opening of Dembel City Center's new Fashion Wing, featuring 20+ international brands and exclusive launch offers.",
-                'excerpt_am' => "ዴምቤል ሲቲ ሴንተር አዲሱን የፋሽን ዊንግ በ20 በላይ ዓለም አቀፍ ብራንዶችና ልዩ የመክፈቻ ቅናሽ ጋር እንደተከፈተ ደስ ይላል።",
+                'excerpt_am' => 'ዴምቤል ሲቲ ሴንተር አዲሱን የፋሽን ዊንግ በ20 በላይ ዓለም አቀፍ ብራንዶችና ልዩ የመክፈቻ ቅናሽ ጋር እንደተከፈተ ደስ ይላል።',
                 'content_en' => 'The new Fashion Wing at Dembel City Center officially opened its doors on October 1st, 2025. This expansion introduces a premium shopping experience to our visitors, bringing over 20 new international fashion brands to Addis Ababa. The grand opening ceremony featured a live fashion show, celebrity guests, and exclusive launch offers for early shoppers. Visitors can now explore new collections from brands such as Zara, H&M, Mango, and more. Come and experience luxury shopping like never before at the Dembel City Center Fashion Wing',
-                'content_am' => "አዲሱ የፋሽን ዊንግ በኦክቶበር 1 2025 ቀን በዴምቤል ሲቲ ሴንተር መክፈቱን አውጥቷል።",
+                'content_am' => 'አዲሱ የፋሽን ዊንግ በኦክቶበር 1 2025 ቀን በዴምቤል ሲቲ ሴንተር መክፈቱን አውጥቷል።',
                 'created_by' => 1,
                 'approval' => true,
 
             ],
             [
-                'category' => "Offer",
-                'title_en' => "Spring Festival Sale - Up to 70% Off",
-                'title_am' => "የፀደይ ፌስቲቫል ሽያጭ",
-                'sub_title_en' => "Amazing discounts across all stores",
-                'sub_title_am' => "በሁሉም ሱቆች ላይ አስደናቂ ቅናሾች",
-                'image' => "https://images.unsplash.com/photo-1607083206968-13611e3d76db?auto=format&fit=crop&w=1200&q=80",
+                'category' => 'Offer',
+                'title_en' => 'Spring Festival Sale - Up to 70% Off',
+                'title_am' => 'የፀደይ ፌስቲቫል ሽያጭ',
+                'sub_title_en' => 'Amazing discounts across all stores',
+                'sub_title_am' => 'በሁሉም ሱቆች ላይ አስደናቂ ቅናሾች',
+                'image' => 'https://images.unsplash.com/photo-1607083206968-13611e3d76db?auto=format&fit=crop&w=1200&q=80',
                 'pdf_file' => null,
                 'gallery' => json_encode([
-                    "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=800&q=80",
-                    "https://images.unsplash.com/photo-1607082349566-187342175e2f?auto=format&fit=crop&w=800&q=80",
+                    'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1607082349566-187342175e2f?auto=format&fit=crop&w=800&q=80',
                 ]),
                 'excerpt_en' => "Don't miss our biggest sale of the season! Get up to 70% off on fashion, electronics, home décor, and more at Dembel City Center.",
-                'excerpt_am' => "የወቅቱን ትልቁ ሽያጭ አያመልጡ!",
+                'excerpt_am' => 'የወቅቱን ትልቁ ሽያጭ አያመልጡ!',
                 'content_en' => "Our Spring Festival Sale is here with unbeatable deals across all categories. From March 15th to March 30th, enjoy massive discounts on your favorite brands and products. Whether you're shopping for the latest fashion trends, upgrading your electronics, or refreshing your home décor, you'll find incredible savings throughout the mall. Special deals include buy-one-get-one offers, flash sales, and exclusive member discounts. Visit us today and make the most of this limited-time opportunity. Happy shopping!",
-                'content_am' => "የፀደይ ፌስቲቫል ሽያጭ ከሁሉም ምድቦች ጋር ከተለያዩ ውድድሮች ጋር ነው። ከምርቶች ላይ የሚደርሱ ትልቅ ቅናሾች እና የተለያዩ የሽያጭ ዕቅዶች ይገኛሉ። ይህ ዝግጅት በምርቶች ላይ የሚደርሱ ትልቅ ቅናሾች እና የተለያዩ የሽያጭ ዕቅዶች ይገኛሉ።",
+                'content_am' => 'የፀደይ ፌስቲቫል ሽያጭ ከሁሉም ምድቦች ጋር ከተለያዩ ውድድሮች ጋር ነው። ከምርቶች ላይ የሚደርሱ ትልቅ ቅናሾች እና የተለያዩ የሽያጭ ዕቅዶች ይገኛሉ። ይህ ዝግጅት በምርቶች ላይ የሚደርሱ ትልቅ ቅናሾች እና የተለያዩ የሽያጭ ዕቅዶች ይገኛሉ።',
                 'created_by' => 1,
                 'approval' => true,
             ],
@@ -410,14 +410,14 @@ class DatabaseSeeder extends Seeder
                 'pdf_file' => 'retreat-schedule.pdf',
                 'gallery' => json_encode([
                     'storage/news/retreat1.jpg',
-                    'storage/news/retreat2.jpg'
+                    'storage/news/retreat2.jpg',
                 ]),
                 'excerpt_en' => 'Our annual retreat is a time for reflection, learning, and fun. This year, we will be hosting the event at a scenic location with various activities planned to enhance team cohesion and morale.',
                 'excerpt_am' => 'ዓመታዊ ስብሰባችን ለማስተዋወቅ፣ ለመማርና ለመዝናናት ጊዜ ነው።',
                 'content_en' => 'The Annual Company Retreat 2024 is set to take place from July 10th to July 12th at the beautiful Lakeside Resort. Employees will have the opportunity to participate in various team-building exercises, workshops, and recreational activities designed to foster collaboration and innovation. The retreat will also include sessions for strategic planning and goal setting for the upcoming fiscal year. We encourage all employees to attend and make the most of this enriching experience',
                 'content_am' => 'ዓመታዊ የኩባንያ ስብሰባ 2024 ከጁላይ 10 እስከ ጁላይ 12 በተለያዩ ቡድን ግንባታ ሥራዎች፣ የስልጠና ምዕመናት እና የመዝናናት እንቅስቃሴዎች ይሳተፉ። ይህ ዝግጅት በስትራቴጂክ ዕቅድ እና የሚመጣው ዓመት ዕቅድ ላይ ይተኮር ይችላል። ሁሉም ሰራተኞች ይህን ዕቅድ ለማስተዋወቅ ይቀላቀሉን።',
                 'created_by' => 1,
-                'approval' => true
+                'approval' => true,
             ],
             [
                 'category' => 'Updates',
@@ -429,14 +429,14 @@ class DatabaseSeeder extends Seeder
                 'pdf_file' => null,
                 'gallery' => json_encode([
                     'storage/news/office1.jpg',
-                    'storage/news/office2.jpg'
+                    'storage/news/office2.jpg',
                 ]),
                 'excerpt_en' => 'The new office is equipped with state-of-the-art facilities and is designed to foster collaboration and innovation among our team members.',
                 'excerpt_am' => 'አዲሱ ቢሮ በዘመናዊ መሣሪያዎች የተሞላ እና በቡድን አባላት መካከል ትስስርና አዳዲስ ነገሮችን ለማፍራት የተነደፈ ነው።',
                 'content_en' => 'The new office is designed with an open layout to encourage teamwork and creativity. It features modern meeting rooms, collaborative workspaces, and relaxation areas for employees to recharge.',
                 'content_am' => 'አዲሱ ቢሮ በቡድን ሥራና ፈጠራ ለማስተካከል በክፍት ንድፍ የተነደፈ ነው። ይህ የዘመናዊ የስብሰባ ክፍሎች፣ የተባበሩ የሥራ ቦታዎችና ለሰራተኞች ለመዝገብ የሚያግዙ መዝገብ ክፍሎችን ይጠቀማል።',
                 'created_by' => 2,
-                'approval' => true
+                'approval' => true,
             ],
             [
                 'category' => 'Announcements',
@@ -448,14 +448,14 @@ class DatabaseSeeder extends Seeder
                 'pdf_file' => 'product-brochure.pdf',
                 'gallery' => json_encode([
                     'storage/news/product1.jpg',
-                    'storage/news/product2.jpg'
+                    'storage/news/product2.jpg',
                 ]),
                 'excerpt_en' => 'Be the first to experience our latest products and innovations. The launch event will provide an exclusive look at the features and benefits of our new offerings.',
                 'excerpt_am' => 'አዲስ ምርቶቻችንን እና አዳዲስ ነገሮቻችንን ለመማስተዋወቅ የመጀም ሁሉ ይሁኑ።',
                 'content_en' => 'The Product Launch Event will take place on September 5th, 2024 at our headquarters. Attendees will have the opportunity to see live demonstrations of the new products, interact with the development team, and participate in Q&A sessions to learn more about the technology and design behind our latest innovations.',
                 'content_am' => 'የምርት መከፈቻ ክስተት በሴፕቴምበር 5 2024 ቀን በራሳችን ዋና ቦታ ይካሄዳል። ተሳትፎ ይውሉና ለአዳዲስ ምርቶች ምርጥ ዕድል ይሰጣል።',
                 'created_by' => 1,
-                'approval' => true
+                'approval' => true,
             ],
             [
                 'category' => 'Events',
@@ -467,93 +467,89 @@ class DatabaseSeeder extends Seeder
                 'pdf_file' => null,
                 'gallery' => json_encode([
                     'storage/news/community1.jpg',
-                    'storage/news/community2.jpg'
+                    'storage/news/community2.jpg',
                 ]),
                 'excerpt_en' => 'Our community outreach program will focus on education, health, and environmental sustainability. We invite employees and community members to participate in various activities and initiatives throughout the year.',
                 'excerpt_am' => 'የማህበረሰብ ድጋፍ እቅዳችን በትምህርት፣ በጤና እና በአካባቢ ተጠቃሚነት ይመራል።',
                 'content_en' => 'The Community Outreach Program will kick off with a series of events and activities designed to engage and support local communities. Initiatives will include educational workshops, health clinics, environmental clean-up drives, and fundraising events to support local charities. We encourage all employees to get involved and contribute their time and skills to make a positive impact.',
                 'content_am' => 'የማህበረሰብ ድጋፍ እቅድ በተለያዩ ክስተቶችና እንቅስቃሴዎች በመጀመር ይጀምራል። ይህ ዝግጅት በትምህርት የስልጠና ውይይቶች፣ የጤና ክሊኒኮች፣ የአካባቢ ንጽህና እንቅስቃሴዎች እና ለአካባቢ ተቋማት የሚደርሱ የገንዘብ ስጦታ ክስተቶችን ያካትታል።',
                 'created_by' => 2,
-                'approval' => true
+                'approval' => true,
             ],
             [
-                'category' => "Announcement",
-                'title_en' => "New Parking Facilities Now Open",
-                'title_am' => "አዲስ የመኪና ማቆሚያ አገልግሎት ተከፈተ",
-                'sub_title_en' => "Enhanced convenience for all visitors",
-                'sub_title_am' => "ለሁሉም ጎብኚዎች የተሻሻለ ምቾት",
-                'image' => "https://images.unsplash.com/photo-1590674899484-d5640e854abe?auto=format&fit=crop&w=1200&q=80",
-                'pdf_file' => "https://example.com/news/parking-guide.pdf",
+                'category' => 'Announcement',
+                'title_en' => 'New Parking Facilities Now Open',
+                'title_am' => 'አዲስ የመኪና ማቆሚያ አገልግሎት ተከፈተ',
+                'sub_title_en' => 'Enhanced convenience for all visitors',
+                'sub_title_am' => 'ለሁሉም ጎብኚዎች የተሻሻለ ምቾት',
+                'image' => 'https://images.unsplash.com/photo-1590674899484-d5640e854abe?auto=format&fit=crop&w=1200&q=80',
+                'pdf_file' => 'https://example.com/news/parking-guide.pdf',
                 'gallery' => json_encode([]),
                 'excerpt_en' => "We've expanded our parking facilities with 500 new spaces, featuring covered parking, EV charging stations, and improved security.",
-                'excerpt_am' => "የመኪና ማቆሚያ አገልግሎታችንን በ500 አዳዲስ ቦታዎች አስፋፍተናል።",
+                'excerpt_am' => 'የመኪና ማቆሚያ አገልግሎታችንን በ500 አዳዲስ ቦታዎች አስፋፍተናል።',
                 'content_en' => ' Dembel City Center is pleased to announce the opening of our new multi-level parking facility. This state-of-the-art structure adds 500 additional parking spaces, including 50 dedicated EV charging stations. The new facility features covered parking to protect your vehicle from the elements, enhanced lighting for safety, and a modern payment system that accepts both cash and digital payments. Premium parking spots are also available for monthly subscribers. All parking areas are monitored 24/7 with advanced security cameras and trained security personnel to ensure your peace of mind while you shop.',
-                'content_am' => "አዲስ የመኪና ማቆሚያ አገልግሎት በዴምቤል ሲቲ ሴንተር መክፈቻን ለማሳወቅ ደስ ይላል።",
+                'content_am' => 'አዲስ የመኪና ማቆሚያ አገልግሎት በዴምቤል ሲቲ ሴንተር መክፈቻን ለማሳወቅ ደስ ይላል።',
                 'created_by' => 1,
                 'approval' => true,
             ],
             [
-                'category' => "Lifestyle",
-                'title_en' => "Kids Play Zone Grand Launch",
-                'title_am' => "የህጻናት መጫወቻ ዞን ትልቅ መክፈቻ",
-                'sub_title_en' => "A world of fun for children ages 2-12",
-                'sub_title_am' => "ከ2-12 ዓመት ለሆኑ ህጻናት አስደሳች ዓለም",
-                'image' => "https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=1200&q=80",
+                'category' => 'Lifestyle',
+                'title_en' => 'Kids Play Zone Grand Launch',
+                'title_am' => 'የህጻናት መጫወቻ ዞን ትልቅ መክፈቻ',
+                'sub_title_en' => 'A world of fun for children ages 2-12',
+                'sub_title_am' => 'ከ2-12 ዓመት ለሆኑ ህጻናት አስደሳች ዓለም',
+                'image' => 'https://images.unsplash.com/photo-1587654780291-39c9404d746b?auto=format&fit=crop&w=1200&q=80',
                 'pdf_file' => null,
                 'gallery' => json_encode([
-                    "https://images.unsplash.com/photo-1576782187843-cc9009e0f2b0?auto=format&fit=crop&w=800&q=80",
-                    "https://images.unsplash.com/photo-1564053489984-317bbd824340?auto=format&fit=crop&w=800&q=80",
-                    "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=800&q=80",
+                    'https://images.unsplash.com/photo-1576782187843-cc9009e0f2b0?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1564053489984-317bbd824340?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=800&q=80',
                 ]),
-                'excerpt_en' =>
-                "Introducing our brand new supervised play area featuring climbing structures, soft play zones, and educational activities for kids.",
-                'excerpt_am' => "አዳዲስ የመውጫ መዋቅሮችን፣ ለስላሳ የመጫወቻ ዞኖችን እና ትምህርታዊ እንቅስቃሴዎችን የያዘ አዲስ ቁጥጥር የሚደረግበት የመጫወቻ ቦታን እናቀርባለን።",
+                'excerpt_en' => 'Introducing our brand new supervised play area featuring climbing structures, soft play zones, and educational activities for kids.',
+                'excerpt_am' => 'አዳዲስ የመውጫ መዋቅሮችን፣ ለስላሳ የመጫወቻ ዞኖችን እና ትምህርታዊ እንቅስቃሴዎችን የያዘ አዲስ ቁጥጥር የሚደረግበት የመጫወቻ ቦታን እናቀርባለን።',
                 'content_en' => 'Parents can now shop with peace of mind knowing their children are having a great time in our professionally supervised Kids Play Zone. Located on the second floor, this 2,000 square meter facility is designed to provide safe, engaging entertainment for children ages 2 to 12. The play zone features age-appropriate activities including climbing walls, ball pits, interactive learning stations, and creative arts corners. All staff members are trained in child safety and first aid, and the entire area is monitored with CCTV cameras. Admission is affordable at just 50 Birr per child for 2 hours. Special packages and memberships are also available. Open daily from 10 AM to 8 PM.',
-                'content_am' => "የህጻናት መጫወቻ ዞን በሙያዊ ሁኔታ ተቆጣጣሪ ስለሆነ ልጆቻችሁ እየደሰቱ እንደሚገኙ በመረዳት ከፍተኛ ደህንነት ጋር መገባባት ይችላሉ።",
+                'content_am' => 'የህጻናት መጫወቻ ዞን በሙያዊ ሁኔታ ተቆጣጣሪ ስለሆነ ልጆቻችሁ እየደሰቱ እንደሚገኙ በመረዳት ከፍተኛ ደህንነት ጋር መገባባት ይችላሉ።',
                 'created_by' => 1,
                 'approval' => true,
             ],
             [
-                'category' => "Event",
-                'title_en' => "Live Music Weekends - Every Saturday",
-                'title_am' => "የቀጥታ ሙዚቃ ቅዳሜዎች - በየቅዳሜው",
-                'sub_title_en' => "Enjoy live performances while you shop and dine",
-                'sub_title_am' => "ሲገበያዩና ሲመገቡ የቀጥታ ትርኢቶችን ይደሰቱ",
-                'image' => "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=1200&q=80",
+                'category' => 'Event',
+                'title_en' => 'Live Music Weekends - Every Saturday',
+                'title_am' => 'የቀጥታ ሙዚቃ ቅዳሜዎች - በየቅዳሜው',
+                'sub_title_en' => 'Enjoy live performances while you shop and dine',
+                'sub_title_am' => 'ሲገበያዩና ሲመገቡ የቀጥታ ትርኢቶችን ይደሰቱ',
+                'image' => 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=1200&q=80',
                 'pdf_file' => null,
                 'gallery' => json_encode([
-                    "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?auto=format&fit=crop&w=800&q=80",
-                    "https://images.unsplash.com/photo-1511735111819-9a3f7709049c?auto=format&fit=crop&w=800&q=80",
+                    'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1511735111819-9a3f7709049c?auto=format&fit=crop&w=800&q=80',
                 ]),
-                'excerpt_en' =>
-                "Experience vibrant live music performances every Saturday evening at our Central Plaza. Free entry for all visitors!",
-                'excerpt_am' =>
-                "በየቅዳሜው ምሽት በማእከላዊ አደባባያችን ላይ ንቁ የቀጥታ ሙዚቃ ትርኢቶችን ይለማመዱ። ለሁሉም ጎብኚዎች ነፃ መግቢያ!",
+                'excerpt_en' => 'Experience vibrant live music performances every Saturday evening at our Central Plaza. Free entry for all visitors!',
+                'excerpt_am' => 'በየቅዳሜው ምሽት በማእከላዊ አደባባያችን ላይ ንቁ የቀጥታ ሙዚቃ ትርኢቶችን ይለማመዱ። ለሁሉም ጎብኚዎች ነፃ መግቢያ!',
                 'content_en' => "Starting this month, Dembel City Center is proud to present Live Music Weekends! Every Saturday from 5 PM to 8 PM, talented local and international artists will perform at our Central Plaza. The lineup features a diverse range of genres including jazz, pop, traditional Ethiopian music, and contemporary fusion. It's the perfect way to unwind after a week of work while enjoying great food from our restaurants and cafés. Seating is available on a first-come, first-served basis, so arrive early to get the best spots. Bring your family and friends for an unforgettable evening of music and community.",
-                'content_am' => "የቀጥታ ሙዚቃ ቅዳሜዎች በየቅዳሜው ምሽት በማእከላዊ አደባባያችን ላይ ንቁ የቀጥታ ሙዚቃ ትርኢቶችን ይለማመዱ። ለሁሉም ጎብኚዎች ነፃ መግቢያ!",
+                'content_am' => 'የቀጥታ ሙዚቃ ቅዳሜዎች በየቅዳሜው ምሽት በማእከላዊ አደባባያችን ላይ ንቁ የቀጥታ ሙዚቃ ትርኢቶችን ይለማመዱ። ለሁሉም ጎብኚዎች ነፃ መግቢያ!',
                 'created_by' => 1,
                 'approval' => true,
             ],
             [
-                'category' => "Announcement",
-                'title_en' => "Mobile App Launch - Shop Smarter",
-                'title_am' => "የሞባይል መተግበሪያ መክፈቻ",
-                'sub_title_en' => "Download now for exclusive deals and rewards",
-                'sub_title_am' => "ልዩ ቅናሾችና ሽልማቶች ለማግኘት አሁን ያውርዱ",
-                'image' => "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1200&q=80",
+                'category' => 'Announcement',
+                'title_en' => 'Mobile App Launch - Shop Smarter',
+                'title_am' => 'የሞባይል መተግበሪያ መክፈቻ',
+                'sub_title_en' => 'Download now for exclusive deals and rewards',
+                'sub_title_am' => 'ልዩ ቅናሾችና ሽልማቶች ለማግኘት አሁን ያውርዱ',
+                'image' => 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1200&q=80',
                 'pdf_file' => null,
                 'gallery' => json_encode([
-                    "https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&w=800&q=80",
+                    'https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&w=800&q=80',
                 ]),
-                'excerpt_en' =>
-                "Our new mobile app makes shopping easier with store directories, parking assistance, exclusive promotions, and a loyalty rewards program.",
-                'excerpt_am' => "አዲሱ የሞባይል መተግበሪያችን ግብይትን ቀላል ያደርጋል።",
+                'excerpt_en' => 'Our new mobile app makes shopping easier with store directories, parking assistance, exclusive promotions, and a loyalty rewards program.',
+                'excerpt_am' => 'አዲሱ የሞባይል መተግበሪያችን ግብይትን ቀላል ያደርጋል።',
                 'content_en' => "We're thrilled to announce the launch of the official Dembel City Center mobile app, now available for download on iOS and Android devices. The app is designed to enhance your shopping experience with a host of convenient features. Key features include: interactive store directory with navigation, real-time parking availability, personalized offers based on your preferences, mobile payment integration, and a loyalty rewards program where you earn points with every purchase. Download the app today and receive a welcome bonus of 500 points, redeemable at participating stores. Simply search for \"Dembel City Center\" in the App Store or Google Play.",
-                'content_am' => "የሞባይል መተግበሪያ...",
+                'content_am' => 'የሞባይል መተግበሪያ...',
                 'created_by' => 1,
                 'approval' => true,
 
-            ]
+            ],
         ];
 
         $service = [
@@ -566,7 +562,7 @@ class DatabaseSeeder extends Seeder
                 'description_am' => 'ሙሉ በሙሉ የተገነቡ የቢሮ ቦታዎችን ከዘመናዊ አገልግሎቶች፣ ከፍተኛ ፍጥነት ያለው ኢንተርኔት እና 24/7 ደህንነት እናቀርባለን። ለጀማሪ እና ለተመሠረቱ ንግዶች ተስማሚ።',
                 'image' => 'storage/service/office-rental.jpg',
                 'approval' => true,
-                'created_by' => 1
+                'created_by' => 1,
             ],
             [
                 'title_en' => 'Meeting Room Booking',
@@ -577,7 +573,7 @@ class DatabaseSeeder extends Seeder
                 'description_am' => 'ለዝግጅትዎ፣ ለደምበኞች ስብሰባ እና ለቡድን ውይይቶች የተጠናከረ የሆኑ የመገናኛ ክፍሎቻችንን ያስይዙ። እንደ ፍላጎትዎ በተለያዩ መጠኖች ይገኛሉ።',
                 'image' => 'storage/service/meeting-rooms.jpg',
                 'approval' => true,
-                'created_by' => 2
+                'created_by' => 2,
             ],
             [
                 'title_en' => 'Virtual Office Services',
@@ -588,7 +584,7 @@ class DatabaseSeeder extends Seeder
                 'description_am' => 'የእውነተኛ የቢሮ አገልግሎቶቻችን ለእርስዎ ከፍተኛ የንግድ አድራሻ፣ የፖስታ አስተዳደር እና የስልክ መልስ አገልግሎቶችን ያቀርባሉ ያለ ፊዚካል የቢሮ ቦታ።',
                 'image' => 'storage/service/virtual-office.jpg',
                 'approval' => false,
-                'created_by' => 1
+                'created_by' => 1,
             ],
             [
                 'title_en' => 'Coworking Spaces',
@@ -599,7 +595,7 @@ class DatabaseSeeder extends Seeder
                 'description_am' => 'የተሠራተኞች ቦታዎቻችን ለነጻ ስራ አዋጅ፣ ለንግድ እና ለሩቅ እንደሚሰሩ ሰዎች የሚገኝ እና የሚጋራ አካባቢ ይሰጣል። ፍጥነታማ ኢንተርኔት፣ የመገናኛ ክፍሎች እና የመገናኛ ዕድሎችን ይዘው ይጠቀሙ።',
                 'image' => 'storage/service/coworking.jpg',
                 'approval' => true,
-                'created_by' => 2
+                'created_by' => 2,
             ],
             [
                 'title_en' => 'Business Support Services',
@@ -610,7 +606,7 @@ class DatabaseSeeder extends Seeder
                 'description_am' => 'እኛ የንግድ ድጋፍ አገልግሎቶችን እንሰጣለን ከሚሆኑት የአስተዳደር እርዳታ፣ የIT ድጋፍ እና የማርኬቲንግ አገልግሎቶች ያሉት የቢሮ ፍላጎቶችዎ ለመፍጠር።',
                 'image' => 'storage/service/business-support.jpg',
                 'approval' => true,
-                'created_by' => 1
+                'created_by' => 1,
             ],
         ];
         $events = [
@@ -704,61 +700,61 @@ class DatabaseSeeder extends Seeder
                 'name' => 'John Smith',
                 'position' => 'CEO, Tech Solutions Inc.',
                 'testimonial' => 'The office spaces provided are exceptional. The facilities are modern, well-maintained, and the staff is incredibly supportive. Highly recommended for any growing business!',
-                'approval' => true
+                'approval' => true,
             ],
             [
                 'name' => 'Sarah Johnson',
                 'position' => 'Marketing Director',
                 'testimonial' => 'We\'ve been using their meeting rooms for our client presentations for over a year now. Professional environment and excellent service every time.',
-                'approval' => true
+                'approval' => true,
             ],
             [
                 'name' => 'Michael Chen',
                 'position' => 'Startup Founder',
                 'testimonial' => 'Perfect solution for our startup. Flexible terms and great amenities helped us focus on growing our business without worrying about office management.',
-                'approval' => false
+                'approval' => false,
             ],
             [
                 'name' => 'Emily Rodriguez',
                 'position' => 'Freelance Consultant',
                 'testimonial' => 'As a freelancer, having access to professional meeting spaces when needed has been invaluable. The booking system is easy to use and the locations are convenient.',
-                'approval' => true
+                'approval' => true,
             ],
             [
                 'name' => 'David Lee',
                 'position' => 'IT Specialist',
                 'testimonial' => 'The virtual office services have given my business a professional edge. The prestigious address and mail handling services are top-notch.',
-                'approval' => true
+                'approval' => true,
             ],
             [
                 'name' => 'Anna Kim',
                 'position' => 'Entrepreneur',
                 'testimonial' => 'The coworking space is vibrant and inspiring. It\'s a great place to network and collaborate with other professionals.',
-                'approval' => false
+                'approval' => false,
             ],
             [
                 'name' => 'Emily Davis',
                 'position' => 'Graphic Designer',
                 'testimonial' => 'A fantastic place to work! The community is supportive and the facilities are top-notch.',
-                'approval' => true
+                'approval' => true,
             ],
             [
                 'name' => 'James Wilson',
                 'position' => 'Financial Analyst',
                 'testimonial' => 'The business support services have been a game-changer for my consultancy. The administrative assistance has allowed me to focus more on my clients.',
-                'approval' => true
+                'approval' => true,
             ],
             [
                 'name' => 'Olivia Martinez',
                 'position' => 'HR Manager',
                 'testimonial' => 'Booking meeting rooms has never been easier. The staff is friendly and the rooms are always well-prepared.',
-                'approval' => false
+                'approval' => false,
             ],
             [
                 'name' => 'Liam Brown',
                 'position' => 'Project Manager',
                 'testimonial' => 'The office rental options are flexible and affordable. The location is perfect for our team, and the amenities are excellent.',
-                'approval' => true
+                'approval' => true,
             ],
         ];
         $tenants = [
@@ -770,7 +766,9 @@ class DatabaseSeeder extends Seeder
                 'location' => 'Near Main Entrance',
                 'hours' => '10:00 AM - 9:00 PM',
                 'fullDescription' => 'Zara offers the latest fashion trends with contemporary designs for men, women, and children. Our collections feature high-quality garments that combine comfort with style, perfect for the modern shopper looking to stay ahead of fashion trends.',
-                'floor' => '1st Floor',
+                'floor_id' => 1,
+                'room_no' => '101',
+                'building' => 'Dembel',
                 'phone' => '+1 (555) 123-4567',
                 'email' => 'info@zara-dembel.com',
                 'website' => 'www.zara.com',
@@ -783,7 +781,9 @@ class DatabaseSeeder extends Seeder
                 'location' => 'Luxury Wing',
                 'hours' => '10:00 AM - 9:00 PM',
                 'fullDescription' => 'Swarovski has been synonymous with luxury and precision-cut crystal since 1895. Our boutique offers an exquisite collection of jewelry, watches, decorative objects, and accessories that add sparkle to every occasion.',
-                'floor' => '2nd Floor',
+                'floor_id' => 2,
+                'room_no' => '201',
+                'building' => 'Dembel',
                 'phone' => '+1 (555) 234-5678',
                 'email' => 'dembel@swarovski.com',
                 'website' => 'www.swarovski.com',
@@ -796,7 +796,9 @@ class DatabaseSeeder extends Seeder
                 'location' => 'Food Court Area',
                 'hours' => '7:00 AM - 10:00 PM',
                 'fullDescription' => 'Start your day with our expertly crafted coffee beverages, made from ethically sourced beans. Enjoy our selection of pastries, sandwiches, and seasonal drinks in a comfortable atmosphere perfect for meetings or relaxation.',
-                'floor' => 'Ground Floor',
+                'floor_id' => 3,
+                'room_no' => '301',
+                'building' => 'Dembel',
                 'phone' => '+1 (555) 345-6789',
                 'email' => 'dembel@starbucks.com',
                 'website' => 'www.starbucks.com',
@@ -809,7 +811,9 @@ class DatabaseSeeder extends Seeder
                 'location' => 'Tech Hub',
                 'hours' => '10:00 AM - 9:00 PM',
                 'fullDescription' => 'Discover the full range of Apple products including the latest iPhone, iPad, Mac, Apple Watch, and accessories. Our knowledgeable team provides personalized service and technical support to help you get the most out of your Apple products.',
-                'floor' => '1st Floor',
+                'floor_id' => 1,
+                'room_no' => '102',
+                'building' => 'Dembel',
                 'phone' => '+1 (555) 456-7890',
                 'email' => 'dembel@apple.com',
                 'website' => 'www.apple.com',
@@ -822,7 +826,9 @@ class DatabaseSeeder extends Seeder
                 'location' => 'Beauty Boulevard',
                 'hours' => '10:00 AM - 9:00 PM',
                 'fullDescription' => 'Explore the world of beauty at Sephora, featuring top brands in cosmetics, skincare, fragrance, and beauty tools. Our beauty experts are ready to help you find the perfect products and provide personalized beauty consultations.',
-                'floor' => '2nd Floor',
+                'floor_id' => 2,
+                'room_no' => '202',
+                'building' => 'Dembel',
                 'phone' => '+1 (555) 567-8901',
                 'email' => 'dembel@sephora.com',
                 'website' => 'www.sephora.com',
@@ -835,7 +841,9 @@ class DatabaseSeeder extends Seeder
                 'location' => 'Sports Zone',
                 'hours' => '10:00 AM - 9:00 PM',
                 'fullDescription' => 'Just Do It at Nike, your destination for performance athletic wear, iconic sneakers, and sports equipment. Whether you\'re training for a marathon or looking for everyday comfort, we have the gear to help you perform your best.',
-                'floor' => '1st Floor',
+                'floor_id' => 1,
+                'room_no' => '103',
+                'building' => 'Dembel',
                 'phone' => '+1 (555) 678-9012',
                 'email' => 'dembel@nike.com',
                 'website' => 'www.nike.com',
@@ -848,7 +856,9 @@ class DatabaseSeeder extends Seeder
                 'location' => '6',
                 'hours' => '10:00 AM - 8:00 PM',
                 'fullDescription' => 'Transform your living space with IKEA\'s affordable, functional, and beautiful home furnishing solutions. From furniture to home accessories, we help you create a home that reflects your personality and lifestyle.',
-                'floor' => '3rd Floor',
+                'floor_id' => 3,
+                'room_no' => '302',
+                'building' => 'Dembel',
                 'phone' => '+1 (555) 789-0123',
                 'email' => 'dembel@ikea.com',
                 'website' => 'www.ikea.com',
@@ -861,7 +871,9 @@ class DatabaseSeeder extends Seeder
                 'location' => 'Entertainment Plaza',
                 'hours' => '10:00 AM - 9:00 PM',
                 'fullDescription' => 'Level up your gaming experience at GameStop. We offer the latest video games, gaming consoles, accessories, and collectibles for all major platforms. Trade in your old games and discover new adventures.',
-                'floor' => '2nd Floor',
+                'floor_id' => 2,
+                'room_no' => '203',
+                'building' => 'Dembel',
                 'phone' => '+1 (555) 890-1234',
                 'email' => 'dembel@gamestop.com',
                 'website' => 'www.gamestop.com',
@@ -874,7 +886,9 @@ class DatabaseSeeder extends Seeder
                 'location' => 'Wellness Center',
                 'hours' => '9:00 AM - 8:00 PM',
                 'fullDescription' => 'Achieve your health and fitness goals with GNC\'s premium supplements, vitamins, and sports nutrition products. Our knowledgeable staff can help you find the right products for your wellness journey.',
-                'floor' => '2nd Floor',
+                'floor_id' => 2,
+                'room_no' => '204',
+                'building' => 'Dembel',
                 'phone' => '+1 (555) 901-2345',
                 'email' => 'dembel@gnc.com',
                 'website' => 'www.gnc.com',
@@ -887,7 +901,9 @@ class DatabaseSeeder extends Seeder
                 'location' => 'Jewelry Quarter',
                 'hours' => '10:00 AM - 9:00 PM',
                 'fullDescription' => 'Discover Pandora\'s unique collection of handcrafted jewelry. From our iconic charm bracelets to rings, earrings, and necklaces, each piece is designed to celebrate life\'s special moments and express your personal style.',
-                'floor' => '2nd Floor',
+                'floor_id' => 2,
+                'room_no' => '205',
+                'building' => 'Dembel',
                 'phone' => '+1 (555) 012-3456',
                 'email' => 'dembel@pandora.com',
                 'website' => 'www.pandora.com',
@@ -900,7 +916,9 @@ class DatabaseSeeder extends Seeder
                 'location' => 'Food Court',
                 'hours' => '11:00 AM - 10:00 PM',
                 'fullDescription' => 'Enjoy handcrafted burgers made from fresh, never-frozen beef, hand-cut fries cooked in peanut oil, and thick milkshakes. All our ingredients are fresh and our food is made to order, ensuring the best taste every time.',
-                'floor' => '',
+                'floor_id' => 3,
+                'room_no' => '303',
+                'building' => 'Dembel',
                 'phone' => '+1 (555) 123-4567',
                 'email' => 'dembel@fiveguys.com',
                 'website' => 'www.fiveguys.com',
@@ -913,7 +931,9 @@ class DatabaseSeeder extends Seeder
                 'location' => 'Fashion District',
                 'hours' => '10:00 AM - 9:00 PM',
                 'fullDescription' => '',
-                'floor' => '1st Floor',
+                'floor_id' => 1,
+                'room_no' => '104',
+                'building' => 'Dembel',
                 'phone' => '+1 (555) 234-5678',
                 'email' => 'dembel@hm.com',
                 'website' => 'www.hm.com',
@@ -922,36 +942,36 @@ class DatabaseSeeder extends Seeder
         $floor = [
             [
                 'name' => 'Ground Floor',
-                'description' => 'Main entrance, reception area, and public spaces. Features a spacious lobby, information desk, and waiting area for visitors.'
+                'description' => 'Main entrance, reception area, and public spaces. Features a spacious lobby, information desk, and waiting area for visitors.',
             ],
             [
                 'name' => 'First Floor',
-                'description' => 'Executive offices and management suites. Includes private offices for senior management and executive meeting rooms.'
+                'description' => 'Executive offices and management suites. Includes private offices for senior management and executive meeting rooms.',
             ],
             [
                 'name' => 'Second Floor',
-                'description' => 'Open workspace and collaborative areas. Designed for team collaboration with modern workstations and breakout spaces.'
+                'description' => 'Open workspace and collaborative areas. Designed for team collaboration with modern workstations and breakout spaces.',
             ],
             [
                 'name' => 'Third Floor',
-                'description' => 'Conference center and training facilities. Equipped with state-of-the-art audio-visual systems and capacity for large meetings.'
+                'description' => 'Conference center and training facilities. Equipped with state-of-the-art audio-visual systems and capacity for large meetings.',
             ],
             [
                 'name' => 'Fourth Floor',
-                'description' => 'Specialized departments and quiet zones. Houses specialized teams requiring focused work environments and research facilities.'
+                'description' => 'Specialized departments and quiet zones. Houses specialized teams requiring focused work environments and research facilities.',
             ],
             [
                 'name' => 'Fifth Floor',
-                'description' => 'Recreation and wellness center. Includes break rooms, cafeteria, fitness area, and relaxation spaces for employees.'
+                'description' => 'Recreation and wellness center. Includes break rooms, cafeteria, fitness area, and relaxation spaces for employees.',
             ],
             [
                 'name' => 'Basement Level 1',
-                'description' => 'Parking and storage facilities. Secure parking area for employees and visitors with additional storage spaces.'
+                'description' => 'Parking and storage facilities. Secure parking area for employees and visitors with additional storage spaces.',
             ],
             [
                 'name' => 'Penthouse',
-                'description' => 'Premium executive suites and boardroom. Exclusive area for top-level executives and important corporate meetings.'
-            ]
+                'description' => 'Premium executive suites and boardroom. Exclusive area for top-level executives and important corporate meetings.',
+            ],
         ];
 
         $application = [
@@ -1002,22 +1022,22 @@ class DatabaseSeeder extends Seeder
                 'education_background' => 'Bachelor\'s Degree in Information Technology',
                 'vacancy_id' => 3,
                 'cv' => 'storage/applications/michael_johnson_cv.pdf',
-            ]
+            ],
         ];
 
         $Client = [
             [
                 'image' => 'storage/clients/client1.png',
-                'title' => 'Client One'
+                'title' => 'Client One',
             ],
             [
                 'image' => 'storage/clients/client2.png',
-                'title' => 'Client Two'
+                'title' => 'Client Two',
             ],
             [
                 'image' => 'storage/clients/client3.png',
-                'title' => 'Client Three'
-            ]
+                'title' => 'Client Three',
+            ],
         ];
 
         $department = [
@@ -1031,7 +1051,7 @@ class DatabaseSeeder extends Seeder
                 'icon' => 'fa fa-users',
                 'image' => 'storage/department/hr.jpg',
                 'created_by' => 1,
-                'approval' => true
+                'approval' => true,
             ],
             [
                 'title_en' => 'Information Technology',
@@ -1043,7 +1063,7 @@ class DatabaseSeeder extends Seeder
                 'icon' => 'fa fa-laptop',
                 'image' => 'storage/department/it.jpg',
                 'created_by' => 2,
-                'approval' => true
+                'approval' => true,
             ],
             [
                 'title_en' => 'Marketing',
@@ -1055,7 +1075,7 @@ class DatabaseSeeder extends Seeder
                 'icon' => 'fa fa-bullhorn',
                 'image' => 'storage/department/marketing.jpg',
                 'created_by' => 1,
-                'approval' => false
+                'approval' => false,
             ],
             [
                 'title_en' => 'Finance',
@@ -1067,7 +1087,7 @@ class DatabaseSeeder extends Seeder
                 'icon' => 'fa fa-calculator',
                 'image' => 'storage/department/finance.jpg',
                 'created_by' => 2,
-                'approval' => true
+                'approval' => true,
             ],
             [
                 'title_en' => 'Customer Service',
@@ -1079,8 +1099,8 @@ class DatabaseSeeder extends Seeder
                 'icon' => 'fa fa-headset',
                 'image' => 'storage/department/customer_service.jpg',
                 'created_by' => 1,
-                'approval' => false
-            ]
+                'approval' => false,
+            ],
         ];
 
         $team = [
@@ -1092,7 +1112,7 @@ class DatabaseSeeder extends Seeder
                 'phone' => '+1 (555) 111-2222',
                 'photo' => 'storage/team/alice_johnson.jpg',
                 'created_by' => 1,
-                'approval' => true
+                'approval' => true,
             ],
             [
                 'name_en' => 'Bob Smith',
@@ -1102,7 +1122,7 @@ class DatabaseSeeder extends Seeder
                 'phone' => '+1 (555) 222-3333',
                 'photo' => 'storage/team/bob_smith.jpg',
                 'created_by' => 1,
-                'approval' => true
+                'approval' => true,
             ],
             [
                 'name_en' => 'Catherine Lee',
@@ -1112,7 +1132,7 @@ class DatabaseSeeder extends Seeder
                 'phone' => '+1 (555) 333-4444',
                 'photo' => 'storage/team/catherine_lee.jpg',
                 'created_by' => 1,
-                'approval' => true
+                'approval' => true,
             ],
             [
                 'name_en' => 'David Brown',
@@ -1122,7 +1142,7 @@ class DatabaseSeeder extends Seeder
                 'phone' => '+1 (555) 444-5555',
                 'photo' => 'storage/team/david_brown.jpg',
                 'created_by' => 1,
-                'approval' => true
+                'approval' => true,
             ],
             [
                 'name_en' => 'Eva Green',
@@ -1132,8 +1152,8 @@ class DatabaseSeeder extends Seeder
                 'phone' => '+1 (555) 555-6666',
                 'photo' => 'storage/team/eva_green.jpg',
                 'created_by' => 1,
-                'approval' => true
-            ]
+                'approval' => true,
+            ],
         ];
 
         $freeSpaces = [
@@ -1278,199 +1298,199 @@ class DatabaseSeeder extends Seeder
                 'availability_status' => 'available',
             ],
             [
-                'name' => "Office Space A1",
+                'name' => 'Office Space A1',
                 'floor_id' => 1,
-                'wing_or_zone' => "North Wing",
-                'area_sqm' => "50.00",
-                'dimensions' => "5m x 10m",
+                'wing_or_zone' => 'North Wing',
+                'area_sqm' => '50.00',
+                'dimensions' => '5m x 10m',
                 'has_window' => true,
                 'has_ventilation' => true,
                 'has_plumbing' => false,
                 'has_electricity' => true,
                 'features' => json_encode(
-                    ["Air Conditioning", "High-Speed Internet", "Conference Room Access"]
+                    ['Air Conditioning', 'High-Speed Internet', 'Conference Room Access']
                 ),
-                'monthly_rent' => "1200.00",
-                'rent_currency' => "USD",
+                'monthly_rent' => '1200.00',
+                'rent_currency' => 'USD',
                 'rent_includes' => json_encode(
-                    ["Utilities", "Maintenance"]
+                    ['Utilities', 'Maintenance']
                 ),
                 'negotiable' => true,
-                'thumbnail' => "storage/free_spaces/image.jpg",
+                'thumbnail' => 'storage/free_spaces/image.jpg',
                 'gallery' => json_encode(
                     [
-                        "storage/free_spaces/image001.jpg",
-                        "storage/free_spaces/image002.jpg",
-                        "storage/free_spaces/image003.jpg"
+                        'storage/free_spaces/image001.jpg',
+                        'storage/free_spaces/image002.jpg',
+                        'storage/free_spaces/image003.jpg',
                     ]
                 ),
-                'virtual_tour_url' => "https://virtualtour.example.com/office_a1",
-                'short_description' => "A modern office space located in the North Wing with great amenities.",
-                'full_description' => "This office space offers a comfortable working environment with access to conference rooms, high-speed internet, and air conditioning. Perfect for small to medium-sized teams.",
-                'contact_person' => "Jane Doe",
-                'contact_phone' => "+1 (555) 123-4567",
-                'contact_email' => "jane.doe@example.com",
-                'meta_title' => "Office Space A1 for Rent",
-                'meta_description' => "Rent a modern office space in the North Wing with great amenities.",
-                'slug' => "office-space-a2",
-                'availability_status' => "available",
+                'virtual_tour_url' => 'https://virtualtour.example.com/office_a1',
+                'short_description' => 'A modern office space located in the North Wing with great amenities.',
+                'full_description' => 'This office space offers a comfortable working environment with access to conference rooms, high-speed internet, and air conditioning. Perfect for small to medium-sized teams.',
+                'contact_person' => 'Jane Doe',
+                'contact_phone' => '+1 (555) 123-4567',
+                'contact_email' => 'jane.doe@example.com',
+                'meta_title' => 'Office Space A1 for Rent',
+                'meta_description' => 'Rent a modern office space in the North Wing with great amenities.',
+                'slug' => 'office-space-a2',
+                'availability_status' => 'available',
             ],
             [
-                'name' => "Retail Shop B2",
+                'name' => 'Retail Shop B2',
                 'floor_id' => 1,
-                'wing_or_zone' => "South Wing",
-                'area_sqm' => "75.00",
-                'dimensions' => "7.5m x 10m",
+                'wing_or_zone' => 'South Wing',
+                'area_sqm' => '75.00',
+                'dimensions' => '7.5m x 10m',
                 'has_window' => true,
                 'has_ventilation' => true,
                 'has_plumbing' => true,
                 'has_electricity' => true,
-                'features' => json_encode(["Street Facing", "Glass Storefront", "Display Windows", "Storage Room"]),
-                'monthly_rent' => "2500.00",
-                'rent_currency' => "USD",
-                'rent_includes' => json_encode(["Utilities", "Maintenance", "Cleaning Services"]),
+                'features' => json_encode(['Street Facing', 'Glass Storefront', 'Display Windows', 'Storage Room']),
+                'monthly_rent' => '2500.00',
+                'rent_currency' => 'USD',
+                'rent_includes' => json_encode(['Utilities', 'Maintenance', 'Cleaning Services']),
                 'negotiable' => false,
-                'thumbnail' => "storage/free_spaces/image004.jpg",
+                'thumbnail' => 'storage/free_spaces/image004.jpg',
                 'gallery' => json_encode([
-                    "storage/free_spaces/image005.jpg",
-                    "storage/free_spaces/image006.jpg",
-                    "storage/free_spaces/image007.jpg"
+                    'storage/free_spaces/image005.jpg',
+                    'storage/free_spaces/image006.jpg',
+                    'storage/free_spaces/image007.jpg',
                 ]),
                 'virtual_tour_url' => null,
-                'short_description' => "Prime retail location with excellent foot traffic and visibility.",
-                'full_description' => "Located in the high-traffic South Wing, this retail space features large glass storefronts, perfect for fashion, electronics, or specialty stores. Includes a dedicated storage area.",
-                'contact_person' => "John Smith",
-                'contact_phone' => "+1 (555) 987-6543",
-                'contact_email' => "john.smith@example.com",
-                'meta_title' => "Retail Shop B2 for Rent",
-                'meta_description' => "Rent a prime retail location in the South Wing with excellent foot traffic.",
-                'slug' => "retail-shop-b3",
-                'availability_status' => "available",
+                'short_description' => 'Prime retail location with excellent foot traffic and visibility.',
+                'full_description' => 'Located in the high-traffic South Wing, this retail space features large glass storefronts, perfect for fashion, electronics, or specialty stores. Includes a dedicated storage area.',
+                'contact_person' => 'John Smith',
+                'contact_phone' => '+1 (555) 987-6543',
+                'contact_email' => 'john.smith@example.com',
+                'meta_title' => 'Retail Shop B2 for Rent',
+                'meta_description' => 'Rent a prime retail location in the South Wing with excellent foot traffic.',
+                'slug' => 'retail-shop-b3',
+                'availability_status' => 'available',
             ],
             [
-                'name' => "Food Kiosk C3",
+                'name' => 'Food Kiosk C3',
                 'floor_id' => 2,
-                'wing_or_zone' => "Food Court",
-                'area_sqm' => "25.00",
-                'dimensions' => "5m x 5m",
+                'wing_or_zone' => 'Food Court',
+                'area_sqm' => '25.00',
+                'dimensions' => '5m x 5m',
                 'has_window' => false,
                 'has_ventilation' => true,
                 'has_plumbing' => true,
                 'has_electricity' => true,
-                'features' => json_encode(["Commercial Kitchen Equipment", "Grease Trap", "Exhaust System", "Serving Counter"]),
-                'monthly_rent' => "1800.00",
-                'rent_currency' => "USD",
-                'rent_includes' => json_encode(["Utilities", "Waste Management"]),
+                'features' => json_encode(['Commercial Kitchen Equipment', 'Grease Trap', 'Exhaust System', 'Serving Counter']),
+                'monthly_rent' => '1800.00',
+                'rent_currency' => 'USD',
+                'rent_includes' => json_encode(['Utilities', 'Waste Management']),
                 'negotiable' => true,
-                'thumbnail' => "storage/free_spaces/image008.jpg",
+                'thumbnail' => 'storage/free_spaces/image008.jpg',
                 'gallery' => json_encode([
-                    "storage/free_spaces/image009.jpg",
-                    "storage/free_spaces/image010.jpg"
+                    'storage/free_spaces/image009.jpg',
+                    'storage/free_spaces/image010.jpg',
                 ]),
-                'virtual_tour_url' => "https://virtualtour.example.com/kiosk_c3",
-                'short_description' => "Fully equipped food kiosk in the bustling food court area.",
-                'full_description' => "This kiosk comes with all necessary equipment for food preparation and service. Located in the center of our food court with high customer traffic throughout the day.",
-                'contact_person' => "Maria Garcia",
-                'contact_phone' => "+1 (555) 456-7890",
-                'contact_email' => "maria.garcia@example.com",
-                'meta_title' => "Food Kiosk C4 for Rent",
-                'meta_description' => "Rent a fully equipped food kiosk in the bustling food court area.",
-                'slug' => "food-kiosk-c4",
-                'availability_status' => "reserved",
+                'virtual_tour_url' => 'https://virtualtour.example.com/kiosk_c3',
+                'short_description' => 'Fully equipped food kiosk in the bustling food court area.',
+                'full_description' => 'This kiosk comes with all necessary equipment for food preparation and service. Located in the center of our food court with high customer traffic throughout the day.',
+                'contact_person' => 'Maria Garcia',
+                'contact_phone' => '+1 (555) 456-7890',
+                'contact_email' => 'maria.garcia@example.com',
+                'meta_title' => 'Food Kiosk C4 for Rent',
+                'meta_description' => 'Rent a fully equipped food kiosk in the bustling food court area.',
+                'slug' => 'food-kiosk-c4',
+                'availability_status' => 'reserved',
             ],
             [
-                'name' => "Luxury Boutique D4",
+                'name' => 'Luxury Boutique D4',
                 'floor_id' => 2,
-                'wing_or_zone' => "East Wing",
-                'area_sqm' => "120.00",
-                'dimensions' => "10m x 12m",
+                'wing_or_zone' => 'East Wing',
+                'area_sqm' => '120.00',
+                'dimensions' => '10m x 12m',
                 'has_window' => true,
                 'has_ventilation' => true,
                 'has_plumbing' => true,
                 'has_electricity' => true,
-                'features' => json_encode(["High Ceilings", "Designer Lighting", "Fitting Rooms", "VIP Area", "Security System"]),
-                'monthly_rent' => "4500.00",
-                'rent_currency' => "USD",
-                'rent_includes' => json_encode(["Climate Control", "Security", "Cleaning"]),
+                'features' => json_encode(['High Ceilings', 'Designer Lighting', 'Fitting Rooms', 'VIP Area', 'Security System']),
+                'monthly_rent' => '4500.00',
+                'rent_currency' => 'USD',
+                'rent_includes' => json_encode(['Climate Control', 'Security', 'Cleaning']),
                 'negotiable' => false,
-                'thumbnail' => "storage/free_spaces/image011.jpg",
+                'thumbnail' => 'storage/free_spaces/image011.jpg',
                 'gallery' => json_encode([
-                    "storage/free_spaces/image012.jpg",
-                    "storage/free_spaces/image013.jpg",
-                    "storage/free_spaces/image014.jpg"
+                    'storage/free_spaces/image012.jpg',
+                    'storage/free_spaces/image013.jpg',
+                    'storage/free_spaces/image014.jpg',
                 ]),
-                'virtual_tour_url' => "https://virtualtour.example.com/boutique_d4",
-                'short_description' => "Premium space ideal for high-end fashion and luxury brands.",
-                'full_description' => "A stunning boutique space with architectural details and premium finishes. Features high ceilings, designer lighting, and a dedicated VIP area for exclusive clientele.",
-                'contact_person' => "David Lee",
-                'contact_phone' => "+1 (555) 234-5678",
-                'contact_email' => "david.lee@example.com",
-                'meta_title' => "Luxury Boutique D6 for Rent",
-                'meta_description' => "Rent a premium space ideal for high-end fashion and luxury brands.",
-                'slug' => "luxury-boutique-d6",
-                'availability_status' => "available",
+                'virtual_tour_url' => 'https://virtualtour.example.com/boutique_d4',
+                'short_description' => 'Premium space ideal for high-end fashion and luxury brands.',
+                'full_description' => 'A stunning boutique space with architectural details and premium finishes. Features high ceilings, designer lighting, and a dedicated VIP area for exclusive clientele.',
+                'contact_person' => 'David Lee',
+                'contact_phone' => '+1 (555) 234-5678',
+                'contact_email' => 'david.lee@example.com',
+                'meta_title' => 'Luxury Boutique D6 for Rent',
+                'meta_description' => 'Rent a premium space ideal for high-end fashion and luxury brands.',
+                'slug' => 'luxury-boutique-d6',
+                'availability_status' => 'available',
             ],
             [
-                'name' => "Tech Store E5",
+                'name' => 'Tech Store E5',
                 'floor_id' => 1,
-                'wing_or_zone' => "West Wing",
-                'area_sqm' => "90.00",
-                'dimensions' => "9m x 10m",
+                'wing_or_zone' => 'West Wing',
+                'area_sqm' => '90.00',
+                'dimensions' => '9m x 10m',
                 'has_window' => true,
                 'has_ventilation' => true,
                 'has_plumbing' => false,
                 'has_electricity' => true,
-                'features' => json_encode(["Extra Power Outlets", "Network Infrastructure", "Display Shelving", "Demo Area"]),
-                'monthly_rent' => "3200.00",
-                'rent_currency' => "USD",
-                'rent_includes' => json_encode(["Internet", "Utilities"]),
+                'features' => json_encode(['Extra Power Outlets', 'Network Infrastructure', 'Display Shelving', 'Demo Area']),
+                'monthly_rent' => '3200.00',
+                'rent_currency' => 'USD',
+                'rent_includes' => json_encode(['Internet', 'Utilities']),
                 'negotiable' => true,
-                'thumbnail' => "storage/free_spaces/image015.jpg",
+                'thumbnail' => 'storage/free_spaces/image015.jpg',
                 'gallery' => json_encode([
-                    "storage/free_spaces/image016.jpg",
-                    "storage/free_spaces/image017.jpg"
+                    'storage/free_spaces/image016.jpg',
+                    'storage/free_spaces/image017.jpg',
                 ]),
                 'virtual_tour_url' => null,
-                'short_description' => "Modern space perfect for electronics and technology retail.",
-                'full_description' => "Designed specifically for tech retailers with enhanced electrical infrastructure, network capabilities, and demo areas for product displays and customer interactions.",
-                'contact_person' => "Sarah Johnson",
-                'contact_phone' => "+1 (555) 345-6789",
-                'contact_email' => "sarah.johnson@example.com",
-                'meta_title' => "Tech Store E5 for Rent",
-                'meta_description' => "Rent a modern space perfect for electronics and technology retail.",
-                'slug' => "tech-store-e3",
-                'availability_status' => "occupied",
+                'short_description' => 'Modern space perfect for electronics and technology retail.',
+                'full_description' => 'Designed specifically for tech retailers with enhanced electrical infrastructure, network capabilities, and demo areas for product displays and customer interactions.',
+                'contact_person' => 'Sarah Johnson',
+                'contact_phone' => '+1 (555) 345-6789',
+                'contact_email' => 'sarah.johnson@example.com',
+                'meta_title' => 'Tech Store E5 for Rent',
+                'meta_description' => 'Rent a modern space perfect for electronics and technology retail.',
+                'slug' => 'tech-store-e3',
+                'availability_status' => 'occupied',
             ],
             [
-                'name' => "Wellness Studio F6",
+                'name' => 'Wellness Studio F6',
                 'floor_id' => 3,
-                'wing_or_zone' => "North Wing",
-                'area_sqm' => "100.00",
-                'dimensions' => "10m x 10m",
+                'wing_or_zone' => 'North Wing',
+                'area_sqm' => '100.00',
+                'dimensions' => '10m x 10m',
                 'has_window' => true,
                 'has_ventilation' => true,
                 'has_plumbing' => true,
                 'has_electricity' => true,
-                'features' => json_encode(["Mirrors", "Rubber Flooring", "Storage Lockers", "Reception Area", "Changing Rooms"]),
-                'monthly_rent' => "2800.00",
-                'rent_currency' => "USD",
-                'rent_includes' => json_encode(["Water", "Climate Control"]),
+                'features' => json_encode(['Mirrors', 'Rubber Flooring', 'Storage Lockers', 'Reception Area', 'Changing Rooms']),
+                'monthly_rent' => '2800.00',
+                'rent_currency' => 'USD',
+                'rent_includes' => json_encode(['Water', 'Climate Control']),
                 'negotiable' => true,
-                'thumbnail' => "storage/free_spaces/image018.jpg",
+                'thumbnail' => 'storage/free_spaces/image018.jpg',
                 'gallery' => json_encode([
-                    "storage/free_spaces/image018.jpg",
-                    "storage/free_spaces/image019.jpg"
+                    'storage/free_spaces/image018.jpg',
+                    'storage/free_spaces/image019.jpg',
                 ]),
-                'virtual_tour_url' => "https://virtualtour.example.com/wellness_f6",
-                'short_description' => "Spacious studio ideal for fitness, yoga, or wellness services.",
-                'full_description' => "A versatile wellness space with natural light, mirrors, and specialized flooring. Perfect for yoga studios, fitness centers, dance classes, or health clinics.",
-                'contact_person' => "Emily Chen",
-                'contact_phone' => "+1 (555) 567-8901",
-                'contact_email' => "emily.chen@example.com",
-                'meta_title' => "Wellness Studio F6 for Rent",
-                'meta_description' => "Rent a spacious studio ideal for fitness, yoga, or wellness services.",
-                'slug' => "wellness-studio-f6",
-                'availability_status' => "available",
+                'virtual_tour_url' => 'https://virtualtour.example.com/wellness_f6',
+                'short_description' => 'Spacious studio ideal for fitness, yoga, or wellness services.',
+                'full_description' => 'A versatile wellness space with natural light, mirrors, and specialized flooring. Perfect for yoga studios, fitness centers, dance classes, or health clinics.',
+                'contact_person' => 'Emily Chen',
+                'contact_phone' => '+1 (555) 567-8901',
+                'contact_email' => 'emily.chen@example.com',
+                'meta_title' => 'Wellness Studio F6 for Rent',
+                'meta_description' => 'Rent a spacious studio ideal for fitness, yoga, or wellness services.',
+                'slug' => 'wellness-studio-f6',
+                'availability_status' => 'available',
             ],
             [
                 'name' => 'Premium Office Suite A1',
@@ -1482,10 +1502,10 @@ class DatabaseSeeder extends Seeder
                 'has_ventilation' => true,
                 'has_plumbing' => false,
                 'has_electricity' => true,
-                'features' => json_encode(["Air Conditioning", "High-Speed Internet", "Conference Room Access"]),
+                'features' => json_encode(['Air Conditioning', 'High-Speed Internet', 'Conference Room Access']),
                 'monthly_rent' => '1200.00',
                 'rent_currency' => 'USD',
-                'rent_includes' => json_encode(["Utilities", "Maintenance"]),
+                'rent_includes' => json_encode(['Utilities', 'Maintenance']),
                 'negotiable' => true,
                 'thumbnail' => 'storage/free_spaces/image020.jpg',
                 'gallery' => json_encode([
@@ -1514,10 +1534,10 @@ class DatabaseSeeder extends Seeder
                 'has_ventilation' => true,
                 'has_plumbing' => true,
                 'has_electricity' => true,
-                'features' => json_encode(["Street Facing", "Storage Room", "Security System"]),
+                'features' => json_encode(['Street Facing', 'Storage Room', 'Security System']),
                 'monthly_rent' => '2500.00',
                 'rent_currency' => 'USD',
-                'rent_includes' => json_encode(["Security", "Cleaning"]),
+                'rent_includes' => json_encode(['Security', 'Cleaning']),
                 'negotiable' => false,
                 'thumbnail' => 'storage/free_spaces/image024.jpg',
                 'gallery' => json_encode([
@@ -1545,10 +1565,10 @@ class DatabaseSeeder extends Seeder
                 'has_ventilation' => true,
                 'has_plumbing' => true,
                 'has_electricity' => true,
-                'features' => json_encode(["Kitchen Equipment", "Exhaust System", "Refrigeration"]),
+                'features' => json_encode(['Kitchen Equipment', 'Exhaust System', 'Refrigeration']),
                 'monthly_rent' => '1800.00',
                 'rent_currency' => 'USD',
-                'rent_includes' => json_encode(["Utilities", "Equipment Maintenance"]),
+                'rent_includes' => json_encode(['Utilities', 'Equipment Maintenance']),
                 'negotiable' => true,
                 'thumbnail' => 'storage/free_spaces/image026.jpg',
                 'gallery' => json_encode([
@@ -1570,158 +1590,158 @@ class DatabaseSeeder extends Seeder
 
         $vacancies = [
             [
-                "title" => "Customer Service Representative",
-                "department" => "Information Desk",
-                "employment_type" => "Full-time",
-                "work_location" => "Dembel City Center, Addis Ababa",
-                "salary_min" => 8000,
-                "salary_max" => 12000,
-                "currency" => "ETB",
-                "job_description" => "Assist mall visitors, provide directions, and handle general inquiries with professionalism.",
-                "requirements" => "Diploma or degree in Hospitality or related field; Excellent communication skills; Fluent in English and Amharic.",
-                "benefits" => "Health insurance, staff discounts, training opportunities.",
-                "how_to_apply" => "Submit your CV and cover letter to hr@dembelmall.com or apply in person at the HR Office.",
-                "posted_date" => "2025-10-06",
-                "closing_date" => "2025-10-20",
-                "number_of_positions" => 3,
-                "contact_email" => "hr@dembelmall.com",
-                "contact_phone" => "+251911223344",
-                "address" => "Dembel City Center, 2nd Floor, HR Office",
-                "is_approved" => true,
-                "slug" => "customer-service-representative",
-                "thumbnail" => "storage/vacancies/image001.jpg",
+                'title' => 'Customer Service Representative',
+                'department' => 'Information Desk',
+                'employment_type' => 'Full-time',
+                'work_location' => 'Dembel City Center, Addis Ababa',
+                'salary_min' => 8000,
+                'salary_max' => 12000,
+                'currency' => 'ETB',
+                'job_description' => 'Assist mall visitors, provide directions, and handle general inquiries with professionalism.',
+                'requirements' => 'Diploma or degree in Hospitality or related field; Excellent communication skills; Fluent in English and Amharic.',
+                'benefits' => 'Health insurance, staff discounts, training opportunities.',
+                'how_to_apply' => 'Submit your CV and cover letter to hr@dembelmall.com or apply in person at the HR Office.',
+                'posted_date' => '2025-10-06',
+                'closing_date' => '2025-10-20',
+                'number_of_positions' => 3,
+                'contact_email' => 'hr@dembelmall.com',
+                'contact_phone' => '+251911223344',
+                'address' => 'Dembel City Center, 2nd Floor, HR Office',
+                'is_approved' => true,
+                'slug' => 'customer-service-representative',
+                'thumbnail' => 'storage/vacancies/image001.jpg',
             ],
             [
-                "title" => "Security Officer",
-                "department" => "Security",
-                "employment_type" => "Full-time",
-                "work_location" => "Dembel City Center, Addis Ababa",
-                "salary_min" => 6500,
-                "salary_max" => 9000,
-                "currency" => "ETB",
-                "job_description" => "Monitor mall premises, ensure visitor safety, and respond to security incidents. Conduct regular patrols and maintain a secure environment for all customers and tenants.",
-                "requirements" => "High school diploma or equivalent; Previous security experience required; Valid security license; Good physical condition; Ability to work night shifts and weekends.",
-                "benefits" => "Health insurance, uniform provided, staff discounts, overtime pay, and professional development opportunities.",
-                "how_to_apply" => "Submit your CV and security license to hr@dembelmall.com or visit the HR Office with required documents.",
-                "posted_date" => "2025-10-08",
-                "closing_date" => "2025-10-22",
-                "number_of_positions" => 5,
-                "contact_email" => "hr@dembelmall.com",
-                "contact_phone" => "+251911223344",
-                "address" => "Dembel City Center, 2nd Floor, HR Office",
-                "is_approved" => true,
-                "slug" => "security-officer",
-                "thumbnail" => "storage/vacancies/image003.jpg",
+                'title' => 'Security Officer',
+                'department' => 'Security',
+                'employment_type' => 'Full-time',
+                'work_location' => 'Dembel City Center, Addis Ababa',
+                'salary_min' => 6500,
+                'salary_max' => 9000,
+                'currency' => 'ETB',
+                'job_description' => 'Monitor mall premises, ensure visitor safety, and respond to security incidents. Conduct regular patrols and maintain a secure environment for all customers and tenants.',
+                'requirements' => 'High school diploma or equivalent; Previous security experience required; Valid security license; Good physical condition; Ability to work night shifts and weekends.',
+                'benefits' => 'Health insurance, uniform provided, staff discounts, overtime pay, and professional development opportunities.',
+                'how_to_apply' => 'Submit your CV and security license to hr@dembelmall.com or visit the HR Office with required documents.',
+                'posted_date' => '2025-10-08',
+                'closing_date' => '2025-10-22',
+                'number_of_positions' => 5,
+                'contact_email' => 'hr@dembelmall.com',
+                'contact_phone' => '+251911223344',
+                'address' => 'Dembel City Center, 2nd Floor, HR Office',
+                'is_approved' => true,
+                'slug' => 'security-officer',
+                'thumbnail' => 'storage/vacancies/image003.jpg',
             ],
             [
-                "title" => "Marketing Coordinator",
-                "department" => "Marketing",
-                "employment_type" => "Full-time",
-                "work_location" => "Dembel City Center, Addis Ababa",
-                "salary_min" => 15000,
-                "salary_max" => 22000,
-                "currency" => "ETB",
-                "job_description" => "Plan and execute marketing campaigns, manage social media presence, coordinate events and promotions. Work closely with mall tenants to drive foot traffic and enhance brand visibility.",
-                "requirements" => "Bachelor's degree in Marketing, Communications, or related field; 2+ years of marketing experience; Strong social media and digital marketing skills; Creative thinking and excellent communication; Proficiency in graphic design tools is a plus.",
-                "benefits" => "Health insurance, performance bonuses, staff discounts, training opportunities, annual leave, and modern work environment.",
-                "how_to_apply" => "Send your CV, portfolio, and cover letter to hr@dembelmall.com with subject line 'Marketing Coordinator Application'.",
-                "posted_date" => "2025-10-05",
-                "closing_date" => "2025-10-19",
-                "number_of_positions" => 1,
-                "contact_email" => "hr@dembelmall.com",
-                "contact_phone" => "+251911223344",
-                "address" => "Dembel City Center, 2nd Floor, HR Office",
-                "is_approved" => true,
-                "slug" => "marketing-coordinator",
-                "thumbnail" => "storage/vacancies/image004.jpg",
+                'title' => 'Marketing Coordinator',
+                'department' => 'Marketing',
+                'employment_type' => 'Full-time',
+                'work_location' => 'Dembel City Center, Addis Ababa',
+                'salary_min' => 15000,
+                'salary_max' => 22000,
+                'currency' => 'ETB',
+                'job_description' => 'Plan and execute marketing campaigns, manage social media presence, coordinate events and promotions. Work closely with mall tenants to drive foot traffic and enhance brand visibility.',
+                'requirements' => "Bachelor's degree in Marketing, Communications, or related field; 2+ years of marketing experience; Strong social media and digital marketing skills; Creative thinking and excellent communication; Proficiency in graphic design tools is a plus.",
+                'benefits' => 'Health insurance, performance bonuses, staff discounts, training opportunities, annual leave, and modern work environment.',
+                'how_to_apply' => "Send your CV, portfolio, and cover letter to hr@dembelmall.com with subject line 'Marketing Coordinator Application'.",
+                'posted_date' => '2025-10-05',
+                'closing_date' => '2025-10-19',
+                'number_of_positions' => 1,
+                'contact_email' => 'hr@dembelmall.com',
+                'contact_phone' => '+251911223344',
+                'address' => 'Dembel City Center, 2nd Floor, HR Office',
+                'is_approved' => true,
+                'slug' => 'marketing-coordinator',
+                'thumbnail' => 'storage/vacancies/image004.jpg',
             ],
             [
-                "title" => "Maintenance Technician",
-                "department" => "Facilities",
-                "employment_type" => "Full-time",
-                "work_location" => "Dembel City Center, Addis Ababa",
-                "salary_min" => 10000,
-                "salary_max" => 15000,
-                "currency" => "ETB",
-                "job_description" => "Perform routine maintenance, repairs, and troubleshooting of mall facilities including electrical, plumbing, and HVAC systems. Ensure all equipment is functioning properly and respond to maintenance requests promptly.",
-                "requirements" => "Technical diploma or certification in relevant field; 3+ years of maintenance experience; Knowledge of electrical, plumbing, and HVAC systems; Problem-solving skills; Ability to work independently.",
-                "benefits" => "Health insurance, tools and equipment provided, staff discounts, training programs, and overtime compensation.",
-                "how_to_apply" => "Submit your CV and relevant certifications to hr@dembelmall.com or apply in person at the HR Office.",
-                "posted_date" => "2025-10-07",
-                "closing_date" => "2025-10-21",
-                "number_of_positions" => 2,
-                "contact_email" => "hr@dembelmall.com",
-                "contact_phone" => "+251911223344",
-                "address" => "Dembel City Center, 2nd Floor, HR Office",
-                "is_approved" => true,
-                "slug" => "maintenance-technician",
-                "thumbnail" => "storage/vacancies/image005.jpg",
+                'title' => 'Maintenance Technician',
+                'department' => 'Facilities',
+                'employment_type' => 'Full-time',
+                'work_location' => 'Dembel City Center, Addis Ababa',
+                'salary_min' => 10000,
+                'salary_max' => 15000,
+                'currency' => 'ETB',
+                'job_description' => 'Perform routine maintenance, repairs, and troubleshooting of mall facilities including electrical, plumbing, and HVAC systems. Ensure all equipment is functioning properly and respond to maintenance requests promptly.',
+                'requirements' => 'Technical diploma or certification in relevant field; 3+ years of maintenance experience; Knowledge of electrical, plumbing, and HVAC systems; Problem-solving skills; Ability to work independently.',
+                'benefits' => 'Health insurance, tools and equipment provided, staff discounts, training programs, and overtime compensation.',
+                'how_to_apply' => 'Submit your CV and relevant certifications to hr@dembelmall.com or apply in person at the HR Office.',
+                'posted_date' => '2025-10-07',
+                'closing_date' => '2025-10-21',
+                'number_of_positions' => 2,
+                'contact_email' => 'hr@dembelmall.com',
+                'contact_phone' => '+251911223344',
+                'address' => 'Dembel City Center, 2nd Floor, HR Office',
+                'is_approved' => true,
+                'slug' => 'maintenance-technician',
+                'thumbnail' => 'storage/vacancies/image005.jpg',
             ],
             [
-                "title" => "Retail Sales Associate",
-                "department" => "Retail",
-                "employment_type" => "Part-time",
-                "work_location" => "Dembel City Center, Addis Ababa",
-                "salary_min" => 5000,
-                "salary_max" => 7000,
-                "currency" => "ETB",
-                "job_description" => "Assist customers with product selection, process transactions, maintain store appearance, and provide excellent customer service. Help create a welcoming shopping environment.",
-                "requirements" => "High school diploma; Previous retail experience preferred; Excellent customer service skills; Ability to work weekends and holidays; Good communication skills in English and Amharic.",
-                "benefits" => "Staff discounts, flexible schedule, training opportunities, and potential for full-time position.",
-                "how_to_apply" => "Submit your CV to hr@dembelmall.com or apply in person at the HR Office during business hours.",
-                "posted_date" => "2025-10-09",
-                "closing_date" => "2025-10-23",
-                "number_of_positions" => 4,
-                "contact_email" => "hr@dembelmall.com",
-                "contact_phone" => "+251911223344",
-                "address" => "Dembel City Center, 2nd Floor, HR Office",
-                "is_approved" => true,
-                "slug" => "retail-sales-associate",
-                "thumbnail" => "storage/vacancies/image006.jpg",
+                'title' => 'Retail Sales Associate',
+                'department' => 'Retail',
+                'employment_type' => 'Part-time',
+                'work_location' => 'Dembel City Center, Addis Ababa',
+                'salary_min' => 5000,
+                'salary_max' => 7000,
+                'currency' => 'ETB',
+                'job_description' => 'Assist customers with product selection, process transactions, maintain store appearance, and provide excellent customer service. Help create a welcoming shopping environment.',
+                'requirements' => 'High school diploma; Previous retail experience preferred; Excellent customer service skills; Ability to work weekends and holidays; Good communication skills in English and Amharic.',
+                'benefits' => 'Staff discounts, flexible schedule, training opportunities, and potential for full-time position.',
+                'how_to_apply' => 'Submit your CV to hr@dembelmall.com or apply in person at the HR Office during business hours.',
+                'posted_date' => '2025-10-09',
+                'closing_date' => '2025-10-23',
+                'number_of_positions' => 4,
+                'contact_email' => 'hr@dembelmall.com',
+                'contact_phone' => '+251911223344',
+                'address' => 'Dembel City Center, 2nd Floor, HR Office',
+                'is_approved' => true,
+                'slug' => 'retail-sales-associate',
+                'thumbnail' => 'storage/vacancies/image006.jpg',
             ],
             [
-                "title" => "HR Assistant",
-                "department" => "Human Resources",
-                "employment_type" => "Full-time",
-                "work_location" => "Dembel City Center, Addis Ababa",
-                "salary_min" => 12000,
-                "salary_max" => 18000,
-                "currency" => "ETB",
-                "job_description" => "Support HR operations including recruitment, onboarding, employee records management, and payroll processing. Assist with employee relations and HR projects.",
-                "requirements" => "Bachelor's degree in HR, Business Administration, or related field; 1-2 years HR experience; Knowledge of Ethiopian labor law; Strong organizational and interpersonal skills; Proficiency in MS Office.",
-                "benefits" => "Health insurance, performance bonuses, staff discounts, professional development, annual leave, and career growth opportunities.",
-                "how_to_apply" => "Send your CV and cover letter to hr@dembelmall.com with subject line 'HR Assistant Application'.",
-                "posted_date" => "2025-10-04",
-                "closing_date" => "2025-10-18",
-                "number_of_positions" => 1,
-                "contact_email" => "hr@dembelmall.com",
-                "contact_phone" => "+251911223344",
-                "address" => "Dembel City Center, 2nd Floor, HR Office",
-                "is_approved" => true,
-                "slug" => "hr-assistant",
-                "thumbnail" => "storage/vacancies/image007.jpg",
+                'title' => 'HR Assistant',
+                'department' => 'Human Resources',
+                'employment_type' => 'Full-time',
+                'work_location' => 'Dembel City Center, Addis Ababa',
+                'salary_min' => 12000,
+                'salary_max' => 18000,
+                'currency' => 'ETB',
+                'job_description' => 'Support HR operations including recruitment, onboarding, employee records management, and payroll processing. Assist with employee relations and HR projects.',
+                'requirements' => "Bachelor's degree in HR, Business Administration, or related field; 1-2 years HR experience; Knowledge of Ethiopian labor law; Strong organizational and interpersonal skills; Proficiency in MS Office.",
+                'benefits' => 'Health insurance, performance bonuses, staff discounts, professional development, annual leave, and career growth opportunities.',
+                'how_to_apply' => "Send your CV and cover letter to hr@dembelmall.com with subject line 'HR Assistant Application'.",
+                'posted_date' => '2025-10-04',
+                'closing_date' => '2025-10-18',
+                'number_of_positions' => 1,
+                'contact_email' => 'hr@dembelmall.com',
+                'contact_phone' => '+251911223344',
+                'address' => 'Dembel City Center, 2nd Floor, HR Office',
+                'is_approved' => true,
+                'slug' => 'hr-assistant',
+                'thumbnail' => 'storage/vacancies/image007.jpg',
             ],
             [
-                "title" => "Event Coordinator",
-                "department" => "Marketing",
-                "employment_type" => "Full-time",
-                "work_location" => "Dembel City Center, Addis Ababa",
-                "salary_min" => 14000,
-                "salary_max" => 20000,
-                "currency" => "ETB",
-                "job_description" => "Plan and execute events, promotions, and marketing activities to drive foot traffic and enhance mall visibility. Coordinate with tenants and external vendors to ensure successful event execution.",
-                "requirements" => "Bachelor's degree in Marketing, Communications, or related field; 2+ years event planning experience; Strong organizational and multitasking skills; Excellent communication and negotiation skills; Ability to work flexible hours including weekends.",
-                "benefits" => "Health insurance, performance bonuses, staff discounts, training opportunities, annual leave, and modern work environment.",
-                "how_to_apply" => "Send your CV, portfolio, and cover letter to hr@dembelmall.com with subject line 'Event Coordinator Application'.",
-                "posted_date" => "2025-10-03",
-                "closing_date" => "2025-10-17",
-                "number_of_positions" => 1,
-                "contact_email" => "hr@dembelmall.com",
-                "contact_phone" => "+251911223344",
-                "address" => "Dembel City Center, 2nd Floor, HR Office",
-                "is_approved" => true,
-                "slug" => "event-coordinator",
-                "thumbnail" => "storage/vacancies/image008.jpg",
+                'title' => 'Event Coordinator',
+                'department' => 'Marketing',
+                'employment_type' => 'Full-time',
+                'work_location' => 'Dembel City Center, Addis Ababa',
+                'salary_min' => 14000,
+                'salary_max' => 20000,
+                'currency' => 'ETB',
+                'job_description' => 'Plan and execute events, promotions, and marketing activities to drive foot traffic and enhance mall visibility. Coordinate with tenants and external vendors to ensure successful event execution.',
+                'requirements' => "Bachelor's degree in Marketing, Communications, or related field; 2+ years event planning experience; Strong organizational and multitasking skills; Excellent communication and negotiation skills; Ability to work flexible hours including weekends.",
+                'benefits' => 'Health insurance, performance bonuses, staff discounts, training opportunities, annual leave, and modern work environment.',
+                'how_to_apply' => "Send your CV, portfolio, and cover letter to hr@dembelmall.com with subject line 'Event Coordinator Application'.",
+                'posted_date' => '2025-10-03',
+                'closing_date' => '2025-10-17',
+                'number_of_positions' => 1,
+                'contact_email' => 'hr@dembelmall.com',
+                'contact_phone' => '+251911223344',
+                'address' => 'Dembel City Center, 2nd Floor, HR Office',
+                'is_approved' => true,
+                'slug' => 'event-coordinator',
+                'thumbnail' => 'storage/vacancies/image008.jpg',
             ],
             [
                 'title' => 'Software Engineer',
@@ -1815,19 +1835,19 @@ class DatabaseSeeder extends Seeder
 
         $mall = [
             [
-                "name" => "Dembel City Center",
-                "slug" => "dembel-city-center",
-                "year_built" => "2004",
-                "floors" => 8,
-                "total_area_sqm" => 25000,
-                "total_shops" => 320,
-                "facilities" => json_encode([
-                    "Parking",
-                    "Elevators",
-                    "24/7 Security",
-                    "Wi-Fi",
-                    "Power Backup",
-                    "Accessibility",
+                'name' => 'Dembel City Center',
+                'slug' => 'dembel-city-center',
+                'year_built' => '2004',
+                'floors' => 8,
+                'total_area_sqm' => 25000,
+                'total_shops' => 320,
+                'facilities' => json_encode([
+                    'Parking',
+                    'Elevators',
+                    '24/7 Security',
+                    'Wi-Fi',
+                    'Power Backup',
+                    'Accessibility',
                 ]),
                 'gallery' => json_encode([
                     'storage/mall/image001.jpg',
@@ -1836,46 +1856,46 @@ class DatabaseSeeder extends Seeder
                     'storage/mall/image004.jpg',
                     'storage/mall/image005.jpg',
                 ]),
-                "virtual_tour_url" => "https://virtualtour.com/dembel",
-                "address" => "Africa Avenue, Addis Ababa, Ethiopia",
-                "contact_phone" => "+251 9XX XXX XXX",
-                "contact_email" => "info@dembel.com",
-                "description" => "Dembel City Center is one of the first modern commercial complexes in Addis Ababa, hosting a diverse mix of retail, dining, and corporate offices.",
-                "floors_directory" => json_encode([
+                'virtual_tour_url' => 'https://virtualtour.com/dembel',
+                'address' => 'Africa Avenue, Addis Ababa, Ethiopia',
+                'contact_phone' => '+251 9XX XXX XXX',
+                'contact_email' => 'info@dembel.com',
+                'description' => 'Dembel City Center is one of the first modern commercial complexes in Addis Ababa, hosting a diverse mix of retail, dining, and corporate offices.',
+                'floors_directory' => json_encode([
                     [
-                        "floor" => "Ground Floor",
-                        "highlights" => ["Banking", "Food Court", "Main Entrance"],
+                        'floor' => 'Ground Floor',
+                        'highlights' => ['Banking', 'Food Court', 'Main Entrance'],
                     ],
                     [
-                        "floor" => "1st Floor",
-                        "highlights" => ["Fashion Boutiques", "Retail Stores", "Jewelry"],
+                        'floor' => '1st Floor',
+                        'highlights' => ['Fashion Boutiques', 'Retail Stores', 'Jewelry'],
                     ],
                     [
-                        "floor" => "2nd Floor",
-                        "highlights" => ["Electronics", "Home Goods", "Sports Retail"],
+                        'floor' => '2nd Floor',
+                        'highlights' => ['Electronics', 'Home Goods', 'Sports Retail'],
                     ],
                     [
-                        "floor" => "3rd-8th Floors",
-                        "highlights" => ["Corporate Offices", "Business Centers", "Services"],
+                        'floor' => '3rd-8th Floors',
+                        'highlights' => ['Corporate Offices', 'Business Centers', 'Services'],
                     ],
                 ]),
             ],
             [
-                "name" => "Dembel Extension",
-                "slug" => "dembel-extension",
-                "year_built" => "2018",
-                "floors" => 9,
-                "total_area_sqm" => 30000,
-                "total_shops" => 360,
-                "facilities" => json_encode([
-                    "Parking",
-                    "Elevators",
-                    "24/7 Security",
-                    "Smart HVAC",
-                    "Wi-Fi",
-                    "Power Backup",
-                    "Accessibility",
-                    "EV Charging",
+                'name' => 'Dembel Extension',
+                'slug' => 'dembel-extension',
+                'year_built' => '2018',
+                'floors' => 9,
+                'total_area_sqm' => 30000,
+                'total_shops' => 360,
+                'facilities' => json_encode([
+                    'Parking',
+                    'Elevators',
+                    '24/7 Security',
+                    'Smart HVAC',
+                    'Wi-Fi',
+                    'Power Backup',
+                    'Accessibility',
+                    'EV Charging',
                 ]),
                 'gallery' => json_encode([
                     'storage/mall/image006.jpg',
@@ -1884,27 +1904,27 @@ class DatabaseSeeder extends Seeder
                     'storage/mall/image009.jpg',
                     'storage/mall/image010.jpg',
                 ]),
-                "virtual_tour_url" => "https://virtualtour.com/dembel-extension",
-                "address" => "Bole Road, Addis Ababa, Ethiopia",
-                "contact_phone" => "+251 9XX XXX XXX",
-                "contact_email" => "extension@dembel.com",
-                "description" => "Dembel Extension represents the modern evolution of the Dembel brand — combining luxury retail, spacious offices, and enhanced visitor experiences.",
-                "floors_directory" => json_encode([
+                'virtual_tour_url' => 'https://virtualtour.com/dembel-extension',
+                'address' => 'Bole Road, Addis Ababa, Ethiopia',
+                'contact_phone' => '+251 9XX XXX XXX',
+                'contact_email' => 'extension@dembel.com',
+                'description' => 'Dembel Extension represents the modern evolution of the Dembel brand — combining luxury retail, spacious offices, and enhanced visitor experiences.',
+                'floors_directory' => json_encode([
                     [
-                        "floor" => "Ground Floor",
-                        "highlights" => ["Luxury Retail", "Premium Dining", "Main Lobby"],
+                        'floor' => 'Ground Floor',
+                        'highlights' => ['Luxury Retail', 'Premium Dining', 'Main Lobby'],
                     ],
                     [
-                        "floor" => "1st-2nd Floors",
-                        "highlights" => ["Fashion & Lifestyle", "International Brands", "Beauty & Wellness"],
+                        'floor' => '1st-2nd Floors',
+                        'highlights' => ['Fashion & Lifestyle', 'International Brands', 'Beauty & Wellness'],
                     ],
                     [
-                        "floor" => "3rd-4th Floors",
-                        "highlights" => ["Entertainment Zone", "Food Court", "Family Dining"],
+                        'floor' => '3rd-4th Floors',
+                        'highlights' => ['Entertainment Zone', 'Food Court', 'Family Dining'],
                     ],
                     [
-                        "floor" => "5th-9th Floors",
-                        "highlights" => ["Modern Offices", "Conference Centers", "Business Services"],
+                        'floor' => '5th-9th Floors',
+                        'highlights' => ['Modern Offices', 'Conference Centers', 'Business Services'],
                     ],
                 ]),
             ],
@@ -1929,37 +1949,35 @@ class DatabaseSeeder extends Seeder
         DB::table('malls')->insert($mall);
     }
 }
- // foreach ($vacancies as $index => $vacancy) {
-        //     $count = count($vacancy);
-        //     echo "Row {$index} has {$count} fields\n";
-        // }
+// foreach ($vacancies as $index => $vacancy) {
+//     $count = count($vacancy);
+//     echo "Row {$index} has {$count} fields\n";
+// }
 
+// $usedSlugs = [];
+// foreach ($freeSpaces as $space) {
+//     $baseSlug = !empty($space['slug'])
+//         ? Str::slug($space['slug'])
+//         : (!empty($space['name']) ? Str::slug($space['name']) : null);
 
-
-        // $usedSlugs = [];
-        // foreach ($freeSpaces as $space) {
-        //     $baseSlug = !empty($space['slug'])
-        //         ? Str::slug($space['slug'])
-        //         : (!empty($space['name']) ? Str::slug($space['name']) : null);
-
-        //     if ($baseSlug) {
-        //         $uniqueSlug = $baseSlug;
-        //         $suffix = 2;
-        //         while (
-        //             DB::table('free_spaces')->where('slug', $uniqueSlug)->exists() ||
-        //             in_array($uniqueSlug, $usedSlugs, true)
-        //         ) {
-        //             $uniqueSlug = $baseSlug . '-' . $suffix;
-        //             $suffix++;
-        //         }
-        //         $space['slug'] = $uniqueSlug;
-        //         $usedSlugs[] = $uniqueSlug;
-        //     }
-        //     $normalize = function ($value) {
-        //         if ($value === '?' || $value === '') return null;
-        //         return $value;
-        //     };
-        //     $space['virtual_tour_url'] = $normalize($space['virtual_tour_url'] ?? null);
-        //     $space['meta_title'] = $normalize($space['meta_title'] ?? null);
-        //     $space['meta_description'] = $normalize($space['meta_description'] ?? null);
-        // }
+//     if ($baseSlug) {
+//         $uniqueSlug = $baseSlug;
+//         $suffix = 2;
+//         while (
+//             DB::table('free_spaces')->where('slug', $uniqueSlug)->exists() ||
+//             in_array($uniqueSlug, $usedSlugs, true)
+//         ) {
+//             $uniqueSlug = $baseSlug . '-' . $suffix;
+//             $suffix++;
+//         }
+//         $space['slug'] = $uniqueSlug;
+//         $usedSlugs[] = $uniqueSlug;
+//     }
+//     $normalize = function ($value) {
+//         if ($value === '?' || $value === '') return null;
+//         return $value;
+//     };
+//     $space['virtual_tour_url'] = $normalize($space['virtual_tour_url'] ?? null);
+//     $space['meta_title'] = $normalize($space['meta_title'] ?? null);
+//     $space['meta_description'] = $normalize($space['meta_description'] ?? null);
+// }

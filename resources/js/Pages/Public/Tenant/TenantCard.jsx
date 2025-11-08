@@ -71,6 +71,7 @@ const TenantCard = ({ tenant, viewMode = 'grid' }) => {
             <div className="flex items-center">
               <MapPin className="w-3.5 h-3.5 mr-1.5 text-gray-400 flex-shrink-0" />
               <span className="text-sm">
+                {tenant.building && <span>{tenant.building} • </span>}
                 {tenant.room_no && `Room ${tenant.room_no} • `}
                 {tenant.floor?.name || tenant.floor}
                 {tenant.location && `, ${tenant.location}`}
@@ -126,6 +127,7 @@ const TenantCard = ({ tenant, viewMode = 'grid' }) => {
           <div className="flex items-start text-sm text-gray-600">
             <MapPin className="w-4 h-4 mt-0.5 mr-2 flex-shrink-0 text-gray-400" />
             <div>
+              {tenant.building && <div className="font-medium">{tenant.building}</div>}
               {tenant.room_no && <div className="font-medium">Room: {tenant.room_no}</div>}
               <div>{tenant.floor?.name || tenant.floor}{tenant.location && `, ${tenant.location}`}</div>
             </div>

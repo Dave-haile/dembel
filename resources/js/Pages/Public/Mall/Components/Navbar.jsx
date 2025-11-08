@@ -12,11 +12,10 @@ export const Navbar = ({
 }) => {
   return (
     <nav
-      className={`fixed top-16 w-full z-50 transition-all duration-300 ${
-        isHeaderTransparent
-          ? "bg-transparent shadow-none text-white hover:text-gray-400"
-          : "bg-white shadow-sm text-gray-600 hover:text-gray-800"
-      }`}
+      className={`fixed top-20 w-full z-[20] transition-all duration-300 ${isHeaderTransparent
+        ? "bg-transparent shadow-none text-white hover:text-gray-400"
+        : "bg-white shadow-sm text-gray-600 hover:text-gray-800"
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
@@ -30,9 +29,8 @@ export const Navbar = ({
             >
               <span>{selectedMall.name}</span>
               <span
-                className={`transform transition-transform duration-200 ${
-                  isDropdownOpen ? "rotate-180" : ""
-                }`}
+                className={`transform transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""
+                  }`}
               >
                 ▼
               </span>
@@ -50,14 +48,22 @@ export const Navbar = ({
                   <button
                     key={mall.slug}
                     onClick={() => {
+                      // setSelectedMall(mall);
+                      // setIsDropdownOpen(false);
+                      // router.visit(`/mall?mall=${mall.slug}`);
+                      window.history.pushState({}, "", `/mall?mall=${mall.slug}`);
+
+                      // Update the selected mall state in the parent
                       setSelectedMall(mall);
+
+                      // Close the dropdown
                       setIsDropdownOpen(false);
                     }}
-                    className={`w-full text-left px-5 py-3 hover:bg-blue-50 transition-colors ${
-                      selectedMall.slug === mall.slug
-                        ? "bg-blue-50 text-blue-700 font-medium"
-                        : "text-gray-800"
-                    }`}
+
+                    className={`w-full text-left px-5 py-3 hover:bg-blue-50 transition-colors ${selectedMall.slug === mall.slug
+                      ? "bg-blue-50 text-blue-700 font-medium"
+                      : "text-gray-800"
+                      }`}
                     role="option"
                     aria-selected={selectedMall.slug === mall.slug}
                   >

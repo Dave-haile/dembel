@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Tenant extends Model
 {
     use LogsActivity;
+
     protected $fillable = [
         'category_id',
         'name',
@@ -18,10 +19,11 @@ class Tenant extends Model
         'hours',
         'fullDescription',
         'floor_id',
+        'building',
         'room_no',
         'phone',
         'email',
-        'website'
+        'website',
     ];
 
     protected $casts = [

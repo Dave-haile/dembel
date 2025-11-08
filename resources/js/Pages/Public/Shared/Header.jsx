@@ -75,13 +75,13 @@ export default function Header() {
                 items={[
                   {
                     label: "Dembel",
-                    href: "/building?building=dembel",
-                    active: url === "/building?building=dembel",
+                    href: "/mall?mall=dembel",
+                    active: url === "/mall?mall=dembel",
                   },
                   {
                     label: "Dembel Extension",
-                    href: "/building?building=extension",
-                    active: url === "/building?building=extension",
+                    href: "/mall?mall=dembel-extension",
+                    active: url === "/mall?mall=dembel-extension",
                   },
                 ]}
               />
@@ -260,11 +260,10 @@ function NavLink({ href, active, children }) {
   return (
     <Link
       href={href}
-      className={`font-medium transition duration-150 hover:text-[#F05A7E] ${
-        active
-          ? "text-[#F05A7E] border-b-2 border-[#F05A7E] pb-1"
-          : "text-gray-700"
-      }`}
+      className={`font-medium transition duration-150 hover:text-[#F05A7E] ${active
+        ? "text-[#F05A7E] border-b-2 border-[#F05A7E] pb-1"
+        : "text-gray-700"
+        }`}
     >
       {children}
     </Link>

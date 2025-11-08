@@ -1,5 +1,6 @@
 import React from "react";
 import { ArrowRight } from "lucide-react";
+import { Link } from "@inertiajs/react";
 
 const WhoWeAre = () => {
   return (
@@ -33,8 +34,8 @@ const WhoWeAre = () => {
               experience that brings together local and international brands
               under one modern, sophisticated roof.
             </p>
-            <a
-              href="#about"
+            <Link
+              href="/about"
               className="inline-flex items-center text-[#0B8494] hover:text-[#0b8494d5] font-semibold text-lg group transition-colors duration-200"
             >
               Learn More
@@ -42,7 +43,7 @@ const WhoWeAre = () => {
                 size={20}
                 className="ml-2 transform group-hover:translate-x-1 transition-transform duration-200"
               />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

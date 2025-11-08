@@ -2,7 +2,7 @@ import { Link } from "@inertiajs/react";
 import { useRef, useState } from "react";
 
 export // Reusable Desktop Dropdown (with hover delay)
-function Dropdown({ label, href, active, items }) {
+  function Dropdown({ label, href, active, items, className }) {
   const [open, setOpen] = useState(false);
   const timeoutRef = useRef(null);
 
@@ -18,14 +18,13 @@ function Dropdown({ label, href, active, items }) {
   };
 
   return (
-    <div className="relative" onMouseEnter={show} onMouseLeave={hide}>
+    <div className={`relative ${className}`} onMouseEnter={show} onMouseLeave={hide}>
       <Link
         href={href}
-        className={`font-medium flex items-center transition duration-150 hover:text-[#F05A7E] ${
-          active
+        className={`font-medium flex items-center transition duration-150 hover:text-[#F05A7E] ${active
             ? "text-[#F05A7E] border-b-2 border-[#F05A7E] pb-1"
             : "text-gray-700"
-        }`}
+          }`}
       >
         {label}
         <svg
@@ -43,9 +42,8 @@ function Dropdown({ label, href, active, items }) {
         </svg>
       </Link>
       <div
-        className={`absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 py-1 transition-opacity duration-200 ${
-          open ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
+        className={`absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 py-1 transition-opacity duration-200 ${open ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
         onMouseEnter={show}
         onMouseLeave={hide}
       >
@@ -53,9 +51,8 @@ function Dropdown({ label, href, active, items }) {
           <Link
             key={idx}
             href={item.href}
-            className={`block px-4 py-2 text-sm text-gray-700 hover:text-[#F05A7E] transition duration-150 ${
-              item.active ? "text-[#F05A7E]" : ""
-            }`}
+            className={`block px-4 py-2 text-sm text-gray-700 hover:text-[#F05A7E] transition duration-150 ${item.active ? "text-[#F05A7E]" : ""
+              }`}
           >
             {item.label}
           </Link>

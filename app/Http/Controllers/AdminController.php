@@ -166,24 +166,56 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Profile updated successfully');
     }
 
-    public function tenants()
+    public function tenants(Request $request)
     {
-        $tenants = Tenant::with(['category', 'floor'])->orderBy('created_at', 'desc')->limit(10)->get();
+        $query = Tenant::with(['category', 'floor'])
+            ->orderBy('created_at', 'desc');
+
+        // Apply search filter if search term exists
+        if ($request->has('search') && ! empty($request->search)) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('location', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%")
+                    ->orWhere('room_no', 'like', "%{$search}%")
+                    ->orWhereHas('category', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        // Apply category filter if category_id exists
+        if ($request->has('category_id') && ! empty($request->category_id)) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        // Get pagination setting or default to 10
+        $perPage = $request->per_page === 'all' ? PHP_INT_MAX : ($request->per_page ?? 10);
+
+        // Check if this is an AJAX request for pagination/search
+        if ($request->ajax() || $request->wantsJson()) {
+            $tenants = $perPage === PHP_INT_MAX
+                ? $query->get()
+                : $query->paginate($perPage);
+
+            return response()->json($tenants);
+        }
+
+        // Initial page load with default pagination
+        $tenants = $query->paginate($perPage);
         $floors = Floor::all();
-        $count = DB::table('tenants')->count();
+        $count = $query->count();
         $categories = Category::all();
-        $activities = ActivityLog::with('user')
-            ->where('subject_type', 'Tenant')
-            ->orderBy('created_at', 'desc')
-            ->take(10)
-            ->get();
 
         return Inertia::render('Admin/Tenant/AdminTenant', [
             'tenants' => $tenants,
+            'floors' => $floors,
             'count' => $count,
             'categories' => $categories,
-            'floors' => $floors,
-            'activities' => $activities,
+            'activities' => ActivityLog::latest()->take(5)->get(),
         ]);
     }
 
@@ -315,7 +347,7 @@ class AdminController extends Controller
         return response()->json($paginator);
     }
 
-    public function mallStore(\Illuminate\Http\Request $request)
+    public function mallStore(Request $request)
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -1898,6 +1930,7 @@ class AdminController extends Controller
             'hours' => ['required', 'string', 'max:255'],
             'fullDescription' => ['nullable', 'string'],
             'floor_id' => ['required', 'exists:floors,id'],
+            'building' => ['required', 'string', 'max:255'],
             'room_no' => ['required', 'string', 'max:50'],
             'phone' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
@@ -1937,6 +1970,7 @@ class AdminController extends Controller
 
     public function tenantUpdate(Request $request, Tenant $tenant)
     {
+        Log::info('Tenant update request'.var_export($request->all(), true));
         $validated = $request->validate([
             'category_id' => ['required', 'exists:categories,id'],
             'name' => ['required', 'string', 'max:255'],
@@ -1946,12 +1980,14 @@ class AdminController extends Controller
             'hours' => ['required', 'string', 'max:255'],
             'fullDescription' => ['nullable', 'string'],
             'floor_id' => ['required', 'exists:floors,id'],
+            'building' => ['required', 'string', 'max:255'],
             'room_no' => ['required', 'string', 'max:50'],
             'phone' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
             'website' => ['nullable', 'string', 'max:255'],
         ]);
 
+        Log::info('Tenant update validated '.var_export($validated, true));
         if ($request->hasFile('logo') && ! $request->file('logo')->isValid()) {
             $file = $request->file('logo');
             Log::error('Logo upload invalid on update', [
@@ -2545,17 +2581,28 @@ class AdminController extends Controller
 
     public function tenantList(Request $request)
     {
-        $query = Tenant::with(['category', 'floor'])->orderByDesc('created_at');
-        $search = $request->query('search');
-        $categoryId = $request->query('category_id');
-        if ($search) {
+        $query = Tenant::with(['category', 'floor'])
+            ->orderBy('created_at', 'desc');
+
+        // Apply search filter if search term exists
+        if ($request->has('search') && ! empty($request->search)) {
+            $search = $request->search;
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%$search%")
-                    ->orWhere('description', 'like', "%$search%")
-                    ->orWhere('location', 'like', "%$search%");
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('location', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%")
+                    ->orWhere('room_no', 'like', "%{$search}%")
+                    ->orWhereHas('category', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%");
+                    });
             });
         }
-        if ($categoryId) {
+
+        // FIX: Define $categoryId from the request
+        $categoryId = $request->query('category_id');
+        if ($categoryId && ! empty($categoryId)) {
             $query->where('category_id', $categoryId);
         }
 

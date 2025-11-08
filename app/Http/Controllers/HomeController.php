@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Catagory;
 use App\Models\Event;
 use App\Models\Gallery;
 use App\Models\News;
@@ -33,12 +32,15 @@ class HomeController extends Controller
             'gallery' => $gallery,
             'event' => $event,
             'tenants' => $tenants,
+            'wasSuccessful' => true,
         ]);
     }
+
     public function main()
     {
         $services = Service::approved()->orderBy('id', 'DESC')->get();
         Log::info($services);
+
         return Inertia::render('Public/Shared/Header', [
             'services' => $services,
         ]);

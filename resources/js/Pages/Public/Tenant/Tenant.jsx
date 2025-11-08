@@ -1,138 +1,6 @@
-// import React, { useState, useRef, useEffect } from "react";
-// import { Head, router } from "@inertiajs/react";
-// import { route } from 'ziggy-js';
-// import { Search, ChevronLeft, ChevronRight, LayoutGrid, List, ChevronDown, Loader2 } from "lucide-react";
-// import MainLayout from "../Shared/MainLayout";
-// import TenantCard from "./TenantCard";
-
-// const Tenant = ({ initialTenants = [], pagination: initialPagination = {}, categories = [] }) => {
-//   const [searchTerm, setSearchTerm] = useState("");
-//   const [selectedCategory, setSelectedCategory] = useState("all");
-//   const [viewMode, setViewMode] = useState("grid"); // 'grid' or 'list'
-//   const [tenants, setTenants] = useState(initialTenants || []);
-//   const [pagination, setPagination] = useState(initialPagination || {
-//     current_page: 1,
-//     last_page: 1,
-//     per_page: 12,
-//     total: 0
-//   });
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [isLoadingMore, setIsLoadingMore] = useState(false);
-//   const [perPageOptions] = useState([12, 24, 48, 96]);
-
-//   const safeCategories = Array.isArray(categories) ? categories : [];
-//   const catScrollRef = useRef(null);
-
-//   const scrollByAmount = (dir) => {
-//     if (catScrollRef.current) {
-//       catScrollRef.current.scrollBy({ left: dir * 300, behavior: "smooth" });
-//     }
-//   };
-
-//       return matchesSearch && matchesCategory;
-//     });
-//   }, [searchTerm, selectedCategory, tenants]);
-
-//   // Ensure categories is an array
-//   const safeCategories = Array.isArray(categories) ? categories : [];
-//   const catScrollRef = useRef(null);
-//   const scrollByAmount = (dir) => {
-//     if (catScrollRef.current) {
-//       catScrollRef.current.scrollBy({ left: dir * 300, behavior: "smooth" });
-//     }
-//   };
-
-//   // State for pagination and loading
-//   const [tenants, setTenants] = useState(initialTenants || []);
-//   const [pagination, setPagination] = useState(initialPagination || {
-//     current_page: 1,
-//     last_page: 1,
-//     per_page: 12,
-//     total: 0
-//   });
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [isLoadingMore, setIsLoadingMore] = useState(false);
-//   const [perPageOptions] = useState([12, 24, 48, 96]);
-
-//   // Reset tenants when search or category changes
-//   useEffect(() => {
-//     setTenants(initialTenants);
-//     setPagination(initialPagination);
-//   }, [initialTenants, initialPagination]);
-
-//   // Function to load more tenants
-//   const loadMoreTenants = async () => {
-//     if (isLoadingMore || pagination.current_page >= pagination.last_page) return;
-
-//     setIsLoadingMore(true);
-//     const nextPage = pagination.current_page + 1;
-
-//     try {
-//       const response = await fetch(`/tenant/load-more?page=${nextPage}&per_page=${pagination.per_page}&category=${selectedCategory}&search=${searchTerm}`);
-//       const data = await response.json();
-
-//       setTenants(prev => [...prev, ...data.data]);
-//       setPagination({
-//         ...pagination,
-//         current_page: data.current_page,
-//         last_page: data.last_page,
-//         total: data.total
-//       });
-//     } catch (error) {
-//       console.error('Error loading more tenants:', error);
-//     } finally {
-//       setIsLoadingMore(false);
-//     }
-//   };
-
-//   // Handle per page change
-//   const handlePerPageChange = async (newPerPage) => {
-//     setIsLoading(true);
-//     try {
-//       const response = await fetch(`/tenant/load-more?page=1&per_page=${newPerPage}&category=${selectedCategory}&search=${searchTerm}`);
-//       const data = await response.json();
-
-//       setTenants(data.data);
-//       setPagination({
-//         current_page: data.current_page,
-//         last_page: data.last_page,
-//         per_page: parseInt(newPerPage),
-//         total: data.total
-//       });
-//     } catch (error) {
-//       console.error('Error changing items per page:', error);
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
-
-//   // Handle search with debounce
-//   useEffect(() => {
-//     const timer = setTimeout(() => {
-//       if (searchTerm !== '') {
-//         router.get(
-//           route('tenant.index'), 
-//           { search: searchTerm, category: selectedCategory },
-//           { preserveState: true, replace: true }
-//         );
-//       }
-//     }, 500);
-
-//     return () => clearTimeout(timer);
-//   }, [searchTerm, selectedCategory]);
-
-//   // Handle category change
-//   const handleCategoryChange = (categoryId) => {
-//     setSelectedCategory(categoryId);
-//     router.get(
-//       route('tenant.index'), 
-//       { category: categoryId, search: searchTerm },
-//       { preserveState: true, replace: true }
-//     );
-//   };
+/* eslint-disable no-undef */
 import React, { useState, useRef, useEffect } from "react";
 import { Head, router } from "@inertiajs/react";
-// import { route } from 'ziggy-js';
 import { Search, ChevronLeft, ChevronRight, LayoutGrid, List, ChevronDown, Loader2 } from "lucide-react";
 import MainLayout from "../Shared/MainLayout";
 import TenantCard from "./TenantCard";
@@ -141,6 +9,7 @@ const Tenant = ({ initialTenants = [], pagination: initialPagination = {}, categ
   // State for search and filters
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedBuilding, setSelectedBuilding] = useState("all");
   const [viewMode, setViewMode] = useState("grid"); // 'grid' or 'list'
 
   // Pagination state
@@ -171,22 +40,6 @@ const Tenant = ({ initialTenants = [], pagination: initialPagination = {}, categ
     setPagination(initialPagination);
   }, [initialTenants, initialPagination]);
 
-  // Function to load more tenants
-  // const loadMoreTenants = async () => {
-  //   if (isLoadingMore || pagination.current_page >= pagination.last_page) return;
-
-  //   setIsLoadingMore(true);
-  //   const nextPage = pagination.current_page + 1;
-
-  //   try {
-  //     const response = await fetch(`/tenant/load-more?page=${nextPage}&per_page=${pagination.per_page}&category=${selectedCategory}&search=${searchTerm}`);
-  //     const data = await response.json();
-
-  //     setTenants(prev => [...prev, ...data.data]);
-  //     setPagination({
-  //       ...pagination,
-  //       current_page: data.current_page,
-  //       last_page: data.last_page,
   const loadMoreTenants = async () => {
     if (isLoadingMore || !pagination.has_more) return;
 
@@ -248,24 +101,65 @@ const Tenant = ({ initialTenants = [], pagination: initialPagination = {}, categ
       if (searchTerm !== '') {
         router.get(
           route('tenant.index'),
-          { search: searchTerm, category: selectedCategory },
-          { preserveState: true, replace: true }
+          {
+            search: searchTerm,
+            category: selectedCategory,
+            building: selectedBuilding
+          },
+          {
+            preserveState: true,   // keep current component state
+            preserveScroll: true,  // keep scroll position
+            onStart: () => { },     // optional: prevent loader
+            onFinish: () => { },    // optional: prevent loader
+            onSuccess: () => { },
+          }
         );
       }
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [searchTerm, selectedCategory]);
+  }, [searchTerm, selectedCategory, selectedBuilding]);
 
   // Handle category change
   const handleCategoryChange = (categoryId) => {
     setSelectedCategory(categoryId);
     router.get(
       route('tenant.index'),
-      { category: categoryId, search: searchTerm },
-      { preserveState: true, replace: true }
+      {
+        category: categoryId,
+        building: selectedBuilding,
+        search: searchTerm
+      },
+      {
+        preserveState: true,   // keep current component state
+        preserveScroll: true,  // keep scroll position
+        onStart: () => { },     // optional: prevent loader
+        onFinish: () => { },    // optional: prevent loader
+        onSuccess: () => { },
+      }
     );
   };
+
+  // Handle building change
+  const handleBuildingChange = (building) => {
+    setSelectedBuilding(building);
+    router.get(
+      route('tenant.index'),
+      {
+        category: selectedCategory,
+        building: building,
+        search: searchTerm
+      },
+      {
+        preserveState: true,   // keep current component state
+        preserveScroll: true,  // keep scroll position
+        onStart: () => { },     // optional: prevent loader
+        onFinish: () => { },    // optional: prevent loader
+        onSuccess: () => { },
+      }
+    );
+  };
+
   return (
     <MainLayout>
       <Head>
@@ -308,41 +202,88 @@ const Tenant = ({ initialTenants = [], pagination: initialPagination = {}, categ
         </div>
 
         {/* Category Filters */}
-        <div className="mb-12 relative">
-          <button
-            type="button"
-            onClick={() => scrollByAmount(-1)}
-            aria-label="Scroll left"
-            className="absolute -left-12 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white border border-gray-200 shadow hover:bg-gray-200"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <div
-            ref={catScrollRef}
-            className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide"
-          >
-            {safeCategories.map((category) => (
-              <button
-                key={category.id || category.name}
-                onClick={() => handleCategoryChange(category.id)}
-                className={`flex items-center gap-2 px-6 py-3 rounded-full font-medium whitespace-nowrap transition-all duration-200 ${selectedCategory === category.id
-                  ? "bg-blue-600 text-white shadow-lg scale-105"
+        <div className="mb-6">
+          <h3 className="text-lg font-medium text-gray-900 mb-3">Categories</h3>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => scrollByAmount(-1)}
+              aria-label="Scroll left"
+              className="absolute -left-12 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white border border-gray-200 shadow hover:bg-gray-200"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <div
+              ref={catScrollRef}
+              className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide"
+            >
+              {/* <button
+                onClick={() => handleCategoryChange("all")}
+                className={`px-4 py-2 rounded-full whitespace-nowrap ${selectedCategory === "all"
+                  ? "bg-blue-600 text-white"
                   : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
                   }`}
               >
-                <span className="text-lg">{category.icon}</span>
-                <span>{category.name}</span>
-              </button>
-            ))}
+                All Categories
+              </button> */}
+              {safeCategories.map((category) => (
+                <button
+                  key={category.id || category.name}
+                  onClick={() => handleCategoryChange(category.id)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full font-medium whitespace-nowrap transition-all duration-200 ${selectedCategory === category.id
+                    ? "bg-blue-600 text-white shadow-lg scale-105"
+                    : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                    }`}
+                >
+                  <span className="text-lg">{category.icon}</span>
+                  <span>{category.name}</span>
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => scrollByAmount(1)}
+              aria-label="Scroll right"
+              className="absolute -right-12 border-2 border-gray-200 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white shadow hover:bg-gray-200"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={() => scrollByAmount(1)}
-            aria-label="Scroll right"
-            className="absolute -right-12 border-2 border-gray-200 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white shadow hover:bg-gray-200"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
+        </div>
+
+        {/* Building Filter */}
+        <div className="mb-8">
+          <h3 className="text-lg font-medium text-gray-900 mb-3">Buildings</h3>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => handleBuildingChange("all")}
+              className={`px-4 py-2 rounded-full text-sm whitespace-nowrap ${selectedBuilding === "all"
+                ? "bg-blue-600 text-white"
+                : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                }`}
+            >
+              All Buildings
+            </button>
+
+            <button
+              onClick={() => handleBuildingChange('Dembel')}
+              className={`px-4 py-2 rounded-full text-sm whitespace-nowrap ${selectedBuilding === 'Dembel'
+                ? "bg-blue-600 text-white"
+                : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                }`}
+            >
+              Dembel
+            </button>
+            <button
+              onClick={() => handleBuildingChange('Dembel Extension')}
+              className={`px-4 py-2 rounded-full text-sm whitespace-nowrap ${selectedBuilding === 'Dembel Extension'
+                ? "bg-blue-600 text-white"
+                : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+                }`}
+            >
+              Dembel Extension
+            </button>
+          </div>
         </div>
 
         {/* View Toggle, Results Count, and Per Page Selector */}
@@ -353,7 +294,9 @@ const Tenant = ({ initialTenants = [], pagination: initialPagination = {}, categ
               {searchTerm && ` for "${searchTerm}"`}
               {selectedCategory !== 'all' &&
                 safeCategories.find(c => c.id === selectedCategory) &&
-                ` in ${safeCategories.find(c => c.id === selectedCategory).name}`}
+                ` in ${safeCategories.find(c => c.id === selectedCategory)?.name}`}
+              {selectedBuilding !== 'all' &&
+                ` • Building: ${selectedBuilding}`}
             </p>
           </div>
 

@@ -2,6 +2,145 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    /* Dembel City Center Brand Colors */
+    --background: 40 15% 98%;
+    --foreground: 220 20% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 15%;
+
+    /* Primary: Deep Blue #303890 */
+    --primary: 235 50% 38%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary: Warm Off-White for subtle backgrounds */
+    --secondary: 240 10% 96%;
+    --secondary-foreground: 220 20% 15%;
+
+    --muted: 240 10% 96%;
+    --muted-foreground: 220 10% 46%;
+
+    /* Accent: Vibrant Yellow #fbee21 for CTAs */
+    --accent: 56 97% 56%;
+    --accent-foreground: 220 20% 15%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 10% 90%;
+    --input: 240 10% 90%;
+    --ring: 235 50% 38%;
+
+    --radius: 0.75rem;
+
+    /* Custom Brand Tokens */
+    --navy: 235 50% 38%;
+    --yellow: 56 97% 56%;
+    --charcoal: 220 20% 15%;
+    
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(235 50% 38% / 0.95), hsl(235 50% 28% / 0.95));
+    --gradient-accent: linear-gradient(135deg, hsl(56 97% 56%), hsl(45 97% 50%));
+    
+    /* Shadows */
+    --shadow-card: 0 4px 20px hsl(235 50% 38% / 0.08);
+    --shadow-card-hover: 0 8px 30px hsl(235 50% 38% / 0.12);
+    --shadow-cta: 0 4px 14px hsl(56 97% 56% / 0.4);
+    
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 220 25% 8%;
+    --foreground: 40 15% 98%;
+
+    --card: 220 20% 12%;
+    --card-foreground: 40 15% 98%;
+
+    --popover: 220 20% 12%;
+    --popover-foreground: 40 15% 98%;
+
+    --primary: 235 60% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 15% 18%;
+    --secondary-foreground: 40 15% 98%;
+
+    --muted: 220 15% 18%;
+    --muted-foreground: 220 10% 65%;
+
+    --accent: 56 97% 56%;
+    --accent-foreground: 220 20% 15%;
+
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 15% 20%;
+    --input: 220 15% 20%;
+    --ring: 235 60% 55%;
+    
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80;
+  }
+  
+  .card-shadow {
+    box-shadow: var(--shadow-card);
+  }
+  
+  .card-shadow-hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+  
+  .cta-shadow {
+    box-shadow: var(--shadow-cta);
+  }
+  
+  .transition-smooth {
+    transition: var(--transition-smooth);
+  }
+}
+
 .highlight-card::before {
     content: "";
     position: absolute;

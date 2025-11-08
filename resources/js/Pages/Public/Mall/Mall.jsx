@@ -11,9 +11,28 @@ import { FloorDirectory } from "./Components/FloorDirectory";
 import { DembelExtention } from "./Components/DembelExtention";
 
 const Mall = ({ malls }) => {
-  const [selectedMall, setSelectedMall] = useState(malls[0]);
+  const queryParams = new URLSearchParams(window.location.search);
+  const mallSlug = queryParams.get("mall");
+
+  const [selectedMall, setSelectedMall] = useState(
+    malls.find((m) => m.slug === mallSlug) || malls[0]
+  );
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+
+  // Watch for manual URL changes (like back/forward buttons)
+  useEffect(() => {
+    const handlePopState = () => {
+      const queryParams = new URLSearchParams(window.location.search);
+      const mallSlug = queryParams.get("mall");
+      const newMall = malls.find((m) => m.slug === mallSlug) || malls[0];
+      setSelectedMall(newMall);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [malls]);
+
 
   const fadeInUp = {
     initial: { opacity: 0, y: 60 },

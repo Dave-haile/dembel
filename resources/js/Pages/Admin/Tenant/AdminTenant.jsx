@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect, useRef } from "react";
 import Toast from "../components/Toast";
 import DeleteConfirmation from "../components/DeleteConfirmation";
@@ -12,9 +13,10 @@ import ControlsBar from "./components/ControlsBar";
 import TenantsTable from "./components/TenantsTable";
 
 const Tenants = () => {
-  const { tenants: tenantsData, categories, activities, count } = usePage().props;
-  // console.log(tenantsData);
-  const [tenants, setTenants] = useState(tenantsData);
+  // All hooks must be called at the top level, before any conditional logic
+  const { tenants: initialTenants, categories, activities, count } = usePage().props;
+  // Ensure tenants is always an array
+  const [tenants, setTenants] = useState(Array.isArray(initialTenants) ? initialTenants : (initialTenants?.data || []));
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,6 +34,7 @@ const Tenants = () => {
     hours: "",
     fullDescription: "",
     floor_id: "",
+    building: "",
     room_no: "",
     phone: "",
     email: "",
@@ -42,38 +45,97 @@ const Tenants = () => {
   const [logoPreview, setLogoPreview] = useState(null);
   const [perPage, setPerPage] = useState(null); // null = client mode; number|'all' = server mode
   const [loading, setLoading] = useState(false);
+  const [isColumnMenuOpen, setIsColumnMenuOpen] = useState(false);
+  const [selectedColumns, setSelectedColumns] = useState([
+    'tenant',
+    'category',
+    'location',
+    'floor',
+    'contact',
+  ]);
+  const columnMenuRef = useRef(null);
 
-  // Keep local tenants state in sync with latest server props after Inertia responses
-  useEffect(() => {
-    setTenants(tenantsData);
-  }, [tenantsData]);
-
-  const fetchTenants = async (size) => {
+  // Fetch tenants with search and filters
+  const fetchTenants = async (size = perPage) => {
     try {
       setLoading(true);
-      setPerPage(size);
+
+      // Use the list endpoint for AJAX requests
       const url = window.route('admin.tenants.list', {
         per_page: size === 'all' ? 'all' : String(size),
-        search: searchTerm || undefined,
-        category_id: filterCategory || undefined,
+        search: searchTerm || '',
+        category_id: filterCategory || '',
+        page: currentPage,
       });
-      const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+      const res = await fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-Inertia': 'true'
+        }
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error('Error response:', errorText);
+        throw new Error(`HTTP ${res.status}: ${errorText}`);
+      }
+
       const data = await res.json();
-      const items = Array.isArray(data) ? data : (data.data || []);
-      setTenants(items);
-      setCurrentPage(1);
+
+      // Handle both paginated response and direct array response
+      if (data && data.data) {
+        // Paginated response
+        setTenants(data.data);
+        setCurrentPage(data.current_page || 1);
+      } else if (Array.isArray(data)) {
+        // Direct array response (when per_page=all)
+        setTenants(data);
+      } else {
+        console.warn('Unexpected response format:', data);
+        setTenants([]);
+      }
+
+      setLoading(false);
+      return data;
     } catch (e) {
       console.error('Failed to load tenants:', e);
-    } finally {
+      setToast({
+        message: `Failed to load tenants: ${e.message}`,
+        type: 'error'
+      });
       setLoading(false);
+      setTenants([]); // Clear tenants on error
+      return [];
     }
   };
 
-  // When server mode active, refetch on search/category changes
+  // Initial data load
   useEffect(() => {
-    if (perPage) fetchTenants(perPage);
-  }, [searchTerm, filterCategory]);
+    fetchTenants(10);
+  }, []);
+
+  // Handle search and filter changes with debounce
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchTenants(perPage);
+    }, 500); // 500ms debounce
+
+    return () => clearTimeout(timer);
+  }, [searchTerm, filterCategory, currentPage]);
+
+  // Handle page changes
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  // Handle per page changes
+  const handlePerPageChange = (size) => {
+    setPerPage(size);
+    setCurrentPage(1); // Reset to first page when changing page size
+    fetchTenants(size);
+  };
 
   const handleLogoFile = (file) => {
     if (!file) return;
@@ -117,15 +179,6 @@ const Tenants = () => {
   }, [logoPreview]);
 
   const maxColumns = 5;
-  const [isColumnMenuOpen, setIsColumnMenuOpen] = useState(false);
-  const [selectedColumns, setSelectedColumns] = useState([
-    'tenant',
-    'category',
-    'location',
-    'floor',
-    'contact',
-  ]);
-  const columnMenuRef = useRef(null);
 
   const toggleColumn = (key) => {
     setSelectedColumns((prev) => {
@@ -256,6 +309,7 @@ const Tenants = () => {
       hours: "",
       fullDescription: "",
       floor_id: "",
+      building: "",
       room_no: "",
       phone: "",
       email: "",
@@ -273,7 +327,7 @@ const Tenants = () => {
 
     setFormData({
       ...tenantData,
-      floor_id: floor?.id || '',
+      floor_id: floor?.id || tenant.floor_id || '',
       // Ensure we don't include the floor object in formData
       floor: undefined
     });
@@ -317,6 +371,7 @@ const Tenants = () => {
     fd.append('hours', formData.hours ?? '');
     fd.append('fullDescription', formData.fullDescription ?? '');
     if (formData.floor_id) fd.append('floor_id', String(formData.floor_id));
+    fd.append('building', formData.building ?? '');
     fd.append('room_no', formData.room_no ?? '');
     fd.append('phone', formData.phone ?? '');
     fd.append('email', formData.email ?? '');
@@ -324,13 +379,13 @@ const Tenants = () => {
     if (isFileLogo) fd.append('logo', formData.logo);
 
     // Debug: Inspect FormData contents before sending
-    for (const [key, val] of fd.entries()) {
-      if (val instanceof File) {
-        console.log(key, '(File)', { name: val.name, type: val.type, size: val.size });
-      } else {
-        console.log(key, String(val));
-      }
-    }
+    // for (const [key, val] of fd.entries()) {
+    //   if (val instanceof File) {
+    //     console.log(key, '(File)', { name: val.name, type: val.type, size: val.size });
+    //   } else {
+    //     console.log(key, String(val));
+    //   }
+    // }
 
     if (selectedTenant) {
       fd.append('_method', 'put');
@@ -381,15 +436,21 @@ const Tenants = () => {
   };
   const itemsPerPage = 10;
 
-  const clientFiltered = tenants.filter((tenant) => {
-    const matchesSearch =
-      tenant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      tenant.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      tenant.location.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      !filterCategory || tenant.category_id === Number(filterCategory);
-    return matchesSearch && matchesCategory;
-  });
+  // Client-side filtering (only used when not using server-side pagination)
+  const clientFiltered = Array.isArray(tenants)
+    ? tenants.filter((tenant) => {
+      if (!tenant) return false;
+      const matchesSearch = !searchTerm ||
+        (tenant.name && tenant.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (tenant.description && tenant.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (tenant.location && tenant.location.toLowerCase().includes(searchTerm.toLowerCase()));
+      const matchesCategory = !filterCategory ||
+        (tenant.category_id && tenant.category_id.toString() === filterCategory.toString());
+      return matchesSearch && matchesCategory;
+    })
+    : [];
+
+  // Use server-side filtering when perPage is set, otherwise use client-side filtering
   const effectiveList = perPage ? tenants : clientFiltered;
 
   const totalPages = Math.ceil(effectiveList.length / itemsPerPage);
@@ -545,6 +606,21 @@ const Tenants = () => {
                 />
 
                 <FormInput
+                  label="Building"
+                  name="building"
+                  type="select"
+                  value={formData.building || ""}
+                  onChange={handleInputChange}
+                  error={errors.building}
+                  required
+                  options={[
+                    { value: "Dembel", label: "Dembel" },
+                    { value: "Dembel Extension", label: "Dembel Extension" },
+                  ]}
+                  placeholder="Select building"
+                />
+
+                <FormInput
                   label="Floor"
                   name="floor_id"
                   type="select"
@@ -683,6 +759,18 @@ const Tenants = () => {
                   <p className="text-sm text-gray-500">Operating Hours</p>
                   <p className="text-gray-800 font-medium">
                     {selectedTenant.hours}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Building</p>
+                  <p className="text-gray-800 font-medium">
+                    {selectedTenant.building}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Room Number</p>
+                  <p className="text-gray-800 font-medium">
+                    {selectedTenant.room_no}
                   </p>
                 </div>
                 <div>

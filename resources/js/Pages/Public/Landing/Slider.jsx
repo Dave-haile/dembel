@@ -1,268 +1,17 @@
-// import React, { useState, useEffect } from "react";
-// import { ChevronLeft, ChevronRight } from "lucide-react";
-
-// const Slider = ({ slides, language = "en" }) => {
-//   console.log(slides);
-//   const [currentSlide, setCurrentSlide] = useState(0);
-
-//   const defaultSlides = [];
-//   const displaySlides =
-//     slides.length > 0
-//       ? slides
-//           .filter((slide) => slide.approval)
-//           .sort((a, b) => a.priority - b.priority)
-//       : defaultSlides;
-
-//   useEffect(() => {
-//     const timer = setInterval(() => {
-//       setCurrentSlide((prev) => (prev + 1) % displaySlides.length);
-//     }, 5000);
-//     return () => clearInterval(timer);
-//   }, [displaySlides.length]);
-
-//   const goToSlide = (index) => {
-//     setCurrentSlide(index);
-//   };
-
-//   const nextSlide = () => {
-//     setCurrentSlide((prev) => (prev + 1) % displaySlides.length);
-//   };
-
-//   const prevSlide = () => {
-//     setCurrentSlide(
-//       (prev) => (prev - 1 + displaySlides.length) % displaySlides.length
-//     );
-//   };
-
-//   if (displaySlides.length === 0) {
-//     return (
-//       <section className="relative h-screen overflow-hidden bg-gray-200 flex items-center justify-center">
-//         <p className="text-gray-500 text-xl">No slides available</p>
-//       </section>
-//     );
-//   }
-
-//   return (
-//     <section className="relative h-screen overflow-hidden">
-//       <div className="relative w-full h-full">
-//         {displaySlides.map((slide, index) => (
-//           <div
-//             key={slide.id}
-//             className={`absolute inset-0 transition-opacity duration-1000 ${
-//               index === currentSlide ? "opacity-100" : "opacity-0"
-//             }`}
-//           >
-//             <div
-//               className="w-full h-full bg-cover bg-center bg-no-repeat"
-//               style={{ backgroundImage: `url(${slide.image})` }}
-//             >
-//               <div className="absolute inset-0 bg-black/30"></div>
-//               <div className="absolute bottom-8 right-8 text-right">
-//                 <h2 className="text-4xl lg:text-6xl font-bold text-white drop-shadow-2xl">
-//                   {language === "am" ? slide.title_am : slide.title_en}
-//                 </h2>
-//               </div>
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-
-//       {/* Navigation arrows */}
-//       <button
-//         onClick={prevSlide}
-//         className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition-all duration-300"
-//       >
-//         <ChevronLeft size={24} />
-//       </button>
-//       <button
-//         onClick={nextSlide}
-//         className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-full transition-all duration-300"
-//       >
-//         <ChevronRight size={24} />
-//       </button>
-
-//       {/* Slide indicators */}
-//       <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-3">
-//         {displaySlides.map((_, index) => (
-//           <button
-//             key={index}
-//             onClick={() => goToSlide(index)}
-//             className={`w-3 h-3 rounded-full transition-all duration-300 ${
-//               index === currentSlide ? "bg-white" : "bg-white/50"
-//             }`}
-//           />
-//         ))}
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default Slider;
-// import React, { useState, useEffect } from "react";
-
-// const Slider = ({ slides = [], language = "en" }) => {
-//   const [currentItems, setCurrentItems] = useState([]);
-//   const [isPaused, setIsPaused] = useState(false);
-
-//   const displaySlides = slides.length > 0 ? slides : null;
-
-//   useEffect(() => {
-//     setCurrentItems(displaySlides);
-//   }, [displaySlides]);
-
-//   // Auto-advance timer
-//   useEffect(() => {
-//     if (isPaused || !displaySlides || displaySlides.length === 0) return;
-
-//     const timer = setInterval(() => {
-//       handleNext();
-//     }, 5000); // Change slide every 5 seconds
-
-//     return () => clearInterval(timer);
-//   }, [isPaused, displaySlides]);
-
-//   const handleNext = () => {
-//     setCurrentItems((prev) => {
-//       const newItems = [...prev];
-//       const firstItem = newItems.shift();
-//       return [...newItems, firstItem];
-//     });
-//   };
-
-//   const handlePrev = () => {
-//     setCurrentItems((prev) => {
-//       const newItems = [...prev];
-//       const lastItem = newItems.pop();
-//       return [lastItem, ...newItems];
-//     });
-//   };
-
-//   const togglePause = () => {
-//     setIsPaused(!isPaused);
-//   };
-
-//   if (displaySlides.length === 0) {
-//     return (
-//       <div className="flex items-center justify-center h-screen bg-gray-300">
-//         <p className="text-gray-600 text-xl">No slides available</p>
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <div
-//       className="relative max-w- h-screen bg-gray-300 overflow-hidden"
-//       onMouseEnter={() => setIsPaused(true)} // Pause on hover
-//       onMouseLeave={() => setIsPaused(false)} // Resume when mouse leaves
-//     >
-//       <div className="absolute inset-0">
-//         {currentItems.map((slide, index) => (
-//           <div
-//             key={slide.id}
-//             className={`
-//               absolute transition-all duration-500 ease-in-out
-//               bg-cover bg-center bg-no-repeat
-//               ${
-//                 index === 0 || index === 1
-//                   ? "inset-0" // Full screen
-//                   : index === 2
-//                   ? "bottom-8 left-[calc(60%+110px)] transform -translate-x-1/2 w-48 h-60 rounded-2xl shadow-2xl shadow-gray-600"
-//                   : index === 3
-//                   ? "bottom-8 left-[calc(60%+220px)] w-48 h-60 rounded-2xl shadow-2xl shadow-gray-600"
-//                   : index === 4
-//                   ? "bottom-8 left-[calc(60%+440px)] w-48 h-60 rounded-2xl shadow-2xl shadow-gray-600"
-//                   : index === 5
-//                   ? "bottom-8 left-[calc(60%+660px)] w-48 h-60 rounded-2xl shadow-2xl shadow-gray-600 opacity-0"
-//                   : "bottom-8 left-[calc(60%+660px)] w-48 h-60 rounded-2xl shadow-2xl shadow-gray-600 opacity-0"
-//               }
-//             `}
-//             style={{ backgroundImage: `url(${slide.image})` }}
-//           >
-//             {(index === 0 || index === 1) && (
-//               <div className="absolute inset-0 bg-black/20"></div>
-//             )}
-
-//             <div
-//               className={`
-//                 absolute top-1/2 left-24 transform -translate-y-1/2
-//                 w-72 text-left text-white font-sans z-10
-//                 ${index === 1 ? "block" : "hidden"}
-//               `}
-//             >
-//               <div className="name flex flex-col gap-12 mt-8">
-//                 <div className="text-4xl font-bold uppercase opacity-0 animate-fade-in-up text-nowrap">
-//                   {slide.title_en}
-//                 </div>
-//                 <div className="text-4xl font-bold uppercase opacity-0 animate-fade-in-up text-nowrap">
-//                   {slide.title_am}
-//                 </div>
-//               </div>
-//               <div className="des mt-2 mb-5 opacity-0 animate-fade-in-up animation-delay-300">
-//                 {language === "am"
-//                   ? slide.description_am || slide.description_en
-//                   : slide.description_en}
-//               </div>
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-
-//       {/* Pause/Play Button */}
-//       <div className="absolute top-8 right-8 z-30">
-//         <button
-//           onClick={togglePause}
-//           className="w-10 h-10 rounded-full bg-white/60 border-2 border-gray-700 flex items-center justify-center transition-all duration-300 hover:bg-white hover:scale-110"
-//           title={isPaused ? "Play auto-advance" : "Pause auto-advance"}
-//         >
-//           {isPaused ? "▶" : "⏸"}
-//         </button>
-//       </div>
-
-//       {/* Navigation Buttons */}
-//       <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2 flex gap-5 items-center text-center z-20">
-//         <button
-//           onClick={handlePrev}
-//           className="w-10 h-9 rounded-lg border-2 border-gray-700 bg-white/60 transition-all duration-300 hover:text-black hover:border-white/70 hover:scale-110 active:scale-105 focus:scale-110 focus:bg-white focus:border-white/70 flex items-center justify-center"
-//         >
-//           <span className="pr-1">◁</span>
-//         </button>
-
-//         {/* Progress indicator */}
-//         <div className="flex gap-1">
-//           {displaySlides.map((_, idx) => (
-//             <div
-//               key={idx}
-//               className={`w-2 h-2 rounded-full transition-all duration-300 ${
-//                 idx ===
-//                 (currentItems[0]
-//                   ? displaySlides.findIndex(
-//                       (slide) => slide.id === currentItems[0].id
-//                     )
-//                   : 0)
-//                   ? "bg-white scale-125"
-//                   : "bg-white/40"
-//               }`}
-//             />
-//           ))}
-//         </div>
-
-//         <button
-//           onClick={handleNext}
-//           className="w-10 h-9 rounded-lg border-2 border-gray-700 bg-white/60 transition-all duration-300 hover:text-black hover:border-white/70 hover:scale-110 active:scale-105 focus:scale-110 focus:bg-white focus:border-white/70 flex items-center justify-center"
-//         >
-//           <span className="pl-1">▷</span>
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Slider;
-
-import { useEffect, useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState } from "react";
 import "./carousel.css";
 
-export default function Slides({ slides = [] }) {
+// Loading spinner component
+// const LoadingSpinner = () => (
+//   <div className="absolute inset-0 flex items-center justify-center bg-black/80 z-50">
+//     <div className="relative w-20 h-20">
+//       <div className="absolute inset-0 border-4 border-t-transparent border-primary-500 rounded-full animate-spin"></div>
+//       <div className="absolute inset-2 border-4 border-b-transparent border-primary-300 rounded-full animate-spin animation-delay-200"></div>
+//     </div>
+//   </div>
+// );
+
+const Slides = ({ slides }) => {
   const carouselRef = useRef(null);
   const listRef = useRef(null);
   const thumbnailRef = useRef(null);
@@ -278,16 +27,19 @@ export default function Slides({ slides = [] }) {
   let runAutoRef = useRef();
 
   // Use all slides for main carousel
-  const allSlides = slides;
+  const allSlides = slides || [];
 
   // Get thumbnail slides based on current position (show next 4 slides in queue)
   const getThumbnailSlides = () => {
-    if (allSlides.length <= 4) return allSlides;
+    if (!allSlides || allSlides.length === 0) return [];
+    if (allSlides.length <= 4) return [...allSlides];
 
     const thumbnailSlides = [];
     for (let i = 1; i <= 4; i++) {
       const index = (currentIndex + i) % allSlides.length;
-      thumbnailSlides.push(allSlides[index]);
+      if (allSlides[index]) {
+        thumbnailSlides.push(allSlides[index]);
+      }
     }
     return thumbnailSlides;
   };
@@ -348,17 +100,9 @@ export default function Slides({ slides = [] }) {
   const handleNext = () => showSlider("next");
   const handlePrev = () => showSlider("prev");
 
-  useEffect(() => {
-    runAutoRef.current = setTimeout(() => showSlider("next"), timeAutoNext);
-
-    return () => {
-      clearTimeout(runTimeoutRef.current);
-      clearTimeout(runAutoRef.current);
-    };
-  }, [showSlider, timeAutoNext]);
-
   // Key to force re-render of thumbnails when currentIndex changes
   const thumbnailKey = `thumbnails-${currentIndex}`;
+
 
   return (
     <div
@@ -430,3 +174,148 @@ export default function Slides({ slides = [] }) {
     </div>
   );
 }
+
+export default Slides;
+
+// import React, { useState, useEffect } from "react";
+// import { ArrowRight, ChevronRight } from "lucide-react";
+
+// export default function Hero({ slides: HERO_SLIDES }) {
+//   const [currentSlide, setCurrentSlide] = useState(0);
+//   const [isAutoPlay, setIsAutoPlay] = useState(true);
+
+//   useEffect(() => {
+//     if (!isAutoPlay) return;
+
+//     const interval = setInterval(() => {
+//       setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+//     }, 5000);
+
+//     return () => clearInterval(interval);
+//   }, [isAutoPlay]);
+
+//   const goToSlide = (index) => {
+//     setCurrentSlide(index);
+//     setIsAutoPlay(false);
+//   };
+
+//   const nextSlide = () => {
+//     setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+//     setIsAutoPlay(false);
+//   };
+
+//   const prevSlide = () => {
+//     setCurrentSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
+//     setIsAutoPlay(false);
+//   };
+
+//   const handleMouseEnter = () => setIsAutoPlay(false);
+//   const handleMouseLeave = () => setIsAutoPlay(true);
+
+//   return (
+//     <section
+//       className="relative h-screen min-h-[600px] overflow-hidden bg-black"
+//       onMouseEnter={handleMouseEnter}
+//       onMouseLeave={handleMouseLeave}
+//     >
+//       {/* Slides Container */}
+//       <div className="relative w-full h-full">
+//         {HERO_SLIDES.map((slide, index) => (
+//           <div
+//             key={slide.id}
+//             className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100' : 'opacity-0'
+//               }`}
+//           >
+//             {/* Background Image */}
+//             <img
+//               src={slide.image}
+//               alt={slide.alt}
+//               className="w-full h-full object-cover"
+//             />
+
+//             {/* Dark Overlay */}
+//             <div className="absolute inset-0 bg-gradient-to-r from-[#303890]/70 via-[#303890]/50 to-[#303890]/60" />
+
+//             {/* Content Container */}
+//             <div className="absolute inset-0 flex flex-col items-center justify-center px-4 md:px-8">
+//               <div className="max-w-3xl text-center">
+//                 {/* Animated Headline */}
+//                 <h1
+//                   className={`text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 md:mb-6 drop-shadow-2xl transition-all duration-700 transform ${index === currentSlide ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+//                     }`}
+//                   style={{ fontFamily: 'Poppins, sans-serif', textShadow: '0 4px 20px rgba(0,0,0,0.4)' }}
+//                 >
+//                   {slide.title_en}
+//                 </h1>
+
+//                 {/* Animated Subheadline */}
+//                 <p
+//                   className={`text-lg md:text-xl lg:text-2xl text-white/95 mb-8 md:mb-12 drop-shadow-lg transition-all duration-700 delay-100 transform ${index === currentSlide ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+//                     }`}
+//                   style={{ fontFamily: 'Inter, sans-serif' }}
+//                 >
+//                   {slide.title_am}
+//                 </p>
+
+//                 {/* Animated CTA Button */}
+//                 <button
+//                   onClick={() => (window.location.href = slide.buttonUrl)}
+//                   className={`inline-flex items-center gap-2 bg-[#fbee21] text-[#303890] px-8 md:px-10 py-4 md:py-5 rounded-2xl font-bold text-base md:text-lg hover:bg-[#fef856] transition-all duration-300 hover:shadow-2xl hover:scale-105 active:scale-95 transform ${index === currentSlide ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+//                     }`}
+//                   style={{ fontFamily: 'Inter, sans-serif', transitionDelay: '200ms' }}
+//                 >
+//                   {slide.buttonText}
+//                   <ArrowRight size={20} />
+//                 </button>
+//               </div>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+
+//       {/* Navigation Buttons - Left */}
+//       <button
+//         onClick={prevSlide}
+//         className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#fbee21] focus:ring-offset-2"
+//         aria-label="Previous slide"
+//       >
+//         <ChevronRight size={28} className="text-white -rotate-180" />
+//       </button>
+
+//       {/* Navigation Buttons - Right */}
+//       <button
+//         onClick={nextSlide}
+//         className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#fbee21] focus:ring-offset-2"
+//         aria-label="Next slide"
+//       >
+//         <ChevronRight size={28} className="text-white" />
+//       </button>
+
+//       {/* Slide Indicators - Bottom */}
+//       <div className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2 md:gap-3">
+//         {HERO_SLIDES.map((_, index) => (
+//           <button
+//             key={index}
+//             onClick={() => goToSlide(index)}
+//             className={`transition-all duration-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#fbee21] focus:ring-offset-2 ${index === currentSlide
+//               ? 'w-8 md:w-10 h-2 md:h-3 bg-[#fbee21]'
+//               : 'w-2 md:w-3 h-2 md:h-3 bg-white/50 hover:bg-white/75'
+//               }`}
+//             aria-label={`Go to slide ${index + 1}`}
+//             aria-current={index === currentSlide ? 'true' : 'false'}
+//           />
+//         ))}
+//       </div>
+
+//       {/* Scroll Indicator */}
+//       <div className="absolute bottom-24 md:bottom-32 left-1/2 -translate-x-1/2 z-20 animate-bounce">
+//         <ChevronRight size={28} className="text-white/60 rotate-90" />
+//       </div>
+
+//       {/* Slide Counter */}
+//       <div className="absolute top-6 md:top-8 right-4 md:right-8 z-20 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-white font-semibold" style={{ fontFamily: 'Inter, sans-serif' }}>
+//         {String(currentSlide + 1).padStart(2, '0')} / {String(HERO_SLIDES.length).padStart(2, '0')}
+//       </div>
+//     </section>
+//   );
+// };

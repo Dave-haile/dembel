@@ -11,10 +11,10 @@ import MallHighlights from "./MallHighlights";
 import FeaturedTenants from "./FeaturedTenants";
 import VisitUs from "./VisitUs";
 import EventsPromotions from "./EventsPromotions";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+// import gsap from "gsap";
+// import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
+// gsap.registerPlugin(ScrollTrigger);
 
 const Home = ({
   sliders,
@@ -39,7 +39,7 @@ const Home = ({
 
   return (
     <MainLayout services={services}>
-      <Head title="Home - Dembel City Center" />
+      <Head title="Home" />
       <Slider slides={sliders} />
 
       {/* <section className="panel h-screen"> */}

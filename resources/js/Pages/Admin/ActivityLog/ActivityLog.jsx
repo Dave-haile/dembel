@@ -141,7 +141,7 @@ export default function ActivityLog() {
                     ...Object.keys(parsed.before || {}),
                     ...Object.keys(parsed.after || {})
                 ])];
-                
+
                 return (
                     <div className="space-y-2">
                         {allKeys.map((key) => (
@@ -271,9 +271,9 @@ export default function ActivityLog() {
         <AdminLayout>
             <Head title="Activity Log" />
 
-            <Modal 
-                isOpen={isDetailsModalOpen} 
-                onClose={closeDetailsModal} 
+            <Modal
+                isOpen={isDetailsModalOpen}
+                onClose={closeDetailsModal}
                 title="Activity Details"
             >
                 {renderActivityDetails()}
@@ -442,18 +442,18 @@ export default function ActivityLog() {
                                         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             User
                                         </th>
-                                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-1">
                                             Changes
                                         </th>
-                                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-1">
                                             Timestamp
                                         </th>
-                                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-1">
                                             Details
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody className="bg-white divide-y divide-gray-200">
+                                <tbody className="bg-white divide-y divide-gray-200 border-1">
                                     {loading ? (
                                         <tr>
                                             <td colSpan="6" className="px-6 py-4 text-center text-sm text-gray-500">
