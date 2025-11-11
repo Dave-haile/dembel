@@ -93,9 +93,12 @@ const ActivityFeed = ({ activities = [], subjectType, onViewMore }) => {
   const [perPage, setPerPage] = useState(null); // null means using initial props
 
   useEffect(() => {
-    // keep in sync if parent updates
-    if (!perPage) setList(activities || []);
-  }, [activities]);
+    // Only update the list if we're not using server-side pagination
+    // and the activities array has changed
+    if (!perPage && JSON.stringify(activities) !== JSON.stringify(list)) {
+      setList(activities || []);
+    }
+  }, [activities, perPage, list]);
 
   const fetchActivities = async (size, subjectType) => {
     try {

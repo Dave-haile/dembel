@@ -181,6 +181,7 @@ import {
   Settings,
   ChevronLeft,
   Activity,
+  Table,
 } from 'lucide-react';
 import { useEffect } from 'react';
 import { usePage } from '@inertiajs/react';
@@ -205,6 +206,7 @@ const Sidebar = ({ isOpen, onClose, onNavigate, onToggle }) => {
     { id: 'vacancies', label: 'Vacancies', icon: Briefcase, link: '/admin/vacancies' },
     // { id: 'announcements', label: 'Announcements', icon: Megaphone, link: '/admin/announcements' },
     { id: 'services', label: 'Services', icon: Wrench, link: '/admin/services' },
+    { id: 'about', label: 'About', icon: Table, link: '/admin/about-contents' },
     { id: 'gallery', label: 'Gallery', icon: ImageIcon, link: '/admin/gallery' },
     { id: 'users', label: 'Users', icon: Users, link: '/admin/users' },
     { id: 'slides', label: 'Slides', icon: Presentation, link: '/admin/slides' },

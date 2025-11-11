@@ -23,6 +23,8 @@
 //     color: "#4B5563",
 //   },
 // });
+
+
 import "../css/app.css";
 import "./bootstrap";
 
