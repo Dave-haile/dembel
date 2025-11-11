@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AboutContentController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\FreeSpaceController;
@@ -120,10 +121,18 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     // Settings page & update
     Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
     Route::post('/settings', [AdminController::class, 'settingsUpdate'])->name('admin.settings.update');
+    // About Contents CRUD (JSON API)
+    Route::get('/about-contents', [AdminController::class, 'aboutContents'])->name('admin.about-contents');
+    Route::get('/about-contents/list', [AdminController::class, 'aboutContentsList'])->name('admin.about-contents.list');
+    Route::get('/about-contents/{aboutContent}', [AdminController::class, 'aboutContentShow'])->name('admin.about-contents.show');
+    Route::post('/about-contents', [AdminController::class, 'aboutContentStore'])->name('admin.about-contents.store');
+    Route::match(['put', 'patch'], '/about-contents/{aboutContent}', [AdminController::class, 'aboutContentUpdate'])->name('admin.about-contents.update');
+    Route::delete('/about-contents/{aboutContent}', [AdminController::class, 'aboutContentDestroy'])->name('admin.about-contents.destroy');
+
     // Activity Log
     Route::get('/activity-log', [AdminController::class, 'activityPage'])->name('admin.activity-log.index');
     Route::get('/api/activity', [AdminController::class, 'activity'])->name('admin.activity.index');
-    
+
     // Add other admin routes here as needed
     Route::get('/activity/{subject}', [AdminController::class, 'activity'])->name('admin.activity.show');
 
@@ -145,9 +154,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
 });
 
-Route::get('/about', function () {
-    return Inertia::render('Public/About/About');
-});
+Route::get('/about', [AboutContentController::class, 'index'])->name('about.index');
+
 Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
 Route::get('/services/{id}', [ServiceController::class, 'show'])->name('services.show');
 Route::post('/services/contact', [ServiceController::class, 'contact'])->name('services.contact');
