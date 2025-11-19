@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { Sparkles, TrendingUp, Award } from 'lucide-react';
 
 export default function MallStory({ mallStory, whoWeAre }) {
+
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
@@ -73,7 +74,7 @@ export default function MallStory({ mallStory, whoWeAre }) {
             const IconComponent = milestone.icon;
             return (
               <motion.div
-                key={milestone.year}
+                key={index}
                 initial={{ opacity: 0, y: 50 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.6 + index * 0.2 }}

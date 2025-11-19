@@ -5,12 +5,12 @@ import { MapPin, Clock, Phone, Mail, Navigation } from 'lucide-react';
 import { Map } from '../../Shared/Map';
 
 export default function Location({ location }) {
-  console.log(location);
+  console.log('location', location);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   const contactInfo = typeof location.extra_data === 'string' ? JSON.parse(location.extra_data) : location.extra_data;
-  console.log(contactInfo);
+  console.log('contactInfo', contactInfo);
   contactInfo.forEach((info) => {
     if (info.icon === 'MapPin') {
       info.icon = MapPin;
@@ -22,32 +22,6 @@ export default function Location({ location }) {
       info.icon = Mail;
     }
   });
-  // [
-  //   {
-  //     icon: MapPin,
-  //     title: 'Address',
-  //     content: '123 Luxury Avenue, Downtown District',
-  //     subContent: 'Metropolitana, MC 10001',
-  //   },
-  //   {
-  //     icon: Clock,
-  //     title: 'Hours',
-  //     content: 'Mon - Sat: 10:00 AM - 10:00 PM',
-  //     subContent: 'Sunday: 11:00 AM - 9:00 PM',
-  //   },
-  //   {
-  //     icon: Phone,
-  //     title: 'Phone',
-  //     content: '+1 (555) 123-4567',
-  //     subContent: 'Customer Service Available',
-  //   },
-  //   {
-  //     icon: Mail,
-  //     title: 'Email',
-  //     content: 'hello@grandeurplaza.com',
-  //     subContent: 'We respond within 24 hours',
-  //   },
-  // ];
 
   return (
     <section ref={ref} className="py-24 px-4 bg-white">

@@ -6,7 +6,7 @@ function MobileNavLink({ href, active, children, onClick }) {
       href={href}
       onClick={onClick}
       className={`block font-medium py-2 px-3 rounded-md transition ${
-        active ? "text-[#F05A7E] bg-pink-50" : "text-gray-700 hover:bg-gray-100"
+        active ? "text-accent-700 bg-pink-50" : "text-primary-700 hover:bg-gray-100"
       }`}
     >
       {children}

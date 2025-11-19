@@ -23,6 +23,15 @@ return new class extends Migration
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });
+        // instagram images
+        Schema::create('instagram_images', function (Blueprint $table) {
+            $table->id();
+            $table->string('image');
+            $table->string('caption')->nullable();
+            $table->string('hashtags')->nullable();
+            $table->boolean('approval')->default(false);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -30,6 +39,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('gallery');
+        Schema::dropIfExists('galleries');
+        Schema::dropIfExists('instagram_images');
     }
 };

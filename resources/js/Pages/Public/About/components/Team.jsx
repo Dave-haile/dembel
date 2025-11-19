@@ -32,7 +32,7 @@ export default function Team({ team }) {
         <div className={`grid md:grid-cols-2 lg:grid-cols-4 gap-8 `}>
           {teamData.map((member, index) => (
             <motion.div
-              key={member.name}
+              key={index}
               initial={{ opacity: 0, y: 50, rotateY: -20 }}
               animate={isInView ? { opacity: 1, y: 0, rotateY: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.15 }}

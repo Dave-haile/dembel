@@ -21,9 +21,9 @@ export // Reusable Desktop Dropdown (with hover delay)
     <div className={`relative ${className}`} onMouseEnter={show} onMouseLeave={hide}>
       <Link
         href={href}
-        className={`font-medium flex items-center transition duration-150 hover:text-[#F05A7E] ${active
-            ? "text-[#F05A7E] border-b-2 border-[#F05A7E] pb-1"
-            : "text-gray-700"
+        className={`font-bold flex items-center transition duration-150 hover:text-accent-700 ${active
+            ? "text-accent-800 border-b-2 border-accent-700 pb-1"
+            : "text-primary-700"
           }`}
       >
         {label}
@@ -51,7 +51,7 @@ export // Reusable Desktop Dropdown (with hover delay)
           <Link
             key={idx}
             href={item.href}
-            className={`block px-4 py-2 text-sm text-gray-700 hover:text-[#F05A7E] transition duration-150 ${item.active ? "text-[#F05A7E]" : ""
+            className={`block px-4 py-2 text-sm text-primary-700 hover:text-accent-800 transition duration-150 ${item.active ? "text-accent-800" : ""
               }`}
           >
             {item.label}

@@ -12,7 +12,7 @@ const VisitUs = () => {
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-4xl lg:text-5xl font-bold text-primary-600 mb-6">
             Visit Us
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -27,8 +27,8 @@ const VisitUs = () => {
             {/* Opening Hours */}
             <div className="bg-gray-50 p-8 rounded-xl">
               <div className="flex items-center mb-6">
-                <Clock size={24} className="text-blue-600 mr-3" />
-                <h3 className="text-2xl font-semibold text-gray-900">
+                <Clock size={24} className="text-accent-600 mr-3" />
+                <h3 className="text-2xl font-semibold text-primary-600">
                   Opening Hours
                 </h3>
               </div>
@@ -52,8 +52,8 @@ const VisitUs = () => {
             {/* Address */}
             <div className="bg-gray-50 p-8 rounded-xl">
               <div className="flex items-center mb-4">
-                <MapPin size={24} className="text-blue-600 mr-3" />
-                <h3 className="text-2xl font-semibold text-gray-900">
+                <MapPin size={24} className="text-accent-600 mr-3" />
+                <h3 className="text-2xl font-semibold text-primary-600">
                   Address
                 </h3>
               </div>
@@ -67,8 +67,8 @@ const VisitUs = () => {
             {/* Contact Phone */}
             <div className="bg-gray-50 p-8 rounded-xl">
               <div className="flex items-center mb-4">
-                <Phone size={24} className="text-blue-600 mr-3" />
-                <h3 className="text-2xl font-semibold text-gray-900">
+                <Phone size={24} className="text-accent-600 mr-3" />
+                <h3 className="text-2xl font-semibold text-primary-600">
                   Contact
                 </h3>
               </div>
@@ -84,9 +84,9 @@ const VisitUs = () => {
               href="https://www.google.com/maps/dir/?api=1&destination=Dembel+City+Center,+Addis+Ababa"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full bg-blue-800 hover:bg-blue-900 text-white px-8 py-4 rounded-lg font-semibold transition-colors duration-200 inline-flex items-center justify-center group"
+              className="w-full bg-primary-800 hover:bg-primary-900 text-white px-8 py-4 rounded-lg font-semibold transition-colors duration-200 inline-flex items-center justify-center group"
             >
-              <Navigation size={20} className="mr-3" />
+              <Navigation size={20} className="mr-3 text-accent-400" />
               Get Directions
             </a>
           </div>

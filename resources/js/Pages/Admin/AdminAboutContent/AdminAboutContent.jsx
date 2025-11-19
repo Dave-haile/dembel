@@ -8,6 +8,192 @@ import Modal from "../components/Modal";
 import AdminLayout from "../Shared/AdminLayout";
 import { usePage, Head, router } from "@inertiajs/react";
 
+// Component-specific form configurations
+const COMPONENT_CONFIGS = {
+    AboutHero: {
+        name: "Hero Section",
+        description: "Main banner with slideshow",
+        extraDataFields: [
+            {
+                key: "slides",
+                label: "Slideshow Images",
+                type: "array",
+                fields: [
+                    {
+                        key: "image",
+                        label: "Slide Image",
+                        type: "file",
+                        required: true,
+                        accept: "image/*"
+                    }
+                ]
+            }
+        ]
+    },
+    MallStory: {
+        name: "Mall Story Timeline",
+        description: "Timeline of mall history",
+        extraDataFields: [
+            {
+                key: "timeline",
+                label: "Timeline Items",
+                type: "array",
+                fields: [
+                    { key: "year", label: "Year", type: "text", required: true },
+                    { key: "title", label: "Title", type: "text", required: true },
+                    { key: "desc", label: "Description", type: "textarea", required: true }
+                ]
+            }
+        ]
+    },
+    MissionValues: {
+        name: "Mission & Values",
+        description: "Company values with icons",
+        extraDataFields: [
+            {
+                key: "values",
+                label: "Values",
+                type: "array",
+                fields: [
+                    { key: "icon", label: "Icon Name", type: "text", required: true },
+                    { key: "title", label: "Title", type: "text", required: true },
+                    { key: "desc", label: "Description", type: "textarea", required: true },
+                    { key: "color", label: "Color Gradient", type: "text" }
+                ]
+            }
+        ]
+    },
+    Facilities: {
+        name: "Facilities",
+        description: "Mall facilities and amenities",
+        extraDataFields: [
+            {
+                key: "facilities",
+                label: "Facilities",
+                type: "array",
+                fields: [
+                    { key: "icon", label: "Icon Name", type: "text", required: true },
+                    { key: "title", label: "Title", type: "text", required: true },
+                    { key: "desc", label: "Description", type: "textarea", required: true },
+                    {
+                        key: "image",
+                        label: "Facility Image",
+                        type: "file",
+                        accept: "image/*"
+                    }
+                ]
+            }
+        ]
+    },
+    Stats: {
+        name: "Statistics",
+        description: "Achievement statistics",
+        extraDataFields: [
+            {
+                key: "stats",
+                label: "Statistics",
+                type: "array",
+                fields: [
+                    { key: "icon", label: "Icon Name", type: "text", required: true },
+                    { key: "value", label: "Value", type: "number", required: true },
+                    { key: "suffix", label: "Suffix", type: "text" },
+                    { key: "label", label: "Label", type: "text", required: true },
+                    { key: "desc", label: "Description", type: "textarea" }
+                ]
+            }
+        ]
+    },
+    Team: {
+        name: "Team Members",
+        description: "Leadership team",
+        extraDataFields: [
+            {
+                key: "team",
+                label: "Team Members",
+                type: "array",
+                fields: [
+                    { key: "name", label: "Full Name", type: "text", required: true },
+                    { key: "role", label: "Role/Position", type: "text", required: true },
+                    {
+                        key: "image",
+                        label: "Profile Photo",
+                        type: "file",
+                        accept: "image/*"
+                    },
+                    { key: "bio", label: "Bio", type: "textarea" },
+                    { key: "linkedin", label: "LinkedIn URL", type: "text" },
+                    { key: "email", label: "Email", type: "text" }
+                ]
+            }
+        ]
+    },
+    Location: {
+        name: "Location Info",
+        description: "Contact and location details",
+        extraDataFields: [
+            {
+                key: "info",
+                label: "Information Items",
+                type: "array",
+                fields: [
+                    { key: "icon", label: "Icon Name", type: "text", required: true },
+                    { key: "title", label: "Title", type: "text", required: true },
+                    { key: "content", label: "Content", type: "textarea", required: true },
+                    { key: "subContent", label: "Sub Content", type: "text" }
+                ]
+            }
+        ]
+    },
+    MissionVisionValues: {
+        name: "Mission Vision Values",
+        description: "Company mission, vision and values",
+        extraDataFields: [
+            {
+                key: "sections",
+                label: "Sections",
+                type: "array",
+                fields: [
+                    { key: "title", label: "Section Title", type: "text", required: true },
+                    { key: "content", label: "Content", type: "textarea", required: true }
+                ]
+            }
+        ]
+    },
+    ManagementTeam: {
+        name: "Management Team",
+        description: "Management team members",
+        extraDataFields: [
+            {
+                key: "management",
+                label: "Management Team",
+                type: "array",
+                fields: [
+                    { key: "name", label: "Full Name", type: "text", required: true },
+                    { key: "role", label: "Role/Position", type: "text", required: true },
+                    { key: "email", label: "Email", type: "text" },
+                    { key: "phone", label: "Phone", type: "text" },
+                    {
+                        key: "image",
+                        label: "Profile Photo",
+                        type: "file",
+                        accept: "image/*"
+                    }
+                ]
+            }
+        ]
+    },
+    WhoWeAre: {
+        name: "Who We Are",
+        description: "Basic information about the company",
+        extraDataFields: [] // No extra data needed
+    },
+    OrganizationalStructure: {
+        name: "Organizational Structure",
+        description: "Company organizational chart",
+        extraDataFields: [] // No extra data needed
+    }
+};
+
 const AdminAboutContent = () => {
     const { aboutContents: initialContents, activities, counts, flash } = usePage().props;
     const [items, setItems] = useState(initialContents || []);
@@ -18,27 +204,8 @@ const AdminAboutContent = () => {
     const [selected, setSelected] = useState(null);
     const [toast, setToast] = useState(null);
 
-    const renderContentPreview = (item) => {
-        if (!item.extra_data) return 'No data';
-        try {
-            const extraData = typeof item.extra_data === 'string'
-                ? JSON.parse(item.extra_data)
-                : item.extra_data;
-
-            if (Array.isArray(extraData)) {
-                return `${extraData.length} items`;
-            } else if (typeof extraData === 'object' && extraData !== null) {
-                return Object.keys(extraData).length > 0
-                    ? `${Object.keys(extraData).length} properties`
-                    : 'Empty object';
-            }
-            return String(extraData).substring(0, 50) + '...';
-        } catch (e) {
-            console.log(e);
-            return 'Invalid JSON data';
-        }
-    };
     const [formData, setFormData] = useState({
+        id: null,
         component: "",
         title: "",
         subtitle: "",
@@ -46,13 +213,18 @@ const AdminAboutContent = () => {
         position: "",
         image: null,
         image_url: "",
-        extra_data: ""
+        extra_data: []
     });
+
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const [perPageCount, setPerPageCount] = useState(10);
     const [imagePreview, setImagePreview] = useState(null);
     const fileInputRef = useRef(null);
+
+    // Extra data state management
+    const [extraData, setExtraData] = useState([]);
+    const [extraDataPreviews, setExtraDataPreviews] = useState({});
 
     useEffect(() => {
         setItems(Array.isArray(initialContents) ? initialContents : (initialContents?.data || []));
@@ -66,8 +238,25 @@ const AdminAboutContent = () => {
     useEffect(() => {
         return () => {
             if (imagePreview) URL.revokeObjectURL(imagePreview);
+            // Clean up extra data preview URLs
+            Object.values(extraDataPreviews).forEach(url => {
+                if (url && url.startsWith('blob:')) {
+                    URL.revokeObjectURL(url);
+                }
+            });
         };
-    }, [imagePreview]);
+    }, [imagePreview, extraDataPreviews]);
+
+    // Reset extra data when component changes
+    useEffect(() => {
+        if (formData.component && COMPONENT_CONFIGS[formData.component]) {
+            // Don't reset extraData if we're editing existing data
+            if (!formData.id) {
+                setExtraData([]);
+                setExtraDataPreviews({});
+            }
+        }
+    }, [formData.component, formData.id]);
 
     const itemsPerPage = perPageCount === "all" ? items?.length || 0 : perPageCount;
 
@@ -105,28 +294,139 @@ const AdminAboutContent = () => {
         }
     };
 
-    // const handleExtraDataChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setFormData(prev => ({
-    //         ...prev,
-    //         extra_data: {
-    //             ...prev.extra_data,
-    //             [name]: value
-    //         }
-    //     }));
-    // };
+    // Extra Data Management
+    const addExtraDataItem = () => {
+        const config = COMPONENT_CONFIGS[formData.component];
+        if (!config || !config.extraDataFields.length) return;
+
+        const newItem = {};
+        config.extraDataFields[0].fields.forEach(field => {
+            newItem[field.key] = field.type === 'file' ? null : '';
+        });
+
+        setExtraData(prev => [...prev, { id: Date.now().toString(), ...newItem }]);
+    };
+
+    const removeExtraDataItem = (itemId) => {
+        setExtraData(prev => prev.filter(item => item.id !== itemId));
+        // Clean up preview URL
+        if (extraDataPreviews[itemId]) {
+            URL.revokeObjectURL(extraDataPreviews[itemId]);
+            setExtraDataPreviews(prev => {
+                const newPreviews = { ...prev };
+                delete newPreviews[itemId];
+                return newPreviews;
+            });
+        }
+    };
+
+    const updateExtraDataItem = (itemId, fieldKey, value, file = null) => {
+        setExtraData(prev => prev.map(item =>
+            item.id === itemId ? { ...item, [fieldKey]: file || value } : item
+        ));
+
+        // Handle file preview
+        if (file) {
+            // Clean up old preview
+            if (extraDataPreviews[`${itemId}_${fieldKey}`]) {
+                URL.revokeObjectURL(extraDataPreviews[`${itemId}_${fieldKey}`]);
+            }
+
+            // Create new preview
+            const previewUrl = URL.createObjectURL(file);
+            setExtraDataPreviews(prev => ({
+                ...prev,
+                [`${itemId}_${fieldKey}`]: previewUrl
+            }));
+        }
+    };
+
+    // Parse existing extra_data and create previews for existing images
+    const parseExistingExtraData = (extraData) => {
+        if (!extraData) return [];
+
+        try {
+            const parsed = typeof extraData === 'string' ? JSON.parse(extraData) : extraData;
+            if (Array.isArray(parsed)) {
+                return parsed.map((item, index) => ({
+                    id: `existing_${index}_${Date.now()}`,
+                    ...item
+                }));
+            }
+        } catch (e) {
+            console.error('Error parsing extra data:', e);
+        }
+
+        return [];
+    };
+
+    const buildFormDataForSubmit = () => {
+        const formDataToSend = new FormData();
+
+        // Basic text fields
+        Object.keys(formData).forEach(key => {
+        if (key !== "extra_data") {
+            if (formData[key] !== undefined && formData[key] !== null) {
+                formDataToSend.append(key, formData[key]);
+            }
+        }
+        });
+        const cleanedExtraData = extraData.map(item => {
+        const config = COMPONENT_CONFIGS[formData.component];
+        const cleanItem = {};
+        
+        if (config && config.extraDataFields.length > 0) {
+            // Get all possible fields from the component config
+            const allFields = config.extraDataFields[0].fields;
+            
+            allFields.forEach(field => {
+                const fieldKey = field.key;
+                // Preserve the value if it exists, otherwise set to null
+                if (item[fieldKey] !== undefined) {
+                    // For file fields, if it's a string (existing file path), preserve it
+                    // If it's a File object, we'll handle it separately in the file upload section
+                    cleanItem[fieldKey] = field.type === 'file' && typeof item[fieldKey] === 'string' 
+                        ? item[fieldKey] 
+                        : item[fieldKey];
+                } else {
+                    cleanItem[fieldKey] = null;
+                }
+            });
+        }
+        
+        return cleanItem;
+    });
+
+        formDataToSend.append("extra_data", JSON.stringify(cleanedExtraData));
+
+        // Add file uploads
+        extraData.forEach((item, idx) => {
+        Object.keys(item).forEach(field => {
+            if (item[field] instanceof File) {
+                formDataToSend.append(
+                    `extra_data_files[${idx}][${field}]`,
+                    item[field]
+                );
+            }
+        });
+    });
+
+    return formDataToSend;
+    };
 
     const resetForm = () => {
         setFormData({
+            id: null,
             component: "",
             title: "",
             subtitle: "",
             description: "",
-            position: "",
-            image: null,
             image_url: "",
-            extra_data: ""
+            position: "",
+            extra_data: []
         });
+        setExtraData([]);
+        setExtraDataPreviews({});
         setImagePreview(null);
         setErrors({});
         if (fileInputRef.current) {
@@ -141,23 +441,20 @@ const AdminAboutContent = () => {
     };
 
     const openEditModal = (item) => {
-        setSelected(item);
+        const extraDataItems = parseExistingExtraData(item.extra_data);
+
         setFormData({
+            id: item.id,
             component: item.component || "",
             title: item.title || "",
             subtitle: item.subtitle || "",
             description: item.description || "",
+            image_url: item.image_url || "",
             position: item.position || "",
-            extra_data: item.extra_data ?
-                (typeof item.extra_data === 'string' ? item.extra_data : JSON.stringify(item.extra_data, null, 2))
-                : "",
-            _method: 'put'
+            extra_data: []
         });
-        if (item.image_url) {
-            setImagePreview(item.image_url.startsWith('http') ? item.image_url : `/storage/${item.image_url}`);
-        } else {
-            setImagePreview(null);
-        }
+
+        setExtraData(extraDataItems);
         setIsModalOpen(true);
     };
 
@@ -171,131 +468,42 @@ const AdminAboutContent = () => {
         setIsViewModalOpen(true);
     };
 
-    const renderViewContent = (content) => {
-        if (!content) return null;
+    const renderContentPreview = (item) => {
+        if (!item.extra_data) return 'No data';
+        try {
+            const extraData = typeof item.extra_data === 'string'
+                ? JSON.parse(item.extra_data)
+                : item.extra_data;
 
-        // Handle array of objects (common case)
-        if (Array.isArray(content)) {
-            // Special case for slides (array of image paths)
-            if (content.length > 0 && content[0].includes && content[0].includes('storage/')) {
-                return (
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                        {content.map((img, idx) => (
-                            <div key={idx} className="relative group">
-                                <img
-                                    src={img.startsWith('http') ? img : `/storage/${img}`}
-                                    alt={`Slide ${idx + 1}`}
-                                    className="w-full h-32 object-cover rounded-lg border border-gray-200"
-                                    onError={(e) => e.target.src = '/img/default.jpg'}
-                                />
-                            </div>
-                        ))}
-                    </div>
-                );
+            if (Array.isArray(extraData)) {
+                return `${extraData.length} items`;
+            } else if (typeof extraData === 'object' && extraData !== null) {
+                return Object.keys(extraData).length > 0
+                    ? `${Object.keys(extraData).length} properties`
+                    : 'Empty object';
             }
-
-            // Handle array of objects with common structures
-            return (
-                <div className="space-y-4 mt-4">
-                    {content.map((item, index) => (
-                        <div key={index} className="p-4 bg-gray-50 rounded-lg border border-gray-100">
-                            {item.title && (
-                                <h4 className="font-medium text-gray-900 mb-1">{item.title}</h4>
-                            )}
-                            {item.year && (
-                                <p className="text-sm text-blue-600 mb-1">{item.year}</p>
-                            )}
-                            {item.desc && (
-                                <p className="text-sm text-gray-600">{item.desc}</p>
-                            )}
-                            {item.content && (
-                                <p className="text-sm text-gray-600 mt-2">{item.content}</p>
-                            )}
-                            {item.image && (
-                                <img
-                                    src={item.image.startsWith('http') ? item.image : `/storage/${item.image}`}
-                                    alt={item.title || 'Image'}
-                                    className="mt-2 w-full h-32 object-cover rounded"
-                                    onError={(e) => e.target.src = '/img/default.jpg'}
-                                />
-                            )}
-                            {item.icon && (
-                                <div className="flex items-center mt-2 text-sm text-gray-500">
-                                    <span className="mr-2">Icon: {item.icon}</span>
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </div>
-            );
+            return String(extraData).substring(0, 50) + '...';
+        } catch (e) {
+            console.log(e);
+            return 'Invalid JSON data';
         }
-
-        // Handle object with key-value pairs
-        if (typeof content === 'object' && content !== null) {
-            return (
-                <div className="space-y-2 mt-4">
-                    {Object.entries(content).map(([key, value]) => (
-                        <div key={key} className="flex flex-col sm:flex-row sm:items-start py-2 border-b border-gray-100 last:border-0">
-                            <span className="font-medium text-gray-700 w-32 flex-shrink-0">
-                                {key.replace(/^\w/, c => c.toUpperCase())}:
-                            </span>
-                            <div className="mt-1 sm:mt-0 flex-1">
-                                {Array.isArray(value) ? (
-                                    <div className="space-y-2">
-                                        {value.map((item, i) => (
-                                            <div key={i} className="bg-gray-50 p-2 rounded text-sm">
-                                                {typeof item === 'object' ? JSON.stringify(item) : String(item)}
-                                            </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <span className="text-gray-800">
-                                        {typeof value === 'object' ? JSON.stringify(value) : String(value)}
-                                    </span>
-                                )}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            );
-        }
-
-        // Fallback for strings or other types
-        return (
-            <div className="mt-2 p-3 bg-gray-50 rounded text-sm whitespace-pre-wrap">
-                {String(content)}
-            </div>
-        );
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoading(true);
 
-        const formDataToSend = new FormData();
-        Object.keys(formData).forEach(key => {
-            if (key === 'extra_data' && formData[key]) {
-                try {
-                    // If it's a string, parse it to an object first
-                    const data = typeof formData[key] === 'string'
-                        ? JSON.parse(formData[key])
-                        : formData[key];
+        const formDataToSend = buildFormDataForSubmit();
 
-                    // Then stringify it to ensure it's a proper JSON string
-                    formDataToSend.append(key, JSON.stringify(data));
-                } catch (e) {
-                    console.error('Error processing extra_data:', e);
-                    // If parsing fails, send it as is
-                    formDataToSend.append(key, formData[key]);
-                }
-            } else if (formData[key] !== null && formData[key] !== undefined) {
-                formDataToSend.append(key, formData[key]);
-            }
-        });
-
-        const url = selected
-            ? `/admin/about-contents/${selected.id}`
+        const url = formData.id
+            ? `/admin/about-contents/${formData.id}`
             : '/admin/about-contents';
+
+
+        if (formData.id) {
+            formDataToSend.append('_method', 'PUT');
+        }
+        console.log(formDataToSend);
 
         router.post(url, formDataToSend, {
             forceFormData: true,
@@ -348,6 +556,159 @@ const AdminAboutContent = () => {
         return new Date(dateString).toLocaleDateString(undefined, options);
     };
 
+    // Render component-specific extra data form
+    const renderExtraDataForm = () => {
+        const config = COMPONENT_CONFIGS[formData.component];
+
+        if (!config || !config.extraDataFields.length) {
+            return (
+                <div className="text-center py-4 text-gray-500">
+                    <p>No additional data required for this component.</p>
+                </div>
+            );
+        }
+
+        const fieldConfig = config.extraDataFields[0];
+
+        return (
+            <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                    <div>
+                        <h4 className="text-lg font-medium text-gray-900">{fieldConfig.label}</h4>
+                        <p className="text-sm text-gray-500">{config.description}</p>
+                    </div>
+                </div>
+
+                <div className="space-y-4">
+                    {extraData.map((item, index) => (
+                        <div key={item.id} className="border border-gray-200 rounded-lg p-4 bg-white">
+                            <div className="flex justify-between items-center mb-3">
+                                <h5 className="font-medium text-gray-900">
+                                    {fieldConfig.label.slice(0, -1)} #{index + 1}
+                                </h5>
+                                <button
+                                    type="button"
+                                    onClick={() => removeExtraDataItem(item.id)}
+                                    className="text-red-600 hover:text-red-800 p-1"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                </button>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {fieldConfig.fields.map(field => (
+                                    <div key={field.key} className={field.type === 'textarea' || field.type === 'file' ? 'md:col-span-2' : ''}>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            {field.label}
+                                            {field.required && <span className="text-red-500 ml-1">*</span>}
+                                        </label>
+
+                                        {field.type === 'textarea' ? (
+                                            <textarea
+                                                value={item[field.key] || ''}
+                                                onChange={(e) => updateExtraDataItem(item.id, field.key, e.target.value)}
+                                                rows={3}
+                                                className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border border-gray-300 rounded-md p-2"
+                                                placeholder={`Enter ${field.label.toLowerCase()}`}
+                                            />
+                                        ) : field.type === 'file' ? (
+                                            <div className="space-y-2">
+                                                <input
+                                                    type="file"
+                                                    accept={field.accept || "image/*"}
+                                                    onChange={(e) => {
+                                                        const file = e.target.files[0];
+                                                        if (file) {
+                                                            updateExtraDataItem(item.id, field.key, '', file);
+                                                        }
+                                                    }}
+                                                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                                                />
+                                                {/* Show existing image or new preview */}
+                                                {(() => {
+                                                    const previewKey = `${item.id}_${field.key}`;
+                                                    const previewUrl = extraDataPreviews[previewKey];
+                                                    const value = item[field.key];
+
+                                                    // Determine if `value` is a valid persisted image URL (string starting with http or storage/)
+                                                    const isPersistedImageUrl =
+                                                        typeof value === 'string' &&
+                                                        (value.startsWith('http') || value.startsWith('storage/'));
+
+                                                    // Only show preview if we have a preview (new upload) or a valid persisted URL
+                                                    if (!previewUrl && !isPersistedImageUrl) {
+                                                        return null;
+                                                    }
+
+                                                    // Resolve the actual src to display
+                                                    let imgSrc;
+                                                    if (previewUrl) {
+                                                        imgSrc = previewUrl; // blob URL from new file
+                                                    } else if (value.startsWith('storage/')) {
+                                                        imgSrc = `/${value}`; // make relative to public folder
+                                                    } else {
+                                                        imgSrc = value; // full http(s) URL
+                                                    }
+
+                                                    return (
+                                                        <div className="mt-2">
+                                                            <img
+                                                                src={imgSrc}
+                                                                alt="Preview"
+                                                                className="h-32 w-auto object-contain rounded-md border border-gray-200"
+                                                                onError={(e) => {
+                                                                    e.target.src = '/img/default.jpg';
+                                                                }}
+                                                            />
+                                                            {isPersistedImageUrl && (
+                                                                <p className="text-xs text-gray-500 mt-1">
+                                                                    Current image: {value.split('/').pop()}
+                                                                </p>
+                                                            )}
+                                                        </div>
+                                                    );
+                                                })()}
+                                            </div>
+                                        ) : (
+                                            <input
+                                                type={field.type}
+                                                value={item[field.key] || ''}
+                                                onChange={(e) => updateExtraDataItem(item.id, field.key, e.target.value)}
+                                                className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border border-gray-300 rounded-md p-2"
+                                                placeholder={`Enter ${field.label.toLowerCase()}`}
+                                            />
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <button
+                    type="button"
+                    onClick={addExtraDataItem}
+                    className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                    <Plus className="w-4 h-4 mr-1" />
+                    Add {fieldConfig.label.slice(0, -1)}
+                </button>
+
+                {extraData.length === 0 && (
+                    <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
+                        <p className="text-gray-500">No {fieldConfig.label.toLowerCase()} added yet.</p>
+                        <button
+                            type="button"
+                            onClick={addExtraDataItem}
+                            className="mt-2 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200"
+                        >
+                            <Plus className="w-4 h-4 mr-1" />
+                            Add First {fieldConfig.label.slice(0, -1)}
+                        </button>
+                    </div>
+                )}
+            </div>
+        );
+    };
 
     return (
         <AdminLayout>
@@ -455,9 +816,6 @@ const AdminAboutContent = () => {
                                         {visible.length > 0 ?
                                             (
                                                 visible.map((item) => {
-                                                    // const extraData = item.extra_data ?
-                                                    //     (typeof item.extra_data === 'string' ? JSON.parse(item.extra_data) : item.extra_data) :
-                                                    //     null;
                                                     const extraData = item.extra_data ?
                                                         (typeof item.extra_data === 'string' ?
                                                             (() => {
@@ -471,12 +829,12 @@ const AdminAboutContent = () => {
                                                             : item.extra_data)
                                                         : null;
                                                     const hasListData = Array.isArray(extraData);
+                                                    // eslint-disable-next-line no-unused-vars
                                                     const previewContent = item.description
                                                         ? item.description.substring(0, 50) + (item.description.length > 50 ? '...' : '')
                                                         : hasListData
                                                             ? `${extraData.length} items`
                                                             : 'No content';
-                                                    console.log(previewContent);
 
                                                     return (
                                                         <tr key={item.id} className="hover:bg-gray-50">
@@ -584,22 +942,23 @@ const AdminAboutContent = () => {
                     setIsModalOpen(false);
                     resetForm();
                 }}
-                title={`${selected ? 'Edit' : 'Create'} About Content`}
-                maxWidth="3xl"
+                title={`${formData.id ? 'Edit' : 'Create'} About Content`}
+                maxWidth="4xl"
             >
                 <form onSubmit={handleSubmit}>
-                    <div className="space-y-4">
+                    <div className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div className="md:col-span-1">
                                 <FormInput
-                                    label="Component Name"
+                                    label="Component Type"
                                     name="component"
                                     type="text"
                                     value={formData.component}
                                     onChange={handleInputChange}
                                     error={errors.component}
                                     required
-                                />
+                                >
+                                </FormInput>
                             </div>
                             <div className="md:col-span-1">
                                 <FormInput
@@ -624,6 +983,15 @@ const AdminAboutContent = () => {
                                 />
                             </div>
                         </div>
+
+                        {formData.component && COMPONENT_CONFIGS[formData.component] && (
+                            <div className="bg-blue-50 p-4 rounded-lg">
+                                <p className="text-sm text-blue-800">
+                                    <strong>{COMPONENT_CONFIGS[formData.component].name}:</strong>{' '}
+                                    {COMPONENT_CONFIGS[formData.component].description}
+                                </p>
+                            </div>
+                        )}
 
                         <FormInput
                             label="Title"
@@ -664,6 +1032,7 @@ const AdminAboutContent = () => {
                             </p>
                         </div>
 
+                        {/* Image Upload Section */}
                         <div className="space-y-2">
                             <label className="block text-sm font-medium text-gray-700">
                                 Image
@@ -708,185 +1077,13 @@ const AdminAboutContent = () => {
                             )}
                         </div>
 
-                        {/* Extra Data Fields */}
-                        <div className="border-t border-gray-200 pt-4">
-                            <h3 className="text-lg font-medium text-gray-900 mb-3">Extra Data</h3>
-                            <div className="space-y-3">
-                                <div className="bg-blue-50 p-3 rounded-md">
-                                    <p className="text-sm text-blue-800">
-                                        <span className="font-medium">Format Examples:</span>
-                                    </p>
-                                    <div className="mt-2 space-y-2 text-xs">
-                                        <button
-                                            type="button"
-                                            onClick={() => setFormData(prev => ({
-                                                ...prev,
-                                                extra_data: JSON.stringify([
-                                                    { "year": "2010", "title": "Event 1", "desc": "Description 1" },
-                                                    { "year": "2012", "title": "Event 2", "desc": "Description 2" }
-                                                ], null, 2)
-                                            }))}
-                                            className="text-blue-600 hover:underline mr-3"
-                                        >
-                                            Timeline
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => setFormData(prev => ({
-                                                ...prev,
-                                                extra_data: JSON.stringify({
-                                                    slides: [
-                                                        "path/to/image1.jpg",
-                                                        "path/to/image2.jpg"
-                                                    ]
-                                                }, null, 2)
-                                            }))}
-                                            className="text-blue-600 hover:underline mr-3"
-                                        >
-                                            Image Gallery
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => setFormData(prev => ({
-                                                ...prev,
-                                                extra_data: JSON.stringify([
-                                                    { "icon": "Users", "value": 25, "suffix": "M+", "label": "Visitors" },
-                                                    { "icon": "Store", "value": 150, "suffix": "+", "label": "Stores" }
-                                                ], null, 2)
-                                            }))}
-                                            className="text-blue-600 hover:underline"
-                                        >
-                                            Stats
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="relative">
-                                    <div className="flex justify-between items-center mb-1">
-                                        <label className="block text-sm font-medium text-gray-700">
-                                            JSON Data
-                                        </label>
-                                        <div className="flex space-x-2">
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    try {
-                                                        const parsed = JSON.parse(formData.extra_data || '{}');
-                                                        setFormData(prev => ({
-                                                            ...prev,
-                                                            extra_data: JSON.stringify(parsed, null, 2)
-                                                        }));
-                                                    } catch (e) {
-                                                        console.error('Invalid JSON:', e);
-                                                        setToast({
-                                                            message: 'Invalid JSON: ' + e.message,
-                                                            type: 'error'
-                                                        });
-                                                    }
-                                                }}
-                                                className="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded"
-                                                title="Format JSON"
-                                            >
-                                                Format
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    try {
-                                                        // const parsed = JSON.parse(formData.extra_data || '{}');
-                                                        setToast({
-                                                            message: 'JSON is valid!',
-                                                            type: 'success'
-                                                        });
-                                                    } catch (e) {
-                                                        setToast({
-                                                            message: 'Invalid JSON: ' + e.message,
-                                                            type: 'error'
-                                                        });
-                                                    }
-                                                }}
-                                                className="text-xs bg-blue-100 text-blue-700 hover:bg-blue-200 px-2 py-1 rounded"
-                                                title="Validate JSON"
-                                            >
-                                                Validate
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <textarea
-                                        name="extra_data"
-                                        rows={8}
-                                        className="font-mono text-xs shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border border-gray-300 rounded-md p-2"
-                                        value={formData.extra_data || ''}
-                                        onChange={handleInputChange}
-                                        placeholder='Example: [{"title": "Item 1"}, {"title": "Item 2"}]'
-                                    />
-                                    {formData.extra_data && (
-                                        <div className="absolute top-2 right-2 flex space-x-2">
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    try {
-                                                        const parsed = JSON.parse(formData.extra_data);
-                                                        setFormData(prev => ({
-                                                            ...prev,
-                                                            extra_data: JSON.stringify(parsed, null, 2)
-                                                        }));
-                                                    } catch (e) {
-                                                        // Invalid JSON, do nothing
-                                                        console.log(e);
-                                                    }
-                                                }}
-                                                className="text-xs bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded"
-                                                title="Format JSON"
-                                            >
-                                                Format
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    try {
-                                                        const parsed = JSON.parse(formData.extra_data);
-                                                        console.log(parsed);
-                                                    } catch (e) {
-                                                        alert('Invalid JSON: ' + e.message);
-                                                    }
-                                                }}
-                                                className="text-xs bg-blue-100 text-blue-700 hover:bg-blue-200 px-2 py-1 rounded"
-                                                title="Validate JSON"
-                                            >
-                                                Validate
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
-                                {errors.extra_data && (
-                                    <p className="text-sm text-red-600">{errors.extra_data}</p>
-                                )}
-                                {formData.extra_data && (
-                                    <div className="mt-4">
-                                        <h4 className="text-sm font-medium text-gray-700 mb-2">Preview:</h4>
-                                        <div className="p-3 bg-gray-50 rounded-md border border-gray-200 max-h-60 overflow-auto">
-                                            {(() => {
-                                                try {
-                                                    const data = JSON.parse(formData.extra_data);
-                                                    return renderViewContent(data);
-                                                } catch (e) {
-                                                    return (
-                                                        <div className="text-sm text-red-600">
-                                                            {formData.extra_data.trim() === '' ?
-                                                                'Enter valid JSON data' :
-                                                                `Invalid JSON: ${e.message}`
-                                                            }
-                                                        </div>
-                                                    );
-                                                }
-                                            })()}
-                                        </div>
-                                    </div>
-                                )}
+                        {/* Component-specific Extra Data */}
+                        {formData.component && COMPONENT_CONFIGS[formData.component] && (
+                            <div className="border-t border-gray-200 pt-6">
+                                <h3 className="text-lg font-medium text-gray-900 mb-4">Additional Data</h3>
+                                {renderExtraDataForm()}
                             </div>
-                        </div>
+                        )}
                     </div>
 
                     <div className="mt-6 flex justify-end space-x-3">
@@ -907,7 +1104,7 @@ const AdminAboutContent = () => {
                         >
                             {loading ? (
                                 'Saving...'
-                            ) : selected ? (
+                            ) : formData.id ? (
                                 'Update Content'
                             ) : (
                                 'Create Content'

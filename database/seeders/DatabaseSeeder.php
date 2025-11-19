@@ -1930,304 +1930,6 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
-        // $aboutContent = [
-        //     [
-        //         'component' => 'AboutHero',
-        //         'title' => 'About Us',
-        //         'subtitle' => 'Where Luxury Meets Lifestyle',
-        //         'description' => 'Experience the pinnacle of retail excellence with a seamless blend of shopping, dining, and entertainment.',
-        //         'image_url' => 'https://images.pexels.com/photos/1024248/pexels-photo-1024248.jpeg',
-        //         'extra_data' => json_encode([
-        //             'slides' => [
-        //                 'storage/about/image011.jpg',
-        //                 'storage/about/image013.jpg',
-        //                 'storage/about/image014.jpg',
-        //                 'storage/about/image039.jpg',
-        //             ],
-        //         ]),
-        //         'position' => 1,
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        //     [
-        //         'component' => 'MallStory',
-        //         'title' => 'Our Story',
-        //         'description' => 'Born from a dream to create the ultimate shopping and entertainment destination.',
-        //         'image_url' => 'https://images.pexels.com/photos/2467558/pexels-photo-2467558.jpeg',
-        //         'extra_data' => json_encode([
-        //             [
-        //                 'year' => '2010',
-        //                 'title' => 'The Beginning',
-        //                 'desc' => 'First brick laid',
-        //             ],
-        //             [
-        //                 'year' => '2012',
-        //                 'title' => 'Grand Opening',
-        //                 'desc' => '150 premium brands open their doors',
-        //             ],
-        //             [
-        //                 'year' => '2018',
-        //                 'title' => 'Excellence Awarded',
-        //                 'desc' => 'Named Mall of the Year',
-        //             ],
-        //         ]),
-        //         'position' => 2,
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        //     [
-        //         'component' => 'MissionValues',
-        //         'title' => 'Our Mission & Values',
-        //         'description' => 'Guided by principles that shape everything we do.',
-        //         'image_url' => null,
-        //         'extra_data' => json_encode([
-        //             [
-        //                 'icon' => 'Heart',
-        //                 'title' => 'Customer First',
-        //                 'desc' => 'We prioritize our guests in every decision.',
-        //                 'color' => 'red',
-        //             ],
-        //             [
-        //                 'icon' => 'Users',
-        //                 'title' => 'Community',
-        //                 'desc' => 'Supporting local businesses and community growth.',
-        //                 'color' => 'blue',
-        //             ],
-        //             [
-        //                 'icon' => 'Shield',
-        //                 'title' => 'Safety',
-        //                 'desc' => 'Maintaining a secure and welcoming environment.',
-        //                 'color' => 'green',
-        //             ],
-        //         ]),
-        //         'position' => 3,
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        //     [
-        //         'component' => 'Facilities',
-        //         'title' => 'World-Class Facilities',
-        //         'description' => 'Every amenity designed to elevate your visit.',
-        //         'image_url' => null,
-        //         'extra_data' => json_encode([
-        //             [
-        //                 'icon' => 'UtensilsCrossed',
-        //                 'title' => 'Fine Dining',
-        //                 'desc' => 'Experience top chefs and gourmet cuisine.',
-        //                 'image' => 'https://images.pexels.com/photos/262918/pexels-photo-262918.jpeg',
-        //             ],
-        //             [
-        //                 'icon' => 'Film',
-        //                 'title' => 'Luxury Cinema',
-        //                 'desc' => 'State-of-the-art screens and plush seating.',
-        //                 'image' => 'https://images.pexels.com/photos/1591060/pexels-photo-1591060.jpeg',
-        //             ],
-        //             [
-        //                 'icon' => 'Basketball',
-        //                 'title' => 'Sports Arena',
-        //                 'desc' => 'For sports lovers and fitness enthusiasts.',
-        //                 'image' => 'https://images.pexels.com/photos/317157/pexels-photo-317157.jpeg',
-        //             ],
-        //         ]),
-        //         'position' => 4,
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        //     [
-        //         'component' => 'Stats',
-        //         'title' => 'Achievements That Speak',
-        //         'description' => 'Numbers that reflect our commitment to excellence.',
-        //         'image_url' => null,
-        //         'extra_data' => json_encode([
-        //             [
-        //                 'icon' => 'Users',
-        //                 'value' => 25,
-        //                 'suffix' => 'M+',
-        //                 'label' => 'Annual Visitors',
-        //                 'desc' => 'Millions of happy guests every year.',
-        //             ],
-        //             [
-        //                 'icon' => 'Store',
-        //                 'value' => 300,
-        //                 'suffix' => '+',
-        //                 'label' => 'Premium Brands',
-        //                 'desc' => 'A wide variety of top international and local brands.',
-        //             ],
-        //             [
-        //                 'icon' => 'Award',
-        //                 'value' => 15,
-        //                 'suffix' => '',
-        //                 'label' => 'Awards Won',
-        //                 'desc' => 'Recognized for excellence in retail and service.',
-        //             ],
-        //         ]),
-        //         'position' => 5,
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        //     [
-        //         'component' => 'Team',
-        //         'title' => 'Meet Our Leadership',
-        //         'description' => 'The visionaries behind Grandeur Plaza.',
-        //         'image_url' => null,
-        //         'extra_data' => json_encode([
-        //             [
-        //                 'name' => 'Sarah Mitchell',
-        //                 'role' => 'CEO',
-        //                 'image' => 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg',
-        //                 'bio' => 'Visionary leader with 20 years in retail management.',
-        //                 'linkedin' => 'https://linkedin.com/in/sarah-mitchell',
-        //                 'email' => 'sarah@grandeurplaza.com',
-        //             ],
-        //             [
-        //                 'name' => 'John Carter',
-        //                 'role' => 'CFO',
-        //                 'image' => 'https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg',
-        //                 'bio' => 'Financial expert driving sustainable growth.',
-        //                 'linkedin' => 'https://linkedin.com/in/john-carter',
-        //                 'email' => 'john@grandeurplaza.com',
-        //             ],
-        //         ]),
-        //         'position' => 6,
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        //     [
-        //         'component' => 'Location',
-        //         'title' => 'Visit Us Today',
-        //         'description' => 'Located in the heart of the city, welcoming everyone.',
-        //         'image_url' => null,
-        //         'extra_data' => json_encode([
-        //             [
-        //                 'icon' => 'MapPin',
-        //                 'title' => 'Address',
-        //                 'content' => '123 Luxury Avenue, Downtown City',
-        //                 'subContent' => 'Near the Central Park',
-        //             ],
-        //             [
-        //                 'icon' => 'Clock',
-        //                 'title' => 'Opening Hours',
-        //                 'content' => 'Mon-Sun: 10am - 10pm',
-        //                 'subContent' => '',
-        //             ],
-        //             [
-        //                 'icon' => 'Phone',
-        //                 'title' => 'Contact',
-        //                 'content' => '+123 456 7890',
-        //                 'subContent' => 'info@grandeurplaza.com',
-        //             ],
-        //         ]),
-        //         'position' => 7,
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        //     [
-        //         'component' => 'WhoWeAre',
-        //         'title' => 'Who We Are',
-        //         'subtitle' => null,
-        //         'description' => 'Dembel City Centre (DCC) is a beautiful flowery-yellow multi story building, located at Africa Avenue on the road to the Air Port of Addis Ababa. It is one of the first Western-style shopping malls in Ethiopia built in 2002. It is covering about 40,000m² of floor area with basement ground floor and 12 stories, is one of the best buildings in Ethiopia. The twelve-floor structure has more than 123 spaces for shops and offices. It has a modern well- secured double deck parking with a capacity of 500 vehicles at a time. The City Centre is embracing a mosaic of shops and markets under one roof providing most of the services required by customers at reasonable price. This building is planned to accommodate additional shops, gymnasiums, conference halls and other businesses. Dembel City Centre is known for its well-trained, efficient round the clock security guards and assisted by surveillance camera. The professional attendants are always there for the safety of customers.',
-        //         'image_url' => null,
-        //         'extra_data' => null,
-        //         'position' => 2,
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        //     [
-        //         'component' => 'MissionVisionValues',
-        //         'title' => 'Mission, Vision, Core Values, Business Principle, Commitment, Strategic Direction',
-        //         'subtitle' => null,
-        //         'description' => null,
-        //         'image_url' => null,
-        //         'extra_data' => json_encode([
-        //             [
-        //                 'title' => 'Mission',
-        //                 'content' => 'To create eco-friendly and unique shopping and offices experience for customers with unmatched value in terms of quality of services, while continuously exploring new market opportunities and adding value to all its business associates.',
-        //             ],
-        //             [
-        //                 'title' => 'Vision',
-        //                 'content' => 'To be the leading eco-friendly for entirely with fine shopping experience and professional management services excellence in Africa.',
-        //             ],
-        //             [
-        //                 'title' => 'Core Values',
-        //                 'content' => 'Caring and Committed to the community, Creative in saving the environment, Honest and Integrity in conducting business, Provide a pleasant, safe and comfortable business experience, Responsible through commitment and respect and Listen and act our tenants, customers, employees and business partners',
-        //             ],
-        //             [
-        //                 'title' => 'Business Principle',
-        //                 'content' => 'Sharing a sense of lively business participation',
-        //             ],
-        //             [
-        //                 'title' => 'Commitment',
-        //                 'content' => 'Dembel City Center always strives to follow ethical business practices in all spheres of activities right from attracting of tenants, customers, employees and business partners around the world and ensuring satisfaction and bringing happiness to all.',
-        //             ],
-        //             [
-        //                 'title' => 'Strategic Direction',
-        //                 'content' => 'The strategic direction of Dembel City Center is that we would be building on the basic idea of interdependence between the Mall and the stakeholders. It focuses on the mutual business benefits that can accrue out of formal collaborated business management between the DCC and the stakeholders.',
-        //             ],
-        //         ]),
-        //         'position' => 3,
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        //     [
-        //         'component' => 'OrganizationalStructure',
-        //         'title' => 'Organizational Structure',
-        //         'subtitle' => null,
-        //         'description' => null,
-        //         'image_url' => '/storage/about/org.png',
-        //         'extra_data' => null,
-        //         'position' => 4,
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        //     [
-        //         'component' => 'ManagementTeam',
-        //         'title' => 'Management Team',
-        //         'subtitle' => null,
-        //         'description' => null,
-        //         'image_url' => null,
-        //         'extra_data' => json_encode([
-        //             [
-        //                 'name' => 'Yemiru Nega',
-        //                 'role' => 'Managing Director / Founder',
-        //                 'email' => 'yencomad.plc1@ethio.net.et',
-        //                 'phone' => '+251 115 51 40 87 / +251 115 53 75 85',
-        //                 'image' => '/img/default.jpg',
-        //             ],
-        //             [
-        //                 'name' => 'Abebe Mengesha',
-        //                 'role' => 'Mall Manager',
-        //                 'email' => '1206abebe@gmail.com',
-        //                 'phone' => '+251 115 53 75 89',
-        //                 'image' => '/img/default.jpg',
-        //             ],
-        //             [
-        //                 'name' => 'Tarekegn Wakishum',
-        //                 'role' => 'Head, HR & General Service Section',
-        //                 'email' => 'tarekegnwakishum@gmail.com',
-        //                 'phone' => '+251 115 54 78 24',
-        //                 'image' => '/img/default.jpg',
-        //             ],
-        //             [
-        //                 'name' => 'Demelash Fegessa',
-        //                 'role' => 'Head, Finance',
-        //                 'email' => 'denblu2007@gmail.com',
-        //                 'phone' => '+251 115 52 52 67',
-        //                 'image' => '/img/default.jpg',
-        //             ],
-        //             [
-        //                 'name' => 'Col. Denekew Abebe',
-        //                 'role' => 'Head, Security & Safety',
-        //                 'email' => '-----',
-        //                 'phone' => '+251 115 15 00 55',
-        //                 'image' => '/img/default.jpg',
-        //             ],
-        //         ]),
-        //         'position' => 5,
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        // ];
-
         $aboutContent = [
             [
                 'component' => 'AboutHero',
@@ -2644,6 +2346,59 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => now(),
             ],
         ];
+
+        $instagram = [
+            [
+                'image' => 'https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
+                'hashtags' => '#DembelCityCenter',
+                'caption' => 'Dembel City Center',
+                'approval' => true,
+            ],
+            [
+                'image' => 'https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
+                'hashtags' => '#DembelExtension',
+                'caption' => 'Dembel Extension',
+                'approval' => true,
+            ],
+            [
+                'image' => 'https://images.pexels.com/photos/264507/pexels-photo-264507.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
+                'hashtags' => '#DembelExtension',
+                'caption' => 'Dembel Extension',
+                'approval' => true,
+            ],
+            [
+                'image' => 'https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
+                'hashtags' => '#DembelExtension',
+                'caption' => 'Dembel Extension',
+                'approval' => true,
+            ],
+            [
+                'image' => 'https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
+                'hashtags' => '#DembelExtension',
+                'caption' => 'Dembel Extension',
+                'approval' => true,
+            ],
+            [
+                'image' => 'https://images.pexels.com/photos/264507/pexels-photo-264507.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
+                'hashtags' => '#DembelExtension',
+                'caption' => 'Dembel Extension',
+                'approval' => true,
+            ],
+            [
+                'image' => 'https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
+                'hashtags' => '#DembelExtension',
+                'caption' => 'Dembel Extension',
+                'approval' => true,
+            ],
+            [
+                'image' => 'https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
+                'hashtags' => '#DembelExtension',
+                'caption' => 'Dembel Extension',
+                'approval' => true,
+            ],
+        ];
+
+        DB::table('instagrams')->insert($instagram);
         DB::table('users')->insert($users);
         DB::table('categories')->insert($category);
         DB::table('sliders')->insert($sliders);
@@ -2662,6 +2417,7 @@ class DatabaseSeeder extends Seeder
         DB::table('free_spaces')->insert($freeSpaces);
         DB::table('malls')->insert($mall);
         DB::table('about_contents')->insert($aboutContent);
+        DB::table('instagram_images')->insert($instagram);
     }
 }
 // foreach ($vacancies as $index => $vacancy) {

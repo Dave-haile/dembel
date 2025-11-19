@@ -8,9 +8,10 @@ import Modal from '../components/Modal';
 import FormInput from '../components/FormInput';
 import DeleteConfirmation from '../components/DeleteConfirmation';
 import Toast from '../components/Toast';
+import InstagramSection from './components/InstagramSection';
 
 const AdminGallery = () => {
-  const { galleries: initialGalleries = [], counts = {}, activities = [] } = usePage().props;
+  const { galleries: initialGalleries = [], counts = {}, activities = [], instagrams, floors } = usePage().props;
   const [galleries, setGalleries] = useState(initialGalleries || []);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
@@ -258,6 +259,10 @@ const AdminGallery = () => {
           </div>
         </div>
 
+        <div className="my-6">
+          <InstagramSection viewMode={viewMode} images={instagrams} onReload={() => router.reload({ only: ['instagrams','counts'] })} />
+        </div>
+
         <div className="mt-6">
           <RecentActivities
             activities={activities}
@@ -301,12 +306,50 @@ const AdminGallery = () => {
               className="p-6 space-y-4"
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormInput label="Title" name="title" value={formData.title || ''} onChange={(e) => { const { name, value } = e.target; setFormData((p) => ({ ...p, [name]: value })); if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' })); }} error={errors.title} required />
-                <FormInput label="Category" name="category" value={formData.category || ''} onChange={(e) => { const { name, value } = e.target; setFormData((p) => ({ ...p, [name]: value })); if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' })); }} />
-                <FormInput label="Floor ID" name="floor_id" value={formData.floor_id || ''} onChange={(e) => { const { name, value } = e.target; setFormData((p) => ({ ...p, [name]: value })); if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' })); }} />
-                <FormInput label="Sector" name="sector" value={formData.sector || ''} onChange={(e) => { const { name, value } = e.target; setFormData((p) => ({ ...p, [name]: value })); if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' })); }} />
+                <FormInput
+                  label="Title"
+                  name="title"
+                  value={formData.title || ''}
+                  onChange={(e) => { const { name, value } = e.target; setFormData((p) => ({ ...p, [name]: value })); if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' })); }}
+                  error={errors.title}
+                  required
+                />
+                <FormInput
+                  label="Category"
+                  name="category"
+                  value={formData.category || ''}
+                  onChange={(e) => { const { name, value } = e.target; setFormData((p) => ({ ...p, [name]: value })); if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' })); }}
+                  error={errors.category}
+                />
+                <FormInput
+                  label="Floor ID"
+                  type='select'
+                  name="floor_id"
+                  value={formData.floor_id || ''}
+                  onChange={(e) => {
+                    const { name, value } = e.target;
+                    setFormData((p) => ({ ...p, [name]: value }));
+                    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
+                  }}
+                  options={floors.map(f => ({ value: f.id, label: f.name }))}
+                />
+                <FormInput
+                  label="Sector"
+                  name="sector"
+                  value={formData.sector || ''}
+                  onChange={(e) => { const { name, value } = e.target; setFormData((p) => ({ ...p, [name]: value })); if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' })); }}
+                  error={errors.sector}
+                />
                 <div className="md:col-span-2">
-                  <FormInput label="Description" name="description" type="textarea" value={formData.description || ''} onChange={(e) => { const { name, value } = e.target; setFormData((p) => ({ ...p, [name]: value })); if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' })); }} rows={4} />
+                  <FormInput
+                    label="Description"
+                    name="description"
+                    type="textarea"
+                    value={formData.description || ''}
+                    onChange={(e) => { const { name, value } = e.target; setFormData((p) => ({ ...p, [name]: value })); if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' })); }}
+                    rows={4}
+                    error={errors.description}
+                  />
                 </div>
                 <div className="flex items-center gap-3">
                   <input id="approval" type="checkbox" name="approval" checked={!!formData.approval} onChange={(e) => setFormData((p) => ({ ...p, approval: e.target.checked }))} className="w-4 h-4" />
@@ -338,14 +381,7 @@ const AdminGallery = () => {
                         </div>
                       )}
                     </div>
-                    {/* <input
-                      ref={fileInputRef}
-                      type="file"
-                      name="thumbnail"
-                      accept="image/*"
-                      onChange={onLogoInputChange}
-                      className="hidden"
-                    /> */}
+
                      <input
                     ref={fileInputRef}
                     type="file"

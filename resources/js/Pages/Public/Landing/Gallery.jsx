@@ -34,10 +34,10 @@ export default function Gallery({ galleries, language = "en" }) {
   };
 
   return (
-    <section className="py-20 bg-gray-50 border-green-800 rounded-t-[10rem] rounded-tr-[10rem] h-screen">
+    <section className="py-20 bg-gray-5 rounded-t-[10rem] rounded-tr-[10rem] h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-4xl lg:text-5xl font-bold text-primary-800 mb-6">
             {language === "am" ? "ማዕከለ ስዕላት" : "Gallery"}
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -62,18 +62,18 @@ export default function Gallery({ galleries, language = "en" }) {
                 alt={image.title}
                 className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center">
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 group-hover:text-primary-700 transition-colors duration-300 flex items-center justify-center">
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
                     <div className="w-6 h-6 bg-white rounded-full"></div>
                   </div>
                 </div>
               </div>
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                <h3 className="text-white font-semibold text-lg">
+              <div className="absolute  bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                <h3 className="text-white group-hover:text-accent-500 font-semibold text-lg transition-colors duration-300">
                   {image.title}
                 </h3>
-                <p className="text-white/80 text-sm">{image.sector}</p>
+                <p className="text-white/80 text-sm transition-colors duration-300">{image.sector}</p>
               </div>
             </div>
           ))}
@@ -88,7 +88,7 @@ export default function Gallery({ galleries, language = "en" }) {
         <div className="text-center">
           <Link
             href={"/gallery"}
-            className="bg-blue-800 hover:bg-blue-900 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-200"
+            className="bg-primary-800 hover:bg-accent-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-200"
           >
             {language === "am" ? "ሁሉንም ማዕከለ ስዕላት ይመልከቱ" : "View All Galleries"}
           </Link>
@@ -111,13 +111,13 @@ export default function Gallery({ galleries, language = "en" }) {
             />
 
             <div className="absolute bottom-4 left-4 right-4 bg-black/50 backdrop-blur-sm rounded-lg p-4">
-              <h3 className="text-white font-semibold text-lg">
+              <h3 className="text-white group-hover:text-accent-500 font-semibold text-lg transition-colors duration-300">
                 {displayImages[selectedImage].title}
               </h3>
-              <p className="text-white/80 text-sm">
+              <p className="text-white/80 group-hover:text-accent-500 text-sm transition-colors duration-300">
                 {displayImages[selectedImage].description}
               </p>
-              <p className="text-white/60 text-xs mt-1">
+              <p className="text-white/60 group-hover:text-accent-500 text-xs mt-1 transition-colors duration-300">
                 Floor {displayImages[selectedImage].floor_id} •{" "}
                 {displayImages[selectedImage].sector}
               </p>

@@ -12,4 +12,9 @@ class Gallery extends Model
     {
         return $query->where('approval', 1);
     }
+
+    public function floor()
+    {
+        return $this->belongsTo(Floor::class);
+    }
 }

@@ -118,7 +118,7 @@ export default function Header() {
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-md text-gray-700 hover:text-[#F05A7E] transition duration-150 focus:outline-none"
+              className="lg:hidden p-2 rounded-md text-primary-700 hover:text-accent-700 transition duration-150 focus:outline-none"
               aria-label="Toggle menu"
             >
               <svg
@@ -260,9 +260,9 @@ function NavLink({ href, active, children }) {
   return (
     <Link
       href={href}
-      className={`font-medium transition duration-150 hover:text-[#F05A7E] ${active
-        ? "text-[#F05A7E] border-b-2 border-[#F05A7E] pb-1"
-        : "text-gray-700"
+      className={`font-bold transition duration-150 hover:text-accent-800 ${active
+        ? "text-accent-800 border-b-2 border-accent-700 pb-1"
+        : "text-primary-700"
         }`}
     >
       {children}

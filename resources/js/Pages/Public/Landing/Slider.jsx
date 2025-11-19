@@ -1,17 +1,39 @@
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import "./carousel.css";
+import DembelLoader from "../Shared/Loader";
 
 // Loading spinner component
-// const LoadingSpinner = () => (
-//   <div className="absolute inset-0 flex items-center justify-center bg-black/80 z-50">
-//     <div className="relative w-20 h-20">
-//       <div className="absolute inset-0 border-4 border-t-transparent border-primary-500 rounded-full animate-spin"></div>
-//       <div className="absolute inset-2 border-4 border-b-transparent border-primary-300 rounded-full animate-spin animation-delay-200"></div>
-//     </div>
-//   </div>
-// );
+const LoadingSpinner = () => (
+  <DembelLoader />
+  // <OrbitLoader/>
+);
+
+// Play/Pause button component
+const PlayPauseButton = ({ isPlaying, onToggle, className = "" }) => (
+  <button
+    onClick={onToggle}
+    className={`w-14 h-14 rounded-full bg-primary border-2 border-accent text-accent text-xl font-bold transition-all duration-300 hover:scale-110 pointer-events-auto shadow-lg flex items-center justify-center ${className}`}
+    title={isPlaying ? "Pause slider" : "Play slider"}
+  >
+    {isPlaying ? (
+      // Pause icon
+      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+        <rect x="6" y="4" width="4" height="16" />
+        <rect x="14" y="4" width="4" height="16" />
+      </svg>
+    ) : (
+      // Play icon
+      <svg className="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M8 5v14l11-7z" />
+      </svg>
+    )}
+  </button>
+);
 
 const Slides = ({ slides }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [imagesLoaded, setImagesLoaded] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true); // Auto-slide initially enabled
   const carouselRef = useRef(null);
   const listRef = useRef(null);
   const thumbnailRef = useRef(null);
@@ -28,6 +50,66 @@ const Slides = ({ slides }) => {
 
   // Use all slides for main carousel
   const allSlides = slides || [];
+
+  // Effect to handle loading state
+  useEffect(() => {
+    if (allSlides.length === 0) {
+      setIsLoading(true);
+      return;
+    }
+
+    // Reset loaded images count when slides change
+    setImagesLoaded(0);
+    setIsLoading(true);
+
+    // Preload images
+    const loadImages = () => {
+      let loadedCount = 0;
+      const totalImages = allSlides.length;
+
+      allSlides.forEach((slide) => {
+        const img = new Image();
+        img.src = `/${slide.image}`;
+        img.onload = () => {
+          loadedCount++;
+          setImagesLoaded(loadedCount);
+          if (loadedCount === totalImages) {
+            // Small delay for smooth transition
+            setTimeout(() => setIsLoading(false), 300);
+          }
+        };
+        img.onerror = () => {
+          loadedCount++;
+          setImagesLoaded(loadedCount);
+          if (loadedCount === totalImages) {
+            setTimeout(() => setIsLoading(false), 300);
+          }
+        };
+      });
+    };
+
+    loadImages();
+  }, [allSlides]);
+
+  // Effect to handle auto-slide play/pause
+  useEffect(() => {
+    if (isLoading || allSlides.length === 0) return;
+
+    if (isPlaying) {
+      // Start auto-slide
+      runAutoRef.current = setTimeout(() => {
+        showSlider("next");
+      }, timeAutoNext);
+    } else {
+      // Clear auto-slide timeout
+      clearTimeout(runAutoRef.current);
+    }
+
+    // Cleanup on unmount or when dependencies change
+    return () => {
+      clearTimeout(runAutoRef.current);
+    };
+  }, [isPlaying, currentIndex, isLoading, allSlides.length]);
 
   // Get thumbnail slides based on current position (show next 4 slides in queue)
   const getThumbnailSlides = () => {
@@ -75,34 +157,73 @@ const Slides = ({ slides }) => {
         carousel.classList.remove("prev");
       }, timeRunning);
 
-      clearTimeout(runAutoRef.current);
-      runAutoRef.current = setTimeout(() => {
-        const nextCarousel = carouselRef.current;
-        const nextList = listRef.current;
-        const nextListItems = nextList?.querySelectorAll(".item");
+      // Only set up next auto-slide if playing
+      if (isPlaying) {
+        clearTimeout(runAutoRef.current);
+        runAutoRef.current = setTimeout(() => {
+          const nextCarousel = carouselRef.current;
+          const nextList = listRef.current;
+          const nextListItems = nextList?.querySelectorAll(".item");
 
-        if (nextListItems?.length > 0) {
-          setCurrentIndex((prev) => (prev + 1) % allSlides.length);
-          nextList.appendChild(nextListItems[0]);
-          nextCarousel.classList.add("next");
+          if (nextListItems?.length > 0) {
+            setCurrentIndex((prev) => (prev + 1) % allSlides.length);
+            nextList.appendChild(nextListItems[0]);
+            nextCarousel.classList.add("next");
 
-          clearTimeout(runTimeoutRef.current);
-          runTimeoutRef.current = setTimeout(() => {
-            nextCarousel.classList.remove("next");
-            nextCarousel.classList.remove("prev");
-          }, timeRunning);
-        }
-      }, timeAutoNext);
+            clearTimeout(runTimeoutRef.current);
+            runTimeoutRef.current = setTimeout(() => {
+              nextCarousel.classList.remove("next");
+              nextCarousel.classList.remove("prev");
+            }, timeRunning);
+          }
+        }, timeAutoNext);
+      }
     },
-    [timeRunning, timeAutoNext, allSlides.length]
+    [timeRunning, timeAutoNext, allSlides.length, isPlaying]
   );
 
-  const handleNext = () => showSlider("next");
-  const handlePrev = () => showSlider("prev");
+  const handleNext = () => {
+    showSlider("next");
+    // If manually navigating, keep the current play state but reset the auto timer
+    if (isPlaying) {
+      clearTimeout(runAutoRef.current);
+      runAutoRef.current = setTimeout(() => {
+        showSlider("next");
+      }, timeAutoNext);
+    }
+  };
+
+  const handlePrev = () => {
+    showSlider("prev");
+    // If manually navigating, keep the current play state but reset the auto timer
+    if (isPlaying) {
+      clearTimeout(runAutoRef.current);
+      runAutoRef.current = setTimeout(() => {
+        showSlider("next");
+      }, timeAutoNext);
+    }
+  };
+
+  const togglePlayPause = () => {
+    setIsPlaying(!isPlaying);
+  };
 
   // Key to force re-render of thumbnails when currentIndex changes
   const thumbnailKey = `thumbnails-${currentIndex}`;
 
+  // Show loading if no slides or still loading
+  if (allSlides.length === 0 || isLoading) {
+    return (
+      <div className="carousel relative h-screen w-full overflow-x-hidden bg-black text-neutral-200 z-10 flex items-center justify-center">
+        <LoadingSpinner />
+        {allSlides.length > 0 && (
+          <div className="absolute bottom-10 text-white text-center">
+            <p>Loading images... {imagesLoaded}/{allSlides.length}</p>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div
@@ -117,12 +238,18 @@ const Slides = ({ slides }) => {
               src={`/${slide.image}`}
               alt="slide"
               className="w-full h-full object-cover"
+              onLoad={() => {}} // Already handled by preloading
             />
-            <div className="content absolute top-[20%] left-1/2 -translate-x-[60%] w-[1140px] max-w-[80%] pr-[30%] box-border text-white [text-shadow:0_5px_10px_rgba(0,0,0,0.266)]">
-              <div className="title text-[5em] font-bold leading-[1.3em]">
+            <div
+              className="content absolute top-[20%] left-1/2 -translate-x-[60%] w-[1140px] max-w-[80%] pr-[30%] box-border text-primary">
+              <div
+                style={{ textShadow: "1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff" }}
+                className="title text-[5em] font-bold leading-[1.3em]">
                 {slide.title_en}
               </div>
-              <div className="topic text-[4em] font-bold leading-[1.3em] text-[#f1683a]">
+              <div
+                style={{ textShadow: "1px 1px 0 #f5f5f2, -1px -1px 0 #f5f5f2, 1px -1px 0 #f5f5f2, -1px 1px 0 #f5f5f2" }}
+                className="topic text-[4em] font-bold leading-[1.3em] text-[#efe11a]">
                 {slide.title_am}
               </div>
             </div>
@@ -145,7 +272,7 @@ const Slides = ({ slides }) => {
               alt={slide.title_en || "thumb"}
               className="w-full h-full object-cover rounded-[20px]"
             />
-            <div className="content text-white absolute bottom-[10px] left-[10px] right-[10px]">
+            <div className="content text-primary-foreground absolute bottom-[10px] left-[10px] right-[10px]">
               <div className="title font-medium">{slide.title_en}</div>
               <div className="description font-light">{slide.title_am} </div>
             </div>
@@ -158,24 +285,294 @@ const Slides = ({ slides }) => {
           id="prev"
           ref={prevBtnRef}
           onClick={handlePrev}
-          className="w-14 h-14 rounded-full bg-gray-800/80 border-2 border-gray-600 text-white text-xl font-bold transition-all duration-300 hover:bg-gray-700 hover:border-gray-500 hover:scale-110 pointer-events-auto shadow-lg"
+          className="w-14 h-14 rounded-full bg-primary border-2 border-accent text-accent text-xl font-bold transition-all duration-300 hover:scale-110 pointer-events-auto shadow-lg"
         >
           {"<"}
         </button>
+        
+        {/* Play/Pause Button */}
+        <PlayPauseButton 
+          isPlaying={isPlaying} 
+          onToggle={togglePlayPause}
+        />
+        
         <button
           id="next"
           ref={nextBtnRef}
           onClick={handleNext}
-          className="w-14 h-14 rounded-full bg-gray-800/80 border-2 border-gray-600 text-white text-xl font-bold transition-all duration-300 hover:bg-gray-700 hover:border-gray-500 hover:scale-110 pointer-events-auto shadow-lg"
+          className="w-14 h-14 rounded-full bg-primary border-2 border-accent text-accent text-xl font-bold transition-all duration-300 hover:scale-110 pointer-events-auto shadow-lg"
         >
           {">"}
         </button>
+      </div>
+
+      {/* Status indicator (optional) */}
+      <div className="absolute top-4 right-4 z-40 bg-black/50 text-white px-3 py-1 rounded-full text-sm backdrop-blur-sm">
+        Auto: {isPlaying ? "ON" : "OFF"}
       </div>
     </div>
   );
 }
 
 export default Slides;
+// import { useRef, useCallback, useState, useEffect } from "react";
+// import "./carousel.css";
+// import DembelLoader from "../Shared/Loader";
+
+// // Loading spinner component
+// const LoadingSpinner = () => (
+//   // <div className="absolute inset-0 flex items-center justify-center bg-black/80 z-50">
+//   //   <div className="relative w-20 h-20">
+//   //     <div className="absolute inset-0 border-4 border-t-transparent border-primary-500 rounded-full animate-spin"></div>
+//   //     <div className="absolute inset-2 border-4 border-b-transparent border-primary-300 rounded-full animate-spin animation-delay-200"></div>
+//   //   </div>
+//   // </div>
+//   //  <div className="carousel relative h-screen w-full overflow-x-hidden bg-gray-800 text-neutral-200 z-10">
+//   //   <div className="list absolute inset-0">
+//   //     <div className="item absolute inset-0">
+//   //       <div className="w-full h-full bg-gray-700 animate-pulse"></div>
+//   //       <div className="content absolute top-[20%] left-1/2 -translate-x-[60%] w-[1140px] max-w-[80%] pr-[30%] box-border">
+//   //         <div className="title h-16 bg-gray-600 rounded animate-pulse mb-4"></div>
+//   //         <div className="topic h-12 bg-orange-400/50 rounded animate-pulse w-3/4"></div>
+//   //       </div>
+//   //     </div>
+//   //   </div>
+    
+//   //   {/* Skeleton thumbnails */}
+//   //   <div className="thumbnail absolute bottom-[130px] left-[80%] -translate-x-1/2 w-max z-40 flex gap-5 max-w-[90vw] overflow-hidden">
+//   //     {[1, 2, 3, 4].map((item) => (
+//   //       <div key={item} className="item relative w-[150px] h-[220px] shrink-0 bg-gray-600 rounded-[20px] animate-pulse"></div>
+//   //     ))}
+//   //   </div>
+//   // </div>
+//   <DembelLoader />
+// );
+
+// const Slides = ({ slides }) => {
+//   const [isLoading, setIsLoading] = useState(true);
+//   const [imagesLoaded, setImagesLoaded] = useState(0);
+//   const carouselRef = useRef(null);
+//   const listRef = useRef(null);
+//   const thumbnailRef = useRef(null);
+//   const nextBtnRef = useRef(null);
+//   const prevBtnRef = useRef(null);
+
+//   // State to track current position for thumbnail management
+//   const [currentIndex, setCurrentIndex] = useState(0);
+
+//   const timeRunning = 3000;
+//   const timeAutoNext = 7000;
+//   let runTimeoutRef = useRef();
+//   let runAutoRef = useRef();
+
+//   // Use all slides for main carousel
+//   const allSlides = slides || [];
+
+//   // Effect to handle loading state
+//   useEffect(() => {
+//     if (allSlides.length === 0) {
+//       setIsLoading(true);
+//       return;
+//     }
+
+//     // Reset loaded images count when slides change
+//     setImagesLoaded(0);
+//     setIsLoading(true);
+
+//     // Preload images
+//     const loadImages = () => {
+//       let loadedCount = 0;
+//       const totalImages = allSlides.length;
+
+//       allSlides.forEach((slide) => {
+//         const img = new Image();
+//         img.src = `/${slide.image}`;
+//         img.onload = () => {
+//           loadedCount++;
+//           setImagesLoaded(loadedCount);
+//           if (loadedCount === totalImages) {
+//             // Small delay for smooth transition
+//             setTimeout(() => setIsLoading(false), 300);
+//           }
+//         };
+//         img.onerror = () => {
+//           loadedCount++;
+//           setImagesLoaded(loadedCount);
+//           if (loadedCount === totalImages) {
+//             setTimeout(() => setIsLoading(false), 300);
+//           }
+//         };
+//       });
+//     };
+
+//     loadImages();
+//   }, [allSlides]);
+
+//   // Get thumbnail slides based on current position (show next 4 slides in queue)
+//   const getThumbnailSlides = () => {
+//     if (!allSlides || allSlides.length === 0) return [];
+//     if (allSlides.length <= 4) return [...allSlides];
+
+//     const thumbnailSlides = [];
+//     for (let i = 1; i <= 4; i++) {
+//       const index = (currentIndex + i) % allSlides.length;
+//       if (allSlides[index]) {
+//         thumbnailSlides.push(allSlides[index]);
+//       }
+//     }
+//     return thumbnailSlides;
+//   };
+
+//   const thumbnailSlides = getThumbnailSlides();
+
+//   const showSlider = useCallback(
+//     (type) => {
+//       const carousel = carouselRef.current;
+//       const list = listRef.current;
+
+//       if (!carousel || !list || allSlides.length === 0) return;
+
+//       const listItems = list.querySelectorAll(".item");
+//       if (listItems.length === 0) return;
+
+//       // Update current index
+//       if (type === "next") {
+//         setCurrentIndex((prev) => (prev + 1) % allSlides.length);
+//         list.appendChild(listItems[0]);
+//         carousel.classList.add("next");
+//       } else {
+//         setCurrentIndex(
+//           (prev) => (prev - 1 + allSlides.length) % allSlides.length
+//         );
+//         list.prepend(listItems[listItems.length - 1]);
+//         carousel.classList.add("prev");
+//       }
+
+//       clearTimeout(runTimeoutRef.current);
+//       runTimeoutRef.current = setTimeout(() => {
+//         carousel.classList.remove("next");
+//         carousel.classList.remove("prev");
+//       }, timeRunning);
+
+//       clearTimeout(runAutoRef.current);
+//       runAutoRef.current = setTimeout(() => {
+//         const nextCarousel = carouselRef.current;
+//         const nextList = listRef.current;
+//         const nextListItems = nextList?.querySelectorAll(".item");
+
+//         if (nextListItems?.length > 0) {
+//           setCurrentIndex((prev) => (prev + 1) % allSlides.length);
+//           nextList.appendChild(nextListItems[0]);
+//           nextCarousel.classList.add("next");
+
+//           clearTimeout(runTimeoutRef.current);
+//           runTimeoutRef.current = setTimeout(() => {
+//             nextCarousel.classList.remove("next");
+//             nextCarousel.classList.remove("prev");
+//           }, timeRunning);
+//         }
+//       }, timeAutoNext);
+//     },
+//     [timeRunning, timeAutoNext, allSlides.length]
+//   );
+
+//   const handleNext = () => showSlider("next");
+//   const handlePrev = () => showSlider("prev");
+
+//   // Key to force re-render of thumbnails when currentIndex changes
+//   const thumbnailKey = `thumbnails-${currentIndex}`;
+
+//   // Show loading if no slides or still loading
+//   if (allSlides.length === 0 || isLoading) {
+//     return (
+//       <div className="carousel relative h-screen w-full overflow-x-hidden bg-black text-neutral-200 z-10 flex items-center justify-center">
+//         <LoadingSpinner />
+//         {allSlides.length > 0 && (
+//           <div className="absolute bottom-10 text-white text-center">
+//             <p>Loading images... {imagesLoaded}/{allSlides.length}</p>
+//           </div>
+//         )}
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div
+//       className="carousel relative h-screen w-full overflow-x-hidden bg-black text-neutral-200 z-10"
+//       ref={carouselRef}
+//       style={{ margin: 0, padding: 0, maxWidth: "100vw" }}
+//     >
+//       <div className="list absolute inset-0" ref={listRef}>
+//         {allSlides.map((slide, idx) => (
+//           <div className="item absolute inset-0" key={slide?.id ?? idx}>
+//             <img
+//               src={`/${slide.image}`}
+//               alt="slide"
+//               className="w-full h-full object-cover"
+//               onLoad={() => {}} // Already handled by preloading
+//             />
+//             <div className="content absolute top-[20%] left-1/2 -translate-x-[60%] w-[1140px] max-w-[80%] pr-[30%] box-border text-primary">
+//               <div
+//                 style={{ textShadow: "1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff" }}
+//                 className="title text-[5em] font-bold leading-[1.3em]">
+//                 {slide.title_en}
+//               </div>
+//               <div
+//                 style={{ textShadow: "1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff" }}
+//                 className="topic text-[4em] font-bold leading-[1.3em] text-accent">
+//                 {slide.title_am}
+//               </div>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+
+//       <div
+//         className="thumbnail absolute bottom-[130px] left-[80%] -translate-x-1/2 w-max z-40 flex gap-5 max-w-[90vw] overflow-hidden"
+//         ref={thumbnailRef}
+//         key={thumbnailKey}
+//       >
+//         {thumbnailSlides.map((slide, idx) => (
+//           <div
+//             className="item relative w-[150px] h-[220px] shrink-0"
+//             key={`${slide?.id}-${currentIndex}-${idx}`}
+//           >
+//             <img
+//               src={`/${slide.image}`}
+//               alt={slide.title_en || "thumb"}
+//               className="w-full h-full object-cover rounded-[20px]"
+//             />
+//             <div className="content text-primary-foreground absolute bottom-[10px] left-[10px] right-[10px]">
+//               <div className="title font-medium">{slide.title_en}</div>
+//               <div className="description font-light">{slide.title_am} </div>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+
+//       <div className="arrows absolute top-[80%] right-[52%] z-40 w-[300px] max-w-[30%] flex gap-4 items-center">
+//         <button
+//           id="prev"
+//           ref={prevBtnRef}
+//           onClick={handlePrev}
+//           className="w-14 h-14 rounded-full bg-primary border-2 border-accent text-accent text-xl font-bold transition-all duration-300 hover:scale-110 pointer-events-auto shadow-lg"
+//         >
+//           {"<"}
+//         </button>
+//         <button
+//           id="next"
+//           ref={nextBtnRef}
+//           onClick={handleNext}
+//           className="w-14 h-14 rounded-full bg-primary border-2 border-accent text-accent text-xl font-bold transition-all duration-300 hover:scale-110 pointer-events-auto shadow-lg"
+//         >
+//           {">"}
+//         </button>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default Slides;
 
 // import React, { useState, useEffect } from "react";
 // import { ArrowRight, ChevronRight } from "lucide-react";

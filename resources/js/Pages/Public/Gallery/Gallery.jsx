@@ -5,12 +5,12 @@ import {
   ChevronRight,
   MapPin,
   Clock,
-  Instagram,
 } from "lucide-react";
 import MainLayout from "../Shared/MainLayout";
-import { Head } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
+import { motion } from "framer-motion";
 
-const Gallery = ({ gallery = [] }) => {
+const Gallery = ({ gallery = [], instagram = [] }) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [lightboxImage, setLightboxImage] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -32,8 +32,8 @@ const Gallery = ({ gallery = [] }) => {
         typeof item.image === "string" && /^https?:\/\//i.test(item.image)
           ? item.image
           : item.image
-          ? `/${item.image}`
-          : item.image;
+            ? `/${item.image}`
+            : item.image;
       return {
         ...item,
         approval: isApproved,
@@ -107,16 +107,6 @@ const Gallery = ({ gallery = [] }) => {
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [lightboxImage]);
 
-  const socialImages = [
-    "https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&w=300&h=300",
-    "https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&cs=tinysrgb&w=300&h=300",
-    "https://images.pexels.com/photos/264507/pexels-photo-264507.jpeg?auto=compress&cs=tinysrgb&w=300&h=300",
-    "https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&w=300&h=300",
-    "https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&cs=tinysrgb&w=300&h=300",
-    "https://images.pexels.com/photos/264507/pexels-photo-264507.jpeg?auto=compress&cs=tinysrgb&w=300&h=300",
-    "https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&w=300&h=300",
-    "https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&cs=tinysrgb&w=300&h=300",
-  ];
 
   return (
     <MainLayout>
@@ -134,11 +124,10 @@ const Gallery = ({ gallery = [] }) => {
           </div>
 
           <div
-            className={`relative z-10 h-full flex items-center justify-center text-center transition-all duration-1000 ${
-              isVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-8"
-            }`}
+            className={`relative z-10 h-full flex items-center justify-center text-center transition-all duration-1000 ${isVisible
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-8"
+              }`}
           >
             <div className="max-w-4xl mx-auto px-4">
               <h1 className="text-5xl lg:text-7xl font-bold text-white mb-6 drop-shadow-2xl">
@@ -160,11 +149,10 @@ const Gallery = ({ gallery = [] }) => {
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
-                    className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
-                      selectedCategory === category
-                        ? "bg-blue-600 text-white shadow-lg transform scale-105"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-gray-900"
-                    }`}
+                    className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${selectedCategory === category
+                      ? "bg-blue-600 text-white shadow-lg transform scale-105"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-gray-900"
+                      }`}
                   >
                     {category}
                   </button>
@@ -258,58 +246,77 @@ const Gallery = ({ gallery = [] }) => {
           </section>
         </div>
 
+        {/* Redesigned Instagram Feed */}
+        <section className="py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
+                #DembelMoments
+              </h2>
+              <p className="text-lg text-slate-600">
+                Experience the latest vibes from our Instagram community.
+              </p>
+            </div>
+
+            <motion.div
+              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"
+              initial={{ opacity: 1 }}
+            >
+              {instagram.map((item, index) => (
+                <motion.div
+                  key={item.id || index}
+                  className="relative overflow-hidden rounded-2xl aspect-square shadow-lg cursor-pointer group"
+                  initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.2, delay: index * 0.0006 }}
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <img
+                    src={item.image}
+                    alt={item.caption}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700"
+                  />
+
+                  <div
+                    className="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black/80 via-black/30 to-transparent transform translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none"
+                  >
+                    <h3 className="text-white text-lg font-semibold">
+                      {item.caption}
+                    </h3>
+                    <p className="text-pink-300 text-sm">{item.hashtags}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
         <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                #DembelMoments
+                Come Experience It Yourself
               </h2>
-              <p className="text-xl text-gray-600 mb-8">
-                Follow us on Instagram for the latest updates and
-                behind-the-scenes moments
+              <p className="text-xl text-gray-600 mb-12">
+                Visit Dembel City Center today and discover why we&apos;re the
+                premier destination for shopping, dining, and entertainment
               </p>
-              <button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:shadow-lg hover:-translate-y-1 inline-flex items-center">
-                <Instagram size={20} className="mr-2" />
-                Follow Us
-              </button>
-            </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
-              {socialImages.map((image, index) => (
-                <div
-                  key={index}
-                  className="aspect-square overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer group"
+              <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                <a
+                  href="https://www.google.com/maps/dir/?api=1&destination=Dembel+City+Center,+Addis+Ababa" target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-white text-blue-800 hover:bg-blue-50 px-8 py-4 rounded-full font-semibold transition-all duration-300 hover:shadow-lg hover:-translate-y-1 inline-flex items-center justify-center"
                 >
-                  <img
-                    src={image}
-                    alt={`Instagram post ${index + 1}`}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="py-20 bg-gradient-to-r from-blue-800 to-blue-900">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
-              Come Experience It Yourself
-            </h2>
-            <p className="text-xl text-blue-100 mb-12 max-w-2xl mx-auto">
-              Visit Dembel City Center today and discover why we&apos;re the
-              premier destination for shopping, dining, and entertainment
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <button className="bg-white text-blue-800 hover:bg-blue-50 px-8 py-4 rounded-full font-semibold transition-all duration-300 hover:shadow-lg hover:-translate-y-1 inline-flex items-center justify-center">
-                <MapPin size={20} className="mr-2" />
-                Get Directions
-              </button>
-              <button className="bg-blue-700 hover:bg-blue-600 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 hover:shadow-lg hover:-translate-y-1 inline-flex items-center justify-center border-2 border-blue-600">
-                <Clock size={20} className="mr-2" />
-                View Mall Hours
-              </button>
+                  <MapPin size={20} className="mr-2" />
+                  Get Directions
+                </a>
+                <Link href={'/contact'} className="bg-blue-700 hover:bg-blue-600 text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 hover:shadow-lg hover:-translate-y-1 inline-flex items-center justify-center border-2 border-blue-600">
+                  <Clock size={20} className="mr-2" />
+                  View Mall Hours
+                </Link>
+              </div>
             </div>
           </div>
         </section>

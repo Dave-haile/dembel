@@ -21,6 +21,7 @@ use App\Models\Tenant;
 use App\Models\User;
 use App\Models\Vacancy;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -197,7 +198,7 @@ class AdminController extends Controller
         $perPage = $request->per_page === 'all' ? PHP_INT_MAX : ($request->per_page ?? 10);
 
         // Check if this is an AJAX request for pagination/search
-        if ($request->ajax() || $request->wantsJson()) {
+        if ($request->header('X-Inertia') === null && ($request->ajax() || $request->wantsJson())) {
             $tenants = $perPage === PHP_INT_MAX
                 ? $query->get()
                 : $query->paginate($perPage);
@@ -298,8 +299,10 @@ class AdminController extends Controller
 
     public function gallery()
     {
-        $galleries = Gallery::orderByDesc('created_at')->get();
+        $galleries = Gallery::with('floor')->orderByDesc('created_at')->get();
+        $floors = Floor::all();
         $total = DB::table('galleries')->count();
+        $instagramImages = DB::table('instagram_images')->orderByDesc('id')->get();
         $approved = DB::table('galleries')->where('approval', 1)->count();
         $pending = $total - $approved;
         $counts = [
@@ -309,12 +312,15 @@ class AdminController extends Controller
         ];
         $activities = ActivityLog::with('user')
             ->where('subject_type', 'gallery')
+            ->orWhere('subject_type', 'instagram')
             ->orderByDesc('created_at')
             ->take(10)
             ->get();
 
         return Inertia::render('Admin/Gallery/AdminGallery', [
             'galleries' => $galleries,
+            'floors' => $floors,
+            'instagrams' => $instagramImages,
             'activities' => $activities,
             'counts' => $counts,
         ]);
@@ -323,7 +329,7 @@ class AdminController extends Controller
     // Galleries JSON list for client-side pagination/loads
     public function galleriesList()
     {
-        $query = Gallery::orderByDesc('created_at');
+        $query = Gallery::with('floor')->orderByDesc('created_at');
         $perPageRaw = request()->query('per_page', 10);
         if ($perPageRaw === 'all') {
             $items = $query->get();
@@ -346,6 +352,84 @@ class AdminController extends Controller
         $paginator = $query->paginate($perPage);
 
         return response()->json($paginator);
+    }
+
+    public function instagramStore(Request $request)
+    {
+        $data = $request->validate([
+            'caption' => 'nullable|string|max:255',
+            'hashtags' => 'nullable|string|max:255',
+            'approval' => 'boolean',
+            'image' => 'required|image|max:5120',
+        ]);
+
+        $path = $request->file('image')->store('instagram', 'public');
+        $data['image'] = 'storage/'.$path;
+        $data['created_at'] = now();
+        $data['updated_at'] = now();
+
+        DB::table('instagram_images')->insert($data);
+        $activity = new ActivityLog;
+        $activity->user_id = auth()->user()->id;
+        $activity->subject_type = 'instagram';
+        $activity->subject_id = DB::table('instagram_images')->latest('id')->first()->id;
+        $activity->action = 'created';
+        $activity->save();
+
+        return redirect()->back()->with('success', 'Image added');
+    }
+
+    public function instagramUpdate(Request $req, $id)
+    {
+        $row = DB::table('instagram_images')->find($id);
+        if (! $row) {
+            abort(404);
+        }
+
+        $data = $req->validate([
+            'caption' => 'nullable|string|max:255',
+            'hashtags' => 'nullable|string|max:255',
+            'approval' => 'boolean',
+            'image' => 'nullable|image|max:5120',
+        ]);
+
+        if ($req->hasFile('image')) {
+            // delete old
+            if ($row->image && str_starts_with($row->image, 'storage/')) {
+                $diskPath = Str::after($row->image, 'storage/');
+                Storage::disk('public')->delete($diskPath);
+            }
+            $path = $req->file('image')->store('instagram', 'public');
+            $data['image'] = 'storage/'.$path;
+        }
+
+        $data['updated_at'] = now();
+        DB::table('instagram_images')->where('id', $id)->update($data);
+        $activity = new ActivityLog;
+        $activity->user_id = auth()->user()->id;
+        $activity->subject_type = 'instagram';
+        $activity->subject_id = $id;
+        $activity->action = 'updated';
+        $activity->save();
+
+        return redirect()->back()->with('success', 'Updated');
+    }
+
+    public function instagramDestroy($id)
+    {
+        $row = DB::table('instagram_images')->find($id);
+        if ($row && $row->image && str_starts_with($row->image, 'storage/')) {
+            Storage::disk('public')->delete(Str::after($row->image, 'storage/'));
+        }
+        DB::table('instagram_images')->where('id', $id)->delete();
+        $activity = new ActivityLog;
+        $activity->user_id = auth()->user()->id;
+        $activity->subject_type = 'instagram';
+        $activity->subject_id = $id;
+        $activity->action = 'deleted';
+        $activity->save();
+
+        return redirect()->back()->with('success', 'Deleted');
     }
 
     public function mallStore(Request $request)
@@ -2836,7 +2920,7 @@ class AdminController extends Controller
         ]);
     }
 
-    public function mallsList(\Illuminate\Http\Request $request)
+    public function mallsList(Request $request)
     {
         $query = Mall::orderByDesc('created_at');
         $perPageRaw = $request->query('per_page', 10);
@@ -2864,7 +2948,7 @@ class AdminController extends Controller
         return response()->json($paginator);
     }
 
-    public function mallUpdate(\Illuminate\Http\Request $request, \App\Models\Mall $mall)
+    public function mallUpdate(Request $request, \App\Models\Mall $mall)
     {
         $validated = $request->validate([
             'name' => ['sometimes', 'required', 'string', 'max:255'],
@@ -3021,6 +3105,83 @@ class AdminController extends Controller
         return response()->json($contents);
     }
 
+    public function aboutContentUpdate(Request $request, AboutContent $aboutContent)
+    {
+        Log::info('Request Data: '.var_export($request->all(), true));
+        $validated = $request->validate([
+            'component' => 'sometimes|required|string|max:255',
+            'title' => 'nullable|string|max:255',
+            'subtitle' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'position' => 'nullable|integer',
+        ]);
+
+        $updateData = $validated;
+        Log::info('Update Data: '.var_export($updateData, true));
+
+        // 2) Main image
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('about', 'public');
+            $updateData['image_url'] = 'storage/'.$path;
+        } else {
+            $updateData['image_url'] = $request->input('image_url');
+        }
+
+        // 3) EXTRA DATA HANDLING (THIS IS THE FULL FIX)
+        if ($request->has('extra_data')) {
+            $extra_data = json_decode($request->input('extra_data'), true) ?? [];
+
+            foreach ($extra_data as $i => $item) {
+                if (! isset($extra_data[$i]['icon'])) {
+                    $extra_data[$i]['icon'] = null;
+                }
+                if (! isset($extra_data[$i]['title'])) {
+                    $extra_data[$i]['title'] = null;
+                }
+                if (! isset($extra_data[$i]['desc'])) {
+                    $extra_data[$i]['desc'] = null;
+                }
+                if (! isset($extra_data[$i]['image'])) {
+                    $extra_data[$i]['image'] = null;
+                }
+            }
+
+            $allFiles = $request->allFiles();
+            if (isset($allFiles['extra_data_files']) && is_array($allFiles['extra_data_files'])) {
+                $files = $allFiles['extra_data_files'];
+
+                foreach ($files as $index => $fields) {
+                    if (! is_array($fields)) {
+                        continue;
+                    }
+
+                    // Ensure item exists in extra_data
+                    if (! isset($extra_data[$index])) {
+                        $extra_data[$index] = [
+                            'icon' => null,
+                            'title' => null,
+                            'desc' => null,
+                            'image' => null,
+                        ];
+                    }
+
+                    foreach ($fields as $field => $file) {
+                        if ($file instanceof UploadedFile) {
+                            $path = $file->store('about', 'public');
+                            $extra_data[$index][$field] = 'storage/'.$path;
+                        }
+                    }
+                }
+            }
+            $updateData['extra_data'] = json_encode($extra_data);
+        }
+
+        // Save final merged data
+        $aboutContent->update($updateData);
+
+        return redirect()->back()->with('success', 'About content updated successfully');
+    }
+
     public function aboutContentStore(Request $request)
     {
         $validated = $request->validate([
@@ -3030,12 +3191,41 @@ class AdminController extends Controller
             'description' => 'nullable|string',
             'image_url' => 'nullable|string',
             'position' => 'nullable|integer',
-            'extra_data' => 'nullable|array',
+            'extra_data' => 'nullable|string', // Change to string
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        // Handle main image upload
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('about', 'public');
+            $validated['image_url'] = 'storage/'.$imagePath;
+        }
+
+        // Handle extra data files
+        $extraData = [];
+        if ($request->has('extra_data')) {
+            $extraData = json_decode($request->extra_data, true);
+
+            if ($request->hasFile('extra_data_files')) {
+                $extraDataFiles = $request->file('extra_data_files');
+
+                foreach ($extraDataFiles as $index => $files) {
+                    if (isset($extraData[$index])) {
+                        foreach ($files as $field => $file) {
+                            if ($file) {
+                                $filePath = $file->store('about', 'public');
+                                $extraData[$index][$field] = 'storage/'.$filePath;
+                            }
+                        }
+                    }
+                }
+            }
+
+            $validated['extra_data'] = json_encode($extraData);
+        }
 
         $aboutContent = AboutContent::create($validated);
 
-        // Log activity
         $activity = new ActivityLog;
         $activity->user_id = auth()->user()->id;
         $activity->action = 'created';
@@ -3048,38 +3238,10 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'About content created successfully');
     }
 
-    public function aboutContentUpdate(Request $request, AboutContent $aboutContent)
-    {
-        $validated = $request->validate([
-            'component' => 'sometimes|required|string|max:255',
-            'title' => 'nullable|string|max:255',
-            'subtitle' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-            'image_url' => 'nullable|string',
-            'position' => 'nullable|integer',
-            'extra_data' => 'nullable|array',
-        ]);
-
-        $aboutContent->update($validated);
-
-        // Log activity
-        $activity = new ActivityLog;
-        $activity->user_id = auth()->user()->id;
-        $activity->action = 'updated';
-        $activity->subject_type = 'about_content';
-        $activity->subject_id = $aboutContent->id;
-        $activity->description = 'About content updated';
-        $activity->changes = $validated;
-        $activity->save();
-
-        return redirect()->back()->with('success', 'About content updated successfully');
-    }
-
     public function aboutContentDestroy(AboutContent $aboutContent)
     {
         $aboutContent->delete();
 
-        // Log activity
         $activity = new ActivityLog;
         $activity->user_id = auth()->user()->id;
         $activity->action = 'deleted';
