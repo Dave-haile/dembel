@@ -10,4 +10,14 @@ export default defineConfig({
         }),
         react(),
     ],
+    server: {
+        host: '0.0.0.0',
+        port: 5173,
+        strictPort: true,
+        cors: true,       // ✅ allow cross-origin requests
+        hmr: {
+            host: '192.168.26.189', // IP other devices use
+            protocol: 'ws',          // WebSocket for HMR
+        },
+    }
 });

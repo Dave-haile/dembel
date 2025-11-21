@@ -237,7 +237,7 @@ const Slides = ({ slides }) => {
             <img
               src={`/${slide.image}`}
               alt="slide"
-              className="w-full h-full object-cover"
+              className="max-w-full h-full object-cover"
               onLoad={() => {}} // Already handled by preloading
             />
             <div

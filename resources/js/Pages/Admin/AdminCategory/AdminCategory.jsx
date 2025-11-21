@@ -3,10 +3,10 @@ import { Plus, Edit, Trash2, Eye, Search } from "lucide-react";
 import Toast from "../components/Toast";
 import DeleteConfirmation from "../components/DeleteConfirmation";
 import FormInput from "../components/FormInput";
-import RecentActivities from "../components/RecentActivities";
 import Modal from "../components/Modal";
 import AdminLayout from "../Shared/AdminLayout";
 import { usePage, Head, router } from "@inertiajs/react";
+import ActivityFeed from "../components/RecentActivities";
 
 const AdminCategory = () => {
   const { categories: initialCategories, activities, counts, flash } = usePage().props;
@@ -121,11 +121,12 @@ const AdminCategory = () => {
         onError: (errs) => {
           setErrors(errs || {});
           setToast({ message: errs?.message || "Failed to update category", type: "error" });
+          setToast({ message: Object.values(errs)[0], type: 'error' });
         },
         onSuccess: () => {
           setIsModalOpen(false);
           setSelectedCategory(null);
-          
+          setToast({ message: "Category updated successfully", type: "success" });
           router.reload({ only: ["categories", "counts"] });
         },
       });
@@ -135,10 +136,12 @@ const AdminCategory = () => {
         onError: (errs) => {
           setErrors(errs || {});
           setToast({ message: errs?.message || "Failed to create category", type: "error" });
+          setToast({ message: Object.values(errs)[0], type: 'error' });
         },
         onSuccess: () => {
           setIsModalOpen(false);
           setSelectedCategory(null);
+          setToast({ message: "Category created successfully", type: "success" });
           router.reload({ only: ["categories", "counts"] });
         },
       });
@@ -154,6 +157,7 @@ const AdminCategory = () => {
         onSuccess: () => {
           setIsDeleteModalOpen(false);
           setSelectedCategory(null);
+          setToast({ message: "Category deleted successfully", type: "success" });
           router.reload({ only: ["categories", "counts"] });
         },
       }
@@ -277,7 +281,7 @@ const AdminCategory = () => {
         </div>
 
         <div className="mt-6">
-          <RecentActivities activities={activities} subjectType="category" onViewMore={() => router.visit(window.route('admin.activity.index', { subject: 'category' }))} />
+          <ActivityFeed activities={activities} subjectType="category" onViewMore={() => router.visit(window.route('admin.activity.index', { subject: 'category' }))} />
         </div>
 
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={selectedCategory ? "Edit Category" : "Add Category"}>

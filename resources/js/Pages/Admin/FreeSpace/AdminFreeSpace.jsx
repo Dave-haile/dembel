@@ -1,301 +1,3 @@
-// import React, { useMemo, useState } from "react";
-// import AdminLayout from "../Shared/AdminLayout";
-// import DataTable from "../Shared/DataTable";
-// import ModalForm from "../Shared/ModalForm";
-// import DeleteConfirmModal from "../Shared/DeleteConfirmModal";
-// import ActivityLog from "../Shared/ActivityLog";
-
-// const AdminFreeSpace = ({ freeSpaces = [], floors = [] }) => {
-//   const [items, setItems] = useState(freeSpaces);
-//   const [searchTerm, setSearchTerm] = useState("");
-//   // incremental display; no traditional page index
-//   const [itemsPerPage] = useState(5);
-//   const [sidebarOpen, setSidebarOpen] = useState(true);
-
-//   const [isSheetOpen, setIsSheetOpen] = useState(false);
-//   const [editingItem, setEditingItem] = useState(null);
-//   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-//   const [itemToDelete, setItemToDelete] = useState(null);
-//   const [activityLog, setActivityLog] = useState([]);
-//   const [notice, setNotice] = useState(null);
-
-//   const filteredItems = useMemo(() => {
-//     const q = searchTerm.trim().toLowerCase();
-//     if (!q) return items;
-//     return items.filter((s) =>
-//       [
-//         s.name,
-//         s.wing_or_zone,
-//         s.dimensions,
-//         s.availability_status,
-//         s?.floor?.name,
-//       ]
-//         .map((v) => (v ?? "").toString().toLowerCase())
-//         .some((t) => t.includes(q))
-//     );
-//   }, [items, searchTerm]);
-
-//   const totalPages = Math.max(1, Math.ceil(filteredItems.length / itemsPerPage));
-//   const currentItems = filteredItems.slice(
-//     (currentPage - 1) * itemsPerPage,
-//     currentPage * itemsPerPage
-//   );
-
-//   const log = (action, payload) => {
-//     const entry = {
-//       id: Date.now(),
-//       action,
-//       entity: "FreeSpace",
-//       item: payload?.name || payload?.id,
-//       timestamp: new Date().toISOString(),
-//       user: "Admin",
-//     };
-//     setActivityLog((prev) => [entry, ...prev.slice(0, 49)]);
-//   };
-
-//   const handleCreate = () => {
-//     setEditingItem(null);
-//     setIsSheetOpen(true);
-//   };
-
-//   async function submitForm(e) {
-//     e.preventDefault();
-//     const form = e.target;
-//     const formData = new FormData(form);
-
-//     try {
-//       let res;
-//       if (editingItem) {
-//         res = await fetch(`/admin/free-spaces/${editingItem.id}`, {
-//           method: "POST",
-//           headers: { "X-Requested-With": "XMLHttpRequest" },
-//           body: (() => {
-//             const fd = new FormData();
-//             for (const [k, v] of formData.entries()) fd.append(k, v);
-//             fd.append("_method", "PUT");
-//             return fd;
-//           })(),
-//           credentials: "same-origin",
-//         });
-//       } else {
-//         res = await fetch(`/admin/free-spaces`, {
-//           method: "POST",
-//           headers: { "X-Requested-With": "XMLHttpRequest" },
-//           body: formData,
-//           credentials: "same-origin",
-//         });
-//       }
-//       if (!res.ok) throw new Error("Failed to save");
-//       const saved = await res.json();
-//       setItems((prev) => {
-//         const exists = prev.find((p) => p.id === saved.id);
-//         if (exists) return prev.map((p) => (p.id === saved.id ? saved : p));
-//         return [saved, ...prev];
-//       });
-//       setNotice({ type: "success", message: editingItem ? "Updated." : "Created." });
-//       log(editingItem ? "Updated" : "Created", saved);
-//       setIsSheetOpen(false);
-//       setEditingItem(null);
-//       form.reset();
-//     } catch (err) {
-//       setNotice({ type: "error", message: err.message || "Error" });
-//     }
-//   }
-
-//   async function confirmDelete() {
-//     if (!itemToDelete) return;
-//     try {
-//       const res = await fetch(`/admin/free-spaces/${itemToDelete}`, {
-//         method: "DELETE",
-//         headers: { "X-Requested-With": "XMLHttpRequest" },
-//         credentials: "same-origin",
-//       });
-//       if (!res.ok) throw new Error("Failed to delete");
-//       setItems((prev) => prev.filter((s) => s.id !== itemToDelete));
-//       setNotice({ type: "success", message: "Deleted." });
-//       log("Deleted", { id: itemToDelete });
-//     } catch (e) {
-//       setNotice({ type: "error", message: e.message || "Error" });
-//     } finally {
-//       setIsDeleteModalOpen(false);
-//       setItemToDelete(null);
-//     }
-//   }
-
-//   const columns = [
-//     {
-//       header: "Image",
-//       render: (row) => (
-//         <img
-//           src={`/${row.thumbnail}`}
-//           alt={row.name}
-//           className="h-10 w-14 rounded object-cover ring-1 ring-gray-200"
-//         />
-//       ),
-//     },
-//     { header: "Name", render: (row) => <span className="font-semibold">{row.name}</span> },
-//     { header: "Floor", render: (row) => row.floor?.name || "—" },
-//     { header: "Zone", accessor: "wing_or_zone" },
-//     {
-//       header: "Area",
-//       render: (row) => (
-//         <span>
-//           {row.area_sqm ? Number(row.area_sqm).toFixed(2) : "—"} m²
-//         </span>
-//       ),
-//     },
-//     {
-//       header: "Rent",
-//       render: (row) => (
-//         <div className="text-sm">
-//           <div className="font-medium">
-//             {row.monthly_rent ? `${row.rent_currency || "ETB"} ${row.monthly_rent}` : "—"}
-//           </div>
-//           {row.negotiable && <div className="text-gray-500">Negotiable</div>}
-//         </div>
-//       ),
-//     },
-//     { header: "Status", accessor: "availability_status" },
-//     {
-//       header: "Contact",
-//       render: (row) => (
-//         <div className="text-sm">
-//           <div>{row.contact_phone || "—"}</div>
-//           {row.contact_email ? (
-//             <a href={`mailto:${row.contact_email}`} className="text-blue-600 hover:underline">
-//               {row.contact_email}
-//             </a>
-//           ) : (
-//             <span className="text-gray-500">—</span>
-//           )}
-//         </div>
-//       ),
-//     },
-//   ];
-
-//   return (
-//     <AdminLayout
-//       currentPage={"free-spaces"}
-//       setCurrentPage={setCurrentPage}
-//       setSidebarOpen={setSidebarOpen}
-//       sidebarOpen={sidebarOpen}
-//     >
-//       <div className="p-4 md:p-6">
-//         <div className="mb-6 flex items-start justify-between">
-//           <div>
-//             <h1 className="text-2xl font-bold">Free Spaces</h1>
-//             <p className="mt-1 text-sm text-gray-500">Manage available spaces for rent</p>
-//           </div>
-//           <button
-//             onClick={handleCreate}
-//             className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-white shadow hover:bg-blue-700"
-//           >
-//             Add Space
-//           </button>
-//         </div>
-
-//         {notice && (
-//           <div
-//             className={`mb-4 rounded-md border px-4 py-2 text-sm ${
-//               notice.type === "success"
-//                 ? "border-green-200 bg-green-50 text-green-800"
-//                 : "border-red-200 bg-red-50 text-red-800"
-//             }`}
-//           >
-//             {notice.message}
-//           </div>
-//         )}
-
-//         <div className="rounded-xl border border-gray-200 bg-white p-3 shadow">
-//           <div className="mb-4 flex items-center justify-between px-1">
-//             <h3 className="text-base font-semibold text-gray-900">All Free Spaces</h3>
-//             <div className="relative w-full max-w-xs">
-//               <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-//                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4"><path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 105.358 11.02l3.686 3.686a.75.75 0 101.06-1.06l-3.686-3.686A6.75 6.75 0 0010.5 3.75zm-5.25 6.75a5.25 5.25 0 1110.5 0 5.25 5.25 0 01-10.5 0z" clipRule="evenodd" /></svg>
-//               </span>
-//               <input
-//                 type="text"
-//                 placeholder="Search spaces..."
-//                 value={searchTerm}
-//                 onChange={(e) => {
-//                   setSearchTerm(e.target.value);
-//                   // reset view to start
-//                 }}
-//                 className="w-full rounded-md border border-gray-300 bg-white px-9 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-//               />
-//             </div>
-//           </div>
-
-//           <DataTable
-//             columns={columns}
-//             data={currentItems}
-//             onEdit={(item) => {
-//               setEditingItem(item);
-//               setIsSheetOpen(true);
-//             }}
-//             onDelete={(id) => {
-//               setItemToDelete(id);
-//               setIsDeleteModalOpen(true);
-//             }}
-//             currentPage={currentPage}
-//             totalPages={totalPages}
-//             onPageChange={setCurrentPage}
-//             itemsPerPage={itemsPerPage}
-//             filteredCount={filteredItems.length}
-//           />
-//         </div>
-
-//         <div className="mt-6">
-//           <ActivityLog activities={activityLog} />
-//         </div>
-
-//         <ModalForm
-//           isOpen={isSheetOpen}
-//           onClose={() => {
-//             setIsSheetOpen(false);
-//             setEditingItem(null);
-//           }}
-//           title={editingItem ? "Edit Free Space" : "Add Free Space"}
-//           onSubmit={submitForm}
-//         >
-//           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-//             <input name="name" defaultValue={editingItem?.name || ""} required placeholder="Name *" className="p-2 border rounded" />
-//             <select name="floor_id" defaultValue={editingItem?.floor_id || editingItem?.floor?.id || ""} className="p-2 border rounded">
-//               <option value="">Select floor</option>
-//               {floors.map((f) => (
-//                 <option key={f.id} value={f.id}>{f.name}</option>
-//               ))}
-//             </select>
-//             <input name="wing_or_zone" defaultValue={editingItem?.wing_or_zone || ""} placeholder="Wing / Zone" className="p-2 border rounded" />
-//             <input name="area_sqm" defaultValue={editingItem?.area_sqm || ""} placeholder="Area (sqm)" className="p-2 border rounded" />
-//             <input name="dimensions" defaultValue={editingItem?.dimensions || ""} placeholder="Dimensions" className="p-2 border rounded" />
-//             <select name="availability_status" defaultValue={editingItem?.availability_status || "available"} className="p-2 border rounded">
-//               <option value="available">Available</option>
-//               <option value="reserved">Reserved</option>
-//               <option value="occupied">Occupied</option>
-//             </select>
-//             <input name="monthly_rent" defaultValue={editingItem?.monthly_rent || ""} placeholder="Monthly Rent" className="p-2 border rounded" />
-//             <input name="rent_currency" defaultValue={editingItem?.rent_currency || "ETB"} placeholder="Currency" className="p-2 border rounded" />
-//             <input name="contact_person" defaultValue={editingItem?.contact_person || ""} placeholder="Contact Person" className="p-2 border rounded" />
-//             <input name="contact_phone" defaultValue={editingItem?.contact_phone || ""} placeholder="Contact Phone" className="p-2 border rounded" />
-//             <input name="contact_email" defaultValue={editingItem?.contact_email || ""} placeholder="Contact Email" className="p-2 border rounded" />
-//             <input name="slug" defaultValue={editingItem?.slug || ""} placeholder="Slug" className="p-2 border rounded" />
-//             <input name="thumbnail" type="file" accept="image/*" className="p-2 border rounded" />
-//           </div>
-//         </ModalForm>
-
-//         <DeleteConfirmModal
-//           isOpen={isDeleteModalOpen}
-//           onClose={() => setIsDeleteModalOpen(false)}
-//           onConfirm={confirmDelete}
-//           itemName={items.find((i) => i.id === itemToDelete)?.name || "this free space"}
-//         />
-//       </div>
-//     </AdminLayout>
-//   );
-// };
-
-// export default AdminFreeSpace;
 import { useState, useEffect, useRef } from 'react';
 import { Plus, Edit, Trash2, Eye, Search, CheckCircle, XCircle } from 'lucide-react';
 import Toast from '../components/Toast';
@@ -539,15 +241,15 @@ const FreeSpacesCRUD = () => {
     fd.append('wing_or_zone', formData.wing_or_zone ?? '');
     if (formData.area_sqm !== undefined && formData.area_sqm !== '') fd.append('area_sqm', String(formData.area_sqm));
     fd.append('dimensions', formData.dimensions ?? '');
-    fd.append('has_window', formData.has_window ? true : false);
-    fd.append('has_ventilation', formData.has_ventilation ? true : false);
-    fd.append('has_plumbing', formData.has_plumbing ? true : false);
-    fd.append('has_electricity', formData.has_electricity ? true : false);
+    fd.append('has_window', formData.has_window ? 1 : 0);
+    fd.append('has_ventilation', formData.has_ventilation ? 1 : 0);
+    fd.append('has_plumbing', formData.has_plumbing ? 1 : 0);
+    fd.append('has_electricity', formData.has_electricity ? 1 : 0);
     if (Array.isArray(formData.features)) fd.append('features', JSON.stringify(formData.features));
     if (formData.monthly_rent !== undefined && formData.monthly_rent !== '') fd.append('monthly_rent', String(formData.monthly_rent));
     fd.append('rent_currency', formData.rent_currency ?? '');
     if (Array.isArray(formData.rent_includes)) fd.append('rent_includes', JSON.stringify(formData.rent_includes));
-    fd.append('negotiable', formData.negotiable ? true : false);
+    fd.append('negotiable', formData.negotiable ? 1 : 0);
     // File
     if (formData.thumbnail instanceof File) {
       fd.append('thumbnail', formData.thumbnail);
@@ -570,11 +272,16 @@ const FreeSpacesCRUD = () => {
         window.route('admin.free-spaces.update', selectedSpace.id),
         fd,
         {
+          forceFormData: true,
           onSuccess: () => {
             setIsModalOpen(false);
             setSelectedSpace(null);
             setToast({ message: 'Space updated successfully', type: 'success' });
             router.reload({ only: ['freeSpaces', 'counts'] });
+          },
+          onError: (errors) => {
+            setToast({ message: Object.values(errors)[0], type: 'error' });
+            console.log('Error in Free Space', errors);
           },
         }
       );
@@ -583,11 +290,16 @@ const FreeSpacesCRUD = () => {
         window.route('admin.free-spaces.store'),
         fd,
         {
+          forceFormData: true,
           onSuccess: () => {
             setIsModalOpen(false);
             setSelectedSpace(null);
             setToast({ message: 'Space created successfully', type: 'success' });
             router.reload({ only: ['freeSpaces', 'counts'] });
+          },
+          onError: (errors) => {
+            setToast({ message: Object.values(errors)[0], type: 'error' });
+            console.log('Error in Free Space', errors);
           },
         }
       );
@@ -600,11 +312,16 @@ const FreeSpacesCRUD = () => {
         window.route('admin.free-spaces.destroy', selectedSpace.id),
         { _method: 'delete' },
         {
+          forceFormData: true,
           onSuccess: () => {
             setIsDeleteModalOpen(false);
             setSelectedSpace(null);
             setToast({ message: 'Space deleted successfully', type: 'success' });
             router.reload({ only: ['freeSpaces', 'counts'] });
+          },
+          onError: (errors) => {
+            const firstError = Object.values(errors)[0];
+            setToast({ message: firstError, type: 'error' });
           },
         }
       );

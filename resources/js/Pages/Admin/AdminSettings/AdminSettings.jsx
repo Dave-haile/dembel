@@ -66,7 +66,8 @@ const AdminSettings = () => {
       forceFormData: true,
       onError: (errs) => {
         setErrors(errs || {});
-        setToast({ message: "Failed to update profile", type: "error" });
+        setToast({ message: errs?.message || "Failed to update profile", type: "error" });
+        setToast({ message: Object.values(errs)[0], type: 'error' });
       },
       onSuccess: () => {
         setToast({ message: "Profile updated successfully", type: "success" });

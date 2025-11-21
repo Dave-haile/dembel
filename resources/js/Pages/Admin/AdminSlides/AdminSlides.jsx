@@ -130,13 +130,21 @@ const AdminSlides = () => {
             fd.append("_method", "put");
             router.post(window.route("admin.slides.update", selectedSlide.id), fd, {
                 forceFormData: true,
-                onError: (errs) => { setErrors(errs || {}); setToast({ message: errs?.message || "Failed to update slide", type: "error" }); },
+                onError: (errs) => {
+                    setErrors(errs || {});
+                    setToast({ message: errs?.message || "Failed to update slide", type: "error" });
+                    setToast({ message: Object.values(errs)[0], type: 'error' });
+                },
                 onSuccess: () => { setIsModalOpen(false); setSelectedSlide(null); setImagePreview(null); },
             });
         } else {
             router.post(window.route("admin.slides.store"), fd, {
                 forceFormData: true,
-                onError: (errs) => { setErrors(errs || {}); setToast({ message: errs?.message || "Failed to create slide", type: "error" }); },
+                onError: (errs) => {
+                    setErrors(errs || {});
+                    setToast({ message: errs?.message || "Failed to create slide", type: "error" });
+                    setToast({ message: Object.values(errs)[0], type: 'error' });
+                },
                 onSuccess: () => { setIsModalOpen(false); setSelectedSlide(null); setImagePreview(null); },
             });
         }

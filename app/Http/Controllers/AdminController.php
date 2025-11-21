@@ -21,13 +21,14 @@ use App\Models\Tenant;
 use App\Models\User;
 use App\Models\Vacancy;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class AdminController extends Controller
@@ -101,7 +102,7 @@ class AdminController extends Controller
     {
         $user = auth()->user();
 
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'phone' => ['nullable', 'string', 'max:30'],
@@ -109,6 +110,10 @@ class AdminController extends Controller
             'current_password' => ['nullable', 'required_with:password', 'current_password'],
             'password' => ['nullable', 'confirmed', 'min:8'],
         ]);
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+        $validated = $validator->validated();
 
         $dataToUpdate = [
             'name' => $validated['name'],
@@ -118,9 +123,9 @@ class AdminController extends Controller
             $dataToUpdate['phone'] = $validated['phone'];
         }
 
-        if ($request->hasFile('avatar')) {
+        if ($validated['avatar'] ?? null) {
             $old = $user->avatar;
-            $path = $request->file('avatar')->store('user', 'public');
+            $path = $validated['avatar']->store('user', 'public');
             $dataToUpdate['avatar'] = 'storage/'.$path;
             if ($old && str_starts_with($old, 'storage/') && $old !== 'storage/user/default.png') {
                 $diskPath = str_replace('storage/', '', $old);
@@ -356,19 +361,24 @@ class AdminController extends Controller
 
     public function instagramStore(Request $request)
     {
-        $data = $request->validate([
+        $validator = Validator::make($request->all(), [
             'caption' => 'nullable|string|max:255',
             'hashtags' => 'nullable|string|max:255',
             'approval' => 'boolean',
             'image' => 'required|image|max:5120',
         ]);
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
 
-        $path = $request->file('image')->store('instagram', 'public');
-        $data['image'] = 'storage/'.$path;
-        $data['created_at'] = now();
-        $data['updated_at'] = now();
+        $validated = $validator->validated();
 
-        DB::table('instagram_images')->insert($data);
+        $path = $validated['image']->store('instagram', 'public');
+        $validated['image'] = 'storage/'.$path;
+        $validated['created_at'] = now();
+        $validated['updated_at'] = now();
+
+        DB::table('instagram_images')->insert($validated);
         $activity = new ActivityLog;
         $activity->user_id = auth()->user()->id;
         $activity->subject_type = 'instagram';
@@ -386,12 +396,17 @@ class AdminController extends Controller
             abort(404);
         }
 
-        $data = $req->validate([
+        $validator = Validator::make($req->all(), [
             'caption' => 'nullable|string|max:255',
             'hashtags' => 'nullable|string|max:255',
             'approval' => 'boolean',
             'image' => 'nullable|image|max:5120',
         ]);
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         if ($req->hasFile('image')) {
             // delete old
@@ -400,11 +415,11 @@ class AdminController extends Controller
                 Storage::disk('public')->delete($diskPath);
             }
             $path = $req->file('image')->store('instagram', 'public');
-            $data['image'] = 'storage/'.$path;
+            $validated['image'] = 'storage/'.$path;
         }
 
-        $data['updated_at'] = now();
-        DB::table('instagram_images')->where('id', $id)->update($data);
+        $validated['updated_at'] = now();
+        DB::table('instagram_images')->where('id', $id)->update($validated);
         $activity = new ActivityLog;
         $activity->user_id = auth()->user()->id;
         $activity->subject_type = 'instagram';
@@ -434,7 +449,7 @@ class AdminController extends Controller
 
     public function mallStore(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', 'unique:malls,slug'],
             'year_built' => ['nullable', 'integer'],
@@ -449,6 +464,12 @@ class AdminController extends Controller
             'contact_phone' => ['nullable', 'string', 'max:50'],
             'contact_email' => ['nullable', 'email', 'max:255'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         // Normalize JSON-like inputs if sent as strings
         foreach (['floors_directory', 'facilities', 'gallery'] as $key) {
@@ -526,7 +547,7 @@ class AdminController extends Controller
 
     public function galleryStore(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'title' => ['required', 'string', 'max:255'],
             'category' => ['nullable', 'string', 'max:100'],
             'floor_id' => ['nullable', 'exists:floors,id'],
@@ -535,6 +556,11 @@ class AdminController extends Controller
             'image' => ['required', 'image', 'max:5120'],
             'approval' => ['boolean'],
         ]);
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('gallery', 'public');
@@ -558,7 +584,7 @@ class AdminController extends Controller
 
     public function galleryUpdate(Request $request, Gallery $gallery)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'title' => ['sometimes', 'required', 'string', 'max:255'],
             'category' => ['nullable', 'string', 'max:100'],
             'floor_id' => ['nullable', 'exists:floors,id'],
@@ -567,6 +593,11 @@ class AdminController extends Controller
             'image' => ['nullable', 'image', 'max:5120'],
             'approval' => ['boolean'],
         ]);
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         if ($request->hasFile('image')) {
             $old = $gallery->image;
@@ -639,7 +670,7 @@ class AdminController extends Controller
             ->take(10)
             ->get();
 
-        return Inertia::render('AdminFloor/AdminFloor', [
+        return Inertia::render('Admin/AdminFloor/AdminFloor', [
             'floors' => $floors,
             'activities' => $activities,
             'counts' => $counts,
@@ -680,12 +711,15 @@ class AdminController extends Controller
 
     public function floorStore(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
         ]);
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
 
-        $floor = Floor::create($validated);
+        $floor = Floor::create($validator->validated());
 
         $activity = new ActivityLog;
         $activity->user_id = auth()->user()->id;
@@ -693,7 +727,7 @@ class AdminController extends Controller
         $activity->subject_type = 'floor';
         $activity->subject_id = $floor->id;
         $activity->description = 'Floor created';
-        $activity->changes = $validated;
+        $activity->changes = $validator->validated();
         $activity->save();
 
         return redirect()->back()->with('success', 'Floor created successfully');
@@ -701,13 +735,16 @@ class AdminController extends Controller
 
     public function floorUpdate(Request $request, Floor $floor)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => ['sometimes', 'required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
         ]);
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
 
         $original = $floor->getOriginal();
-        $floor->update($validated);
+        $floor->update($validator->validated());
         $changes = $floor->getChanges();
         $diff = ['before' => [], 'after' => []];
         foreach ($changes as $key => $value) {
@@ -802,7 +839,7 @@ class AdminController extends Controller
 
     public function applicationStore(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'first_name' => ['required', 'string', 'max:100'],
             'last_name' => ['required', 'string', 'max:100'],
             'phone' => ['required', 'string', 'max:30'],
@@ -818,6 +855,10 @@ class AdminController extends Controller
             'vacancy_id' => ['nullable', 'exists:vacancies,id'],
             'cv' => ['nullable', 'file', 'max:10240'],
         ]);
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+        $validated = $validator->validated();
 
         if ($request->hasFile('photo')) {
             $path = $request->file('photo')->store('applications/photo', 'public');
@@ -844,7 +885,7 @@ class AdminController extends Controller
 
     public function applicationUpdate(Request $request, Application $application)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'first_name' => ['sometimes', 'required', 'string', 'max:100'],
             'last_name' => ['sometimes', 'required', 'string', 'max:100'],
             'phone' => ['sometimes', 'required', 'string', 'max:30'],
@@ -860,6 +901,11 @@ class AdminController extends Controller
             'vacancy_id' => ['nullable', 'exists:vacancies,id'],
             'cv' => ['nullable', 'file', 'max:10240'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+        $validated = $validator->validated();
 
         if ($request->hasFile('photo')) {
             $old = $application->photo;
@@ -990,12 +1036,16 @@ class AdminController extends Controller
 
     public function categoryStore(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'icon' => ['nullable', 'string', 'max:255'],
         ]);
 
-        $category = Category::create($validated);
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $category = Category::create($validator->validated());
 
         $activity = new ActivityLog;
         $activity->user_id = auth()->user()->id;
@@ -1003,7 +1053,7 @@ class AdminController extends Controller
         $activity->subject_type = 'category';
         $activity->subject_id = $category->id;
         $activity->description = 'Category created';
-        $activity->changes = $validated;
+        $activity->changes = $validator->validated();
         $activity->save();
 
         return redirect()->back()->with('success', 'Category created successfully');
@@ -1011,13 +1061,17 @@ class AdminController extends Controller
 
     public function categoryUpdate(Request $request, Category $category)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => ['sometimes', 'required', 'string', 'max:255'],
             'icon' => ['nullable', 'string', 'max:255'],
         ]);
 
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
         $original = $category->getOriginal();
-        $category->update($validated);
+        $category->update($validator->validated());
         $changes = $category->getChanges();
         $diff = ['before' => [], 'after' => []];
         foreach ($changes as $key => $value) {
@@ -1116,14 +1170,18 @@ class AdminController extends Controller
 
     public function contactStore(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'address' => ['required', 'string', 'max:191'],
             'phone' => ['required', 'string', 'max:191'],
             'fax' => ['nullable', 'string', 'max:191'],
             'email' => ['required', 'email', 'max:191'],
         ]);
 
-        $contact = Contact::create($validated);
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $contact = Contact::create($validator->validated());
 
         $activity = new ActivityLog;
         $activity->user_id = auth()->user()->id;
@@ -1131,7 +1189,7 @@ class AdminController extends Controller
         $activity->subject_type = 'contact';
         $activity->subject_id = $contact->id;
         $activity->description = 'Contact created';
-        $activity->changes = $validated;
+        $activity->changes = $validator->validated();
         $activity->save();
 
         return redirect()->back()->with('success', 'Contact created successfully');
@@ -1139,15 +1197,19 @@ class AdminController extends Controller
 
     public function contactUpdate(Request $request, Contact $contact)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'address' => ['sometimes', 'required', 'string', 'max:191'],
             'phone' => ['sometimes', 'required', 'string', 'max:191'],
             'fax' => ['nullable', 'string', 'max:191'],
             'email' => ['sometimes', 'required', 'email', 'max:191'],
         ]);
 
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
         $original = $contact->getOriginal();
-        $contact->update($validated);
+        $contact->update($validator->validated());
         $changes = $contact->getChanges();
         $diff = ['before' => [], 'after' => []];
         foreach ($changes as $key => $value) {
@@ -1241,7 +1303,7 @@ class AdminController extends Controller
 
     public function teamStore(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name_en' => ['required', 'string', 'max:191'],
             'name_am' => ['nullable', 'string', 'max:191'],
             'position' => ['nullable', 'string', 'max:191'],
@@ -1250,6 +1312,11 @@ class AdminController extends Controller
             'photo' => ['nullable', 'image', 'max:5120'],
             'approval' => ['boolean'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+        $validated = $validator->validated();
 
         if ($request->hasFile('photo')) {
             $path = $request->file('photo')->store('team', 'public');
@@ -1273,7 +1340,7 @@ class AdminController extends Controller
 
     public function teamUpdate(Request $request, Team $team)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name_en' => ['sometimes', 'required', 'string', 'max:191'],
             'name_am' => ['nullable', 'string', 'max:191'],
             'position' => ['nullable', 'string', 'max:191'],
@@ -1282,6 +1349,11 @@ class AdminController extends Controller
             'photo' => ['nullable', 'image', 'max:5120'],
             'approval' => ['boolean'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+        $validated = $validator->validated();
 
         if ($request->hasFile('photo')) {
             $old = $team->photo;
@@ -1397,17 +1469,23 @@ class AdminController extends Controller
 
     public function departmentStore(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'title_en' => ['required', 'string', 'max:255'],
-            'title_am' => ['nullable', 'string', 'max:255'],
-            'sub_title_en' => ['nullable', 'string', 'max:255'],
-            'sub_title_am' => ['nullable', 'string', 'max:255'],
-            'body_en' => ['nullable', 'string'],
-            'body_am' => ['nullable', 'string'],
+            'title_am' => ['required', 'string', 'max:255'],
+            'sub_title_en' => ['required', 'string', 'max:255'],
+            'sub_title_am' => ['required', 'string', 'max:255'],
+            'body_en' => ['required', 'string'],
+            'body_am' => ['required', 'string'],
             'icon' => ['nullable', 'string', 'max:255'],
             'image' => ['nullable', 'image', 'max:5120'],
             'approval' => ['boolean'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('departments', 'public');
@@ -1431,17 +1509,23 @@ class AdminController extends Controller
 
     public function departmentUpdate(Request $request, Department $department)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'title_en' => ['sometimes', 'required', 'string', 'max:255'],
-            'title_am' => ['nullable', 'string', 'max:255'],
-            'sub_title_en' => ['nullable', 'string', 'max:255'],
-            'sub_title_am' => ['nullable', 'string', 'max:255'],
-            'body_en' => ['nullable', 'string'],
-            'body_am' => ['nullable', 'string'],
+            'title_am' => ['sometimes', 'required', 'string', 'max:255'],
+            'sub_title_en' => ['sometimes', 'required', 'string', 'max:255'],
+            'sub_title_am' => ['sometimes', 'required', 'string', 'max:255'],
+            'body_en' => ['sometimes', 'required', 'string'],
+            'body_am' => ['sometimes', 'required', 'string'],
             'icon' => ['nullable', 'string', 'max:255'],
             'image' => ['nullable', 'image', 'max:5120'],
             'approval' => ['boolean'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         if ($request->hasFile('image')) {
             $old = $department->image;
@@ -1557,7 +1641,7 @@ class AdminController extends Controller
 
     public function newsStore(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'category' => ['required', 'string', 'max:50'],
             'title_en' => ['required', 'string', 'max:255'],
             'title_am' => ['required', 'string', 'max:255'],
@@ -1571,6 +1655,12 @@ class AdminController extends Controller
             'pdf_file' => ['nullable', 'file', 'max:10240'],
             'approval' => ['boolean'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('news', 'public');
@@ -1598,7 +1688,7 @@ class AdminController extends Controller
 
     public function newsUpdate(Request $request, News $news)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'category' => ['sometimes', 'required', 'string', 'max:50'],
             'title_en' => ['sometimes', 'required', 'string', 'max:255'],
             'title_am' => ['sometimes', 'required', 'string', 'max:255'],
@@ -1612,6 +1702,12 @@ class AdminController extends Controller
             'pdf_file' => ['nullable', 'file', 'max:10240'],
             'approval' => ['boolean'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         if ($request->hasFile('image')) {
             $old = $news->image;
@@ -1744,13 +1840,19 @@ class AdminController extends Controller
 
     public function slideStore(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'title_en' => ['required', 'string', 'max:255'],
             'title_am' => ['nullable', 'string', 'max:255'],
             'priority' => ['nullable', 'integer'],
             'image' => ['nullable', 'image', 'max:5120'],
             'approval' => ['boolean'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('sliders', 'public');
@@ -1774,13 +1876,19 @@ class AdminController extends Controller
 
     public function slideUpdate(Request $request, Slider $slider)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'title_en' => ['sometimes', 'required', 'string', 'max:255'],
             'title_am' => ['nullable', 'string', 'max:255'],
             'priority' => ['nullable', 'integer'],
             'image' => ['nullable', 'image', 'max:5120'],
             'approval' => ['boolean'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         if ($request->hasFile('image')) {
             $old = $slider->image;
@@ -1896,17 +2004,23 @@ class AdminController extends Controller
 
     public function eventStore(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'title_en' => ['required', 'string', 'max:255'],
-            'title_am' => ['nullable', 'string', 'max:255'],
+            'title_am' => ['required', 'string', 'max:255'],
             'sub_title_en' => ['nullable', 'string', 'max:255'],
             'sub_title_am' => ['nullable', 'string', 'max:255'],
-            'description_en' => ['nullable', 'string'],
-            'description_am' => ['nullable', 'string'],
-            'event_date' => ['nullable', 'date'],
+            'description_en' => ['required', 'string'],
+            'description_am' => ['required', 'string'],
+            'event_date' => ['required', 'date'],
             'image' => ['nullable', 'image', 'max:5120'],
             'approval' => ['boolean'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('events', 'public');
@@ -1930,17 +2044,23 @@ class AdminController extends Controller
 
     public function eventUpdate(Request $request, Event $event)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'title_en' => ['sometimes', 'required', 'string', 'max:255'],
-            'title_am' => ['nullable', 'string', 'max:255'],
+            'title_am' => ['sometimes', 'required', 'string', 'max:255'],
             'sub_title_en' => ['nullable', 'string', 'max:255'],
             'sub_title_am' => ['nullable', 'string', 'max:255'],
-            'description_en' => ['nullable', 'string'],
-            'description_am' => ['nullable', 'string'],
+            'description_en' => ['required', 'string'],
+            'description_am' => ['required', 'string'],
             'event_date' => ['nullable', 'date'],
             'image' => ['nullable', 'image', 'max:5120'],
             'approval' => ['boolean'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         if ($request->hasFile('image')) {
             $old = $event->image;
@@ -2006,7 +2126,7 @@ class AdminController extends Controller
 
     public function tenantStore(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'category_id' => ['required', 'exists:categories,id'],
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
@@ -2021,6 +2141,12 @@ class AdminController extends Controller
             'email' => ['required', 'email', 'max:255'],
             'website' => ['nullable', 'string', 'max:255'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         if ($request->hasFile('logo') && ! $request->file('logo')->isValid()) {
             $file = $request->file('logo');
@@ -2055,8 +2181,7 @@ class AdminController extends Controller
 
     public function tenantUpdate(Request $request, Tenant $tenant)
     {
-        Log::info('Tenant update request'.var_export($request->all(), true));
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'category_id' => ['required', 'exists:categories,id'],
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
@@ -2071,6 +2196,12 @@ class AdminController extends Controller
             'email' => ['required', 'email', 'max:255'],
             'website' => ['nullable', 'string', 'max:255'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         Log::info('Tenant update validated '.var_export($validated, true));
         if ($request->hasFile('logo') && ! $request->file('logo')->isValid()) {
@@ -2172,7 +2303,7 @@ class AdminController extends Controller
         $request->merge(['slug' => $slug]);
 
         Log::info('Free space store request '.var_export($request->all(), true));
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'floor_id' => ['nullable', 'exists:floors,id'],
             'wing_or_zone' => ['nullable', 'string', 'max:255'],
@@ -2201,7 +2332,11 @@ class AdminController extends Controller
             'availability_status' => ['required', 'in:available,reserved,occupied'],
         ]);
 
-        // Log::info('Free space store validated', var_export($validated, true));
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         if ($request->hasFile('thumbnail')) {
             $path = $request->file('thumbnail')->store('free_spaces', 'public');
@@ -2226,7 +2361,8 @@ class AdminController extends Controller
 
     public function freeSpaceUpdate(Request $request, FreeSpace $freeSpace)
     {
-        $validated = $request->validate([
+        Log::info('Free space update request '.var_export($request->all(), true));
+        $validator = Validator::make($request->all(), [
             'name' => ['sometimes', 'required', 'string', 'max:255'],
             'floor_id' => ['nullable', 'exists:floors,id'],
             'wing_or_zone' => ['nullable', 'string', 'max:255'],
@@ -2254,6 +2390,12 @@ class AdminController extends Controller
             'slug' => ['sometimes', 'required', 'string', 'max:255', 'unique:free_spaces,slug,'.$freeSpace->id],
             'availability_status' => ['nullable', 'in:available,reserved,occupied'],
         ]);
+        Log::info('Free space update validator '.var_export($validator->errors()->toArray(), true));
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+        $validated = $validator->validated();
+        Log::info('Free space update validated '.var_export($validated, true));
 
         if ($request->hasFile('thumbnail')) {
             $old = $freeSpace->thumbnail;
@@ -2348,7 +2490,7 @@ class AdminController extends Controller
     public function vacancyStore(Request $request)
     {
         Log::info($request->all());
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'title' => ['required', 'string', 'max:150'],
             'department' => ['nullable', 'string', 'max:100'],
             'employment_type' => ['required', 'string', 'max:30'],
@@ -2370,6 +2512,12 @@ class AdminController extends Controller
             'slug' => ['nullable', 'string', 'max:255', 'unique:vacancies,slug'],
             'thumbnail' => ['nullable', 'image'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         if ($request->hasFile('thumbnail')) {
             $path = $request->file('thumbnail')->store('vacancies', 'public');
@@ -2408,7 +2556,7 @@ class AdminController extends Controller
 
     public function vacancyUpdate(Request $request, Vacancy $vacancy)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'title' => ['sometimes', 'required', 'string', 'max:150'],
             'department' => ['nullable', 'string', 'max:100'],
             'employment_type' => ['sometimes', 'required', 'string', 'max:30'],
@@ -2430,6 +2578,12 @@ class AdminController extends Controller
             'slug' => ['sometimes', 'required', 'string', 'max:255', 'unique:vacancies,slug,'.$vacancy->id],
             'thumbnail' => ['nullable', 'image'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         if ($request->hasFile('thumbnail')) {
             $old = $vacancy->thumbnail;
@@ -2520,7 +2674,7 @@ class AdminController extends Controller
 
     public function serviceStore(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'title_en' => ['required', 'string', 'max:255'],
             'title_am' => ['required', 'string', 'max:255'],
             'sub_title_en' => ['nullable', 'string', 'max:255'],
@@ -2530,6 +2684,12 @@ class AdminController extends Controller
             'image' => ['nullable', 'image'],
             'approval' => ['boolean'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('service', 'public');
@@ -2552,7 +2712,7 @@ class AdminController extends Controller
 
     public function serviceUpdate(Request $request, Service $service)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'title_en' => ['sometimes', 'required', 'string', 'max:255'],
             'title_am' => ['sometimes', 'required', 'string', 'max:255'],
             'sub_title_en' => ['nullable', 'string', 'max:255'],
@@ -2562,6 +2722,12 @@ class AdminController extends Controller
             'image' => ['nullable', 'image'],
             'approval' => ['boolean'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         if ($request->hasFile('image')) {
             $old = $service->image;
@@ -2781,7 +2947,7 @@ class AdminController extends Controller
             return redirect()->back()->with('error', 'You are not authorized to create users.');
         }
 
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'phone' => ['nullable', 'string', 'max:30'],
@@ -2790,6 +2956,12 @@ class AdminController extends Controller
             'password' => ['required', 'string', 'min:6'],
             'avatar' => ['nullable', 'image', 'max:5120'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         if ($request->hasFile('avatar')) {
             $path = $request->file('avatar')->store('user', 'public');
@@ -2818,7 +2990,7 @@ class AdminController extends Controller
         if ($currentUser->role !== 'admin') {
             return redirect()->back()->with('error', 'You are not authorized to create users.');
         }
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => ['sometimes', 'required', 'string', 'max:255'],
             'email' => ['sometimes', 'required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'phone' => ['nullable', 'string', 'max:30'],
@@ -2827,6 +2999,12 @@ class AdminController extends Controller
             'password' => ['nullable', 'string', 'min:6'],
             'avatar' => ['nullable', 'image', 'max:5120'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         if ($request->hasFile('avatar')) {
             $old = $user->avatar;
@@ -2948,9 +3126,9 @@ class AdminController extends Controller
         return response()->json($paginator);
     }
 
-    public function mallUpdate(Request $request, \App\Models\Mall $mall)
+    public function mallUpdate(Request $request, Mall $mall)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => ['sometimes', 'required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('malls', 'slug')->ignore($mall->id)],
             'year_built' => ['nullable', 'integer'],
@@ -2965,6 +3143,12 @@ class AdminController extends Controller
             'contact_phone' => ['nullable', 'string', 'max:50'],
             'contact_email' => ['nullable', 'email', 'max:255'],
         ]);
+
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        $validated = $validator->validated();
 
         foreach (['floors_directory', 'facilities', 'gallery'] as $key) {
             if ($request->has($key)) {
@@ -3105,127 +3289,27 @@ class AdminController extends Controller
         return response()->json($contents);
     }
 
-    public function aboutContentUpdate(Request $request, AboutContent $aboutContent)
-    {
-        Log::info('Request Data: '.var_export($request->all(), true));
-        $validated = $request->validate([
-            'component' => 'sometimes|required|string|max:255',
-            'title' => 'nullable|string|max:255',
-            'subtitle' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-            'position' => 'nullable|integer',
-        ]);
-
-        $updateData = $validated;
-        Log::info('Update Data: '.var_export($updateData, true));
-
-        // 2) Main image
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('about', 'public');
-            $updateData['image_url'] = 'storage/'.$path;
-        } else {
-            $updateData['image_url'] = $request->input('image_url');
-        }
-
-        // 3) EXTRA DATA HANDLING (THIS IS THE FULL FIX)
-        if ($request->has('extra_data')) {
-            $extra_data = json_decode($request->input('extra_data'), true) ?? [];
-
-            foreach ($extra_data as $i => $item) {
-                if (! isset($extra_data[$i]['icon'])) {
-                    $extra_data[$i]['icon'] = null;
-                }
-                if (! isset($extra_data[$i]['title'])) {
-                    $extra_data[$i]['title'] = null;
-                }
-                if (! isset($extra_data[$i]['desc'])) {
-                    $extra_data[$i]['desc'] = null;
-                }
-                if (! isset($extra_data[$i]['image'])) {
-                    $extra_data[$i]['image'] = null;
-                }
-            }
-
-            $allFiles = $request->allFiles();
-            if (isset($allFiles['extra_data_files']) && is_array($allFiles['extra_data_files'])) {
-                $files = $allFiles['extra_data_files'];
-
-                foreach ($files as $index => $fields) {
-                    if (! is_array($fields)) {
-                        continue;
-                    }
-
-                    // Ensure item exists in extra_data
-                    if (! isset($extra_data[$index])) {
-                        $extra_data[$index] = [
-                            'icon' => null,
-                            'title' => null,
-                            'desc' => null,
-                            'image' => null,
-                        ];
-                    }
-
-                    foreach ($fields as $field => $file) {
-                        if ($file instanceof UploadedFile) {
-                            $path = $file->store('about', 'public');
-                            $extra_data[$index][$field] = 'storage/'.$path;
-                        }
-                    }
-                }
-            }
-            $updateData['extra_data'] = json_encode($extra_data);
-        }
-
-        // Save final merged data
-        $aboutContent->update($updateData);
-
-        return redirect()->back()->with('success', 'About content updated successfully');
-    }
-
     public function aboutContentStore(Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'component' => 'required|string|max:255',
             'title' => 'nullable|string|max:255',
             'subtitle' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'image_url' => 'nullable|string',
             'position' => 'nullable|integer',
-            'extra_data' => 'nullable|string', // Change to string
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'extra_data' => 'nullable|array',
         ]);
 
-        // Handle main image upload
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('about', 'public');
-            $validated['image_url'] = 'storage/'.$imagePath;
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
         }
 
-        // Handle extra data files
-        $extraData = [];
-        if ($request->has('extra_data')) {
-            $extraData = json_decode($request->extra_data, true);
-
-            if ($request->hasFile('extra_data_files')) {
-                $extraDataFiles = $request->file('extra_data_files');
-
-                foreach ($extraDataFiles as $index => $files) {
-                    if (isset($extraData[$index])) {
-                        foreach ($files as $field => $file) {
-                            if ($file) {
-                                $filePath = $file->store('about', 'public');
-                                $extraData[$index][$field] = 'storage/'.$filePath;
-                            }
-                        }
-                    }
-                }
-            }
-
-            $validated['extra_data'] = json_encode($extraData);
-        }
+        $validated = $validator->validated();
 
         $aboutContent = AboutContent::create($validated);
 
+        // Log activity
         $activity = new ActivityLog;
         $activity->user_id = auth()->user()->id;
         $activity->action = 'created';
@@ -3238,10 +3322,42 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'About content created successfully');
     }
 
+    public function aboutContentUpdate(Request $request, AboutContent $aboutContent)
+    {
+        $validator = Validator::make($request->all(), [
+            'component' => 'sometimes|required|string|max:255',
+            'title' => 'nullable|string|max:255',
+            'subtitle' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'image_url' => 'nullable|string',
+            'position' => 'nullable|integer',
+            'extra_data' => 'nullable|array',
+        ]);
+
+        if ($validated->fails()) {
+            throw ValidationException::withMessages($validated->errors()->toArray());
+        }
+
+        $aboutContent->update($validated);
+
+        // Log activity
+        $activity = new ActivityLog;
+        $activity->user_id = auth()->user()->id;
+        $activity->action = 'updated';
+        $activity->subject_type = 'about_content';
+        $activity->subject_id = $aboutContent->id;
+        $activity->description = 'About content updated';
+        $activity->changes = $validated;
+        $activity->save();
+
+        return redirect()->back()->with('success', 'About content updated successfully');
+    }
+
     public function aboutContentDestroy(AboutContent $aboutContent)
     {
         $aboutContent->delete();
 
+        // Log activity
         $activity = new ActivityLog;
         $activity->user_id = auth()->user()->id;
         $activity->action = 'deleted';

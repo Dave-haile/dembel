@@ -168,6 +168,7 @@ const AdminTeam = () => {
         onError: (errs) => {
           setErrors(errs || {});
           setToast({ message: errs?.message || "Failed to update team member", type: "error" });
+          setToast({ message: Object.values(errs)[0], type: 'error' });
         },
         onSuccess: () => {
           setIsModalOpen(false);
@@ -182,6 +183,7 @@ const AdminTeam = () => {
         onError: (errs) => {
           setErrors(errs || {});
           setToast({ message: errs?.message || "Failed to create team member", type: "error" });
+          setToast({ message: Object.values(errs)[0], type: 'error' });
         },
         onSuccess: () => {
           setIsModalOpen(false);

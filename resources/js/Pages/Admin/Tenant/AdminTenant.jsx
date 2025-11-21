@@ -400,6 +400,11 @@ const Tenants = () => {
             setToast({ message: 'Tenant updated successfully', type: 'success' });
             router.reload({ only: ['tenants'] });
           },
+          onError: (errs) => {
+            setErrors(errs || {});
+            setToast({ message: "Failed to update tenant", type: "error" });
+            setToast({ message: Object.values(errs)[0], type: 'error' });
+          },
         }
       );
     } else {
@@ -413,6 +418,11 @@ const Tenants = () => {
             setLogoPreview(null);
             setToast({ message: 'Tenant created successfully', type: 'success' });
             router.reload({ only: ['tenants'] });
+          },
+          onError: (errs) => {
+            setErrors(errs || {});
+            setToast({ message: "Failed to create tenant", type: "error" });
+            setToast({ message: Object.values(errs)[0], type: 'error' });
           },
         }
       );
@@ -430,6 +440,11 @@ const Tenants = () => {
           setSelectedTenant(null);
           setToast({ message: 'Tenant deleted successfully', type: 'success' });
           router.reload({ only: ['tenants'] });
+        },
+        onError: (errs) => {
+          setErrors(errs || {});
+          setToast({ message: "Failed to delete tenant", type: "error" });
+          setToast({ message: Object.values(errs)[0], type: 'error' });
         },
       });
     }

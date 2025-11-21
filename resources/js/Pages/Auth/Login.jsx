@@ -24,7 +24,7 @@ export default function Login({ status, canResetPassword }) {
       <div className="max-w-md w-full space-y-8">
         <div>
           <div className="mx-auto h-12 w-12 flex items-center justify-center bg-indigo-100 rounded-full">
-            <Lock className="h-6 w-6 text-indigo-600" />
+            <Lock className="h-6 w-6 text-primary-600" />
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Admin Login
@@ -35,7 +35,7 @@ export default function Login({ status, canResetPassword }) {
         </div>
 
         {status && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+          <div className="bg-accent-100 border border-accent-400 text-accent-700 px-4 py-3 rounded relative">
             {status}
           </div>
         )}
@@ -62,7 +62,7 @@ export default function Login({ status, canResetPassword }) {
                   required
                   value={data.email}
                   onChange={(e) => setData("email", e.target.value)}
-                  className="appearance-none rounded-md relative block w-full pl-10 pr-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  className="appearance-none rounded-md relative block w-full pl-10 pr-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
                   placeholder="Enter your email"
                 />
               </div>
@@ -91,7 +91,7 @@ export default function Login({ status, canResetPassword }) {
                   required
                   value={data.password}
                   onChange={(e) => setData("password", e.target.value)}
-                  className="appearance-none rounded-md relative block w-full pl-10 pr-12 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  className="appearance-none rounded-md relative block w-full pl-10 pr-12 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
                   placeholder="Enter your password"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -123,7 +123,7 @@ export default function Login({ status, canResetPassword }) {
                 type="checkbox"
                 checked={data.remember}
                 onChange={(e) => setData("remember", e.target.checked)}
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
               />
               <label
                 htmlFor="remember-me"
@@ -138,7 +138,7 @@ export default function Login({ status, canResetPassword }) {
                 <Link
                   // eslint-disable-next-line no-undef
                   href={route("password.request")}
-                  className="font-medium text-indigo-600 hover:text-indigo-500"
+                  className="font-medium text-primary-600 hover:text-primary-500"
                 >
                   Forgot your password?
                 </Link>
@@ -151,10 +151,10 @@ export default function Login({ status, canResetPassword }) {
             <button
               type="submit"
               disabled={processing}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
             >
               <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                <Lock className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" />
+                <Lock className="h-5 w-5 text-primary-500 group-hover:text-primary-400" />
               </span>
               {processing ? "Signing in..." : "Sign in"}
             </button>

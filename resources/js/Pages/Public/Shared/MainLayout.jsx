@@ -4,7 +4,7 @@ import Footer from "./Footer";
 
 export default function MainLayout({ children, services }) {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col overflow-x-hidden">
       <Header services={services} />
       <main>{children}</main>
       <Footer />

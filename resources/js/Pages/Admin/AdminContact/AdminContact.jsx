@@ -127,6 +127,7 @@ const AdminContact = () => {
         onError: (errs) => {
           setErrors(errs || {});
           setToast({ message: errs?.message || "Failed to update contact", type: "error" });
+          setToast({ message: Object.values(errs)[0], type: 'error' });
         },
         onSuccess: () => {
           setIsModalOpen(false);
@@ -140,6 +141,7 @@ const AdminContact = () => {
         onError: (errs) => {
           setErrors(errs || {});
           setToast({ message: errs?.message || "Failed to create contact", type: "error" });
+          setToast({ message: Object.values(errs)[0], type: 'error' });
         },
         onSuccess: () => {
           setIsModalOpen(false);

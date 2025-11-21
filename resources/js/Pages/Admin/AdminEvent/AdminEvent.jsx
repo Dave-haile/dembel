@@ -171,6 +171,7 @@ const AdminEvent = () => {
         onError: (errs) => {
           setErrors(errs || {});
           setToast({ message: errs?.message || "Failed to update event", type: "error" });
+          setToast({ message: Object.values(errs)[0], type: 'error' });
         },
         onSuccess: () => {
           setIsModalOpen(false);
@@ -185,6 +186,7 @@ const AdminEvent = () => {
         onError: (errs) => {
           setErrors(errs || {});
           setToast({ message: errs?.message || "Failed to create event", type: "error" });
+          setToast({ message: Object.values(errs)[0], type: 'error' });
         },
         onSuccess: () => {
           setIsModalOpen(false);

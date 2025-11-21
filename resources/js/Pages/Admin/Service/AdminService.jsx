@@ -227,15 +227,15 @@ const AdminService = () => {
     }
 
     // Debug: log FormData entries (including file metadata)
-    console.group("[AdminService] FormData payload");
-    for (const [key, val] of fd.entries()) {
-      if (val instanceof File) {
-        console.log(key, { name: val.name, type: val.type, size: val.size });
-      } else {
-        console.log(key, val);
-      }
-    }
-    console.groupEnd();
+    // console.group("[AdminService] FormData payload");
+    // for (const [key, val] of fd.entries()) {
+    //   if (val instanceof File) {
+    //     console.log(key, { name: val.name, type: val.type, size: val.size });
+    //   } else {
+    //     console.log(key, val);
+    //   }
+    // }
+    // console.groupEnd();
 
     if (selectedService) {
       fd.append("_method", "put");
@@ -245,6 +245,7 @@ const AdminService = () => {
         onError: (errs) => {
           setErrors(errs || {});
           setToast({ message: "Failed to update service", type: "error" });
+          setToast({ message: Object.values(errs)[0], type: 'error' });
         },
         onSuccess: () => {
           setIsModalOpen(false);
@@ -259,6 +260,7 @@ const AdminService = () => {
         onError: (errs) => {
           setErrors(errs || {});
           setToast({ message: "Failed to create service", type: "error" });
+          setToast({ message: Object.values(errs)[0], type: 'error' });
         },
         onSuccess: () => {
           setIsModalOpen(false);

@@ -4,7 +4,6 @@ import { useRef } from 'react';
 import { Sparkles, TrendingUp, Award } from 'lucide-react';
 
 export default function MallStory({ mallStory, whoWeAre }) {
-
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 

@@ -183,6 +183,7 @@ const AdminNews = () => {
         onError: (errs) => {
           setErrors(errs || {});
           setToast({ message: errs?.message || "Failed to update news", type: "error" });
+          setToast({ message: Object.values(errs)[0], type: 'error' });
         },
         onSuccess: () => {
           setIsModalOpen(false);
@@ -197,6 +198,7 @@ const AdminNews = () => {
         onError: (errs) => {
           setErrors(errs || {});
           setToast({ message: errs?.message || "Failed to create news", type: "error" });
+          setToast({ message: Object.values(errs)[0], type: 'error' });
         },
         onSuccess: () => {
           setIsModalOpen(false);

@@ -233,6 +233,7 @@ const AdminMall = () => {
                 onError: (errs) => {
                     setErrors(errs || {});
                     setToast({ message: errs?.message || "Failed to update mall", type: "error" });
+                    setToast({ message: Object.values(errs)[0], type: 'error' });
                 },
                 onSuccess: () => {
                     setIsModalOpen(false);
@@ -246,6 +247,7 @@ const AdminMall = () => {
                 onError: (errs) => {
                     setErrors(errs || {});
                     setToast({ message: errs?.message || "Failed to create mall", type: "error" });
+                    setToast({ message: Object.values(errs)[0], type: 'error' });
                 },
                 onSuccess: () => {
                     setIsModalOpen(false);

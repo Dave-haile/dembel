@@ -172,6 +172,7 @@ const AdminUsers = () => {
         onError: (errs) => {
           setErrors(errs || {});
           setToast({ message: errs?.message || "Failed to update user", type: "error" });
+          setToast({ message: Object.values(errs)[0], type: 'error' });
         },
         onSuccess: () => {
           setIsModalOpen(false);
@@ -185,6 +186,7 @@ const AdminUsers = () => {
         onError: (errs) => {
           setErrors(errs || {});
           setToast({ message: errs?.message || "Failed to create user", type: "error" });
+          setToast({ message: Object.values(errs)[0], type: 'error' });
         },
         onSuccess: () => {
           setIsModalOpen(false);
@@ -205,6 +207,11 @@ const AdminUsers = () => {
           setIsDeleteModalOpen(false);
           setSelectedUser(null);
           // Flash message will be handled by the useEffect listening to props.flash
+        },
+        onError: (errs) => {
+          setErrors(errs || {});
+          setToast({ message: "Failed to delete user", type: "error" });
+          setToast({ message: Object.values(errs)[0], type: 'error' });
         },
       }
     );

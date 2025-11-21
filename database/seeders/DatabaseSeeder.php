@@ -1930,6 +1930,57 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
+        $instagram = [
+            [
+                'image' => 'https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
+                'hashtags' => '#DembelCityCenter',
+                'caption' => 'Dembel City Center',
+                'approval' => true,
+            ],
+            [
+                'image' => 'https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
+                'hashtags' => '#DembelExtension',
+                'caption' => 'Dembel Extension',
+                'approval' => true,
+            ],
+            [
+                'image' => 'https://images.pexels.com/photos/264507/pexels-photo-264507.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
+                'hashtags' => '#DembelExtension',
+                'caption' => 'Dembel Extension',
+                'approval' => true,
+            ],
+            [
+                'image' => 'https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
+                'hashtags' => '#DembelExtension',
+                'caption' => 'Dembel Extension',
+                'approval' => true,
+            ],
+            [
+                'image' => 'https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
+                'hashtags' => '#DembelExtension',
+                'caption' => 'Dembel Extension',
+                'approval' => true,
+            ],
+            [
+                'image' => 'https://images.pexels.com/photos/264507/pexels-photo-264507.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
+                'hashtags' => '#DembelExtension',
+                'caption' => 'Dembel Extension',
+                'approval' => true,
+            ],
+            [
+                'image' => 'https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
+                'hashtags' => '#DembelExtension',
+                'caption' => 'Dembel Extension',
+                'approval' => true,
+            ],
+            [
+                'image' => 'https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
+                'hashtags' => '#DembelExtension',
+                'caption' => 'Dembel Extension',
+                'approval' => true,
+            ],
+        ];
+
         $aboutContent = [
             [
                 'component' => 'AboutHero',
@@ -2345,60 +2396,18 @@ class DatabaseSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-        ];
-
-        $instagram = [
             [
-                'image' => 'https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
-                'hashtags' => '#DembelCityCenter',
-                'caption' => 'Dembel City Center',
-                'approval' => true,
-            ],
-            [
-                'image' => 'https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
-                'hashtags' => '#DembelExtension',
-                'caption' => 'Dembel Extension',
-                'approval' => true,
-            ],
-            [
-                'image' => 'https://images.pexels.com/photos/264507/pexels-photo-264507.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
-                'hashtags' => '#DembelExtension',
-                'caption' => 'Dembel Extension',
-                'approval' => true,
-            ],
-            [
-                'image' => 'https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
-                'hashtags' => '#DembelExtension',
-                'caption' => 'Dembel Extension',
-                'approval' => true,
-            ],
-            [
-                'image' => 'https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
-                'hashtags' => '#DembelExtension',
-                'caption' => 'Dembel Extension',
-                'approval' => true,
-            ],
-            [
-                'image' => 'https://images.pexels.com/photos/264507/pexels-photo-264507.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
-                'hashtags' => '#DembelExtension',
-                'caption' => 'Dembel Extension',
-                'approval' => true,
-            ],
-            [
-                'image' => 'https://images.pexels.com/photos/1797161/pexels-photo-1797161.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
-                'hashtags' => '#DembelExtension',
-                'caption' => 'Dembel Extension',
-                'approval' => true,
-            ],
-            [
-                'image' => 'https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&cs=tinysrgb&w=300&h=300',
-                'hashtags' => '#DembelExtension',
-                'caption' => 'Dembel Extension',
-                'approval' => true,
+                'component' => 'A Legacy of Excellence',
+                'title' => 'A Legacy of Excellence',
+                'subtitle' => 'Covering about 40,000m² of floor area with a basement, ground floor, and 12 stories, DCC stands as one of the finest and most recognized buildings in Ethiopia, offering an unparalleled blend of shopping, dining, and business services.',
+                'description' => "Dembel City Centre (DCC) is a beautiful flowery-yellow multi-story building, located at Africa Avenue on the road to the Air Port of Addis Ababa. As one of the first Western-style shopping malls in Ethiopia, built in 2002, it has become an integral part of the city's identity—so much so that the area around it bears its name.",
+                'image_url' => 'storage/about/PUhKz1RSPqsvYMDMBxZHzzmOKbNeeRrmRPoLb0zY.jpg',
+                'extra_data' => null,
+                'position' => 12,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ];
-
-        DB::table('instagrams')->insert($instagram);
         DB::table('users')->insert($users);
         DB::table('categories')->insert($category);
         DB::table('sliders')->insert($sliders);
@@ -2417,7 +2426,6 @@ class DatabaseSeeder extends Seeder
         DB::table('free_spaces')->insert($freeSpaces);
         DB::table('malls')->insert($mall);
         DB::table('about_contents')->insert($aboutContent);
-        DB::table('instagram_images')->insert($instagram);
     }
 }
 // foreach ($vacancies as $index => $vacancy) {

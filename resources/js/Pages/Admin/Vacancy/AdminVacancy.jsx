@@ -1,278 +1,3 @@
-// import React, { useMemo, useState } from "react";
-// import AdminLayout from "../Shared/AdminLayout";
-// import DataTable from "../Shared/DataTable";
-// import ModalForm from "../Shared/ModalForm";
-// import DeleteConfirmModal from "../Shared/DeleteConfirmModal";
-// import ActivityLog from "../Shared/ActivityLog";
-
-// const AdminVacancy = ({ vacancies = [] }) => {
-//   const [items, setItems] = useState(vacancies);
-//   const [searchTerm, setSearchTerm] = useState("");
-//
-
-//   const [itemsPerPage] = useState(5);
-//   const [sidebarOpen, setSidebarOpen] = useState(true);
-
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-//   const [editingItem, setEditingItem] = useState(null);
-//   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-//   const [itemToDelete, setItemToDelete] = useState(null);
-//   const [activityLog, setActivityLog] = useState([]);
-//   const [notice, setNotice] = useState(null);
-
-//   const filteredItems = useMemo(() => {
-//     const q = searchTerm.trim().toLowerCase();
-//     if (!q) return items;
-//     return items.filter((v) =>
-//       [
-//         v.title,
-//         v.department,
-//         v.employment_type,
-//         v.work_location,
-//         v.status,
-//       ]
-//         .map((x) => (x ?? "").toString().toLowerCase())
-//         .some((t) => t.includes(q))
-//     );
-//   }, [items, searchTerm]);
-
-//   const totalPages = Math.max(1, Math.ceil(filteredItems.length / itemsPerPage));
-//   const currentItems = filteredItems.slice(
-//     (currentPage - 1) * itemsPerPage,
-//     currentPage * itemsPerPage
-//   );
-
-//   const log = (action, payload) => {
-//     const entry = {
-//       id: Date.now(),
-//       action,
-//       entity: "Vacancy",
-//       item: payload?.title || payload?.id,
-//       timestamp: new Date().toISOString(),
-//       user: "Admin",
-//     };
-//     setActivityLog((prev) => [entry, ...prev.slice(0, 49)]);
-//   };
-
-//   const handleCreate = () => {
-//     setEditingItem(null);
-//     setIsModalOpen(true);
-//   };
-
-//   async function submitForm(e) {
-//     e.preventDefault();
-//     const form = e.target;
-//     const fd = new FormData(form);
-//     const toBody = (appendMethod) => {
-//       const body = new FormData();
-//       for (const [k, v] of fd.entries()) body.append(k, v);
-//       if (appendMethod) body.append("_method", appendMethod);
-//       return body;
-//     };
-
-//     try {
-//       let res;
-//       if (editingItem) {
-//         res = await fetch(`/admin/vacancies/${editingItem.id}`, {
-//           method: "POST",
-//           headers: { "X-Requested-With": "XMLHttpRequest" },
-//           body: toBody("PUT"),
-//           credentials: "same-origin",
-//         });
-//       } else {
-//         res = await fetch(`/admin/vacancies`, {
-//           method: "POST",
-//           headers: { "X-Requested-With": "XMLHttpRequest" },
-//           body: toBody(),
-//           credentials: "same-origin",
-//         });
-//       }
-//       if (!res.ok) throw new Error("Failed to save vacancy");
-//       const saved = await res.json();
-//       setItems((prev) => {
-//         const exists = prev.find((p) => p.id === saved.id);
-//         if (exists) return prev.map((p) => (p.id === saved.id ? saved : p));
-//         return [saved, ...prev];
-//       });
-//       setNotice({ type: "success", message: editingItem ? "Updated." : "Created." });
-//       log(editingItem ? "Updated" : "Created", saved);
-//       setIsModalOpen(false);
-//       setEditingItem(null);
-//       form.reset();
-//     } catch (err) {
-//       setNotice({ type: "error", message: err.message || "Error" });
-//     }
-//   }
-
-//   async function confirmDelete() {
-//     if (!itemToDelete) return;
-//     try {
-//       const res = await fetch(`/admin/vacancies/${itemToDelete}`, {
-//         method: "DELETE",
-//         headers: { "X-Requested-With": "XMLHttpRequest" },
-//         credentials: "same-origin",
-//       });
-//       if (!res.ok) throw new Error("Failed to delete vacancy");
-//       setItems((prev) => prev.filter((s) => s.id !== itemToDelete));
-//       setNotice({ type: "success", message: "Deleted." });
-//       log("Deleted", { id: itemToDelete });
-//     } catch (e) {
-//       setNotice({ type: "error", message: e.message || "Error" });
-//     } finally {
-//       setIsDeleteModalOpen(false);
-//       setItemToDelete(null);
-//     }
-//   }
-
-//   const columns = [
-//     { header: "Title", render: (row) => <span className="font-semibold">{row.title}</span> },
-//     { header: "Type", accessor: "employment_type" },
-//     { header: "Location", accessor: "work_location" },
-//     {
-//       header: "Dates",
-//       render: (row) => (
-//         <div className="text-sm text-gray-600">
-//           <div>Posted: {row.posted_date}</div>
-//           <div>Closes: {row.closing_date}</div>
-//         </div>
-//       ),
-//     },
-//     {
-//       header: "Contact",
-//       render: (row) => (
-//         <div className="text-sm">
-//           <div>{row.contact_phone || "—"}</div>
-//           {row.contact_email ? (
-//             <a href={`mailto:${row.contact_email}`} className="text-blue-600 hover:underline">
-//               {row.contact_email}
-//             </a>
-//           ) : (
-//             <span className="text-gray-500">—</span>
-//           )}
-//         </div>
-//       ),
-//     },
-//   ];
-
-//   return (
-//     <AdminLayout
-//       currentPage={"vacancies"}
-//       setCurrentPage={setCurrentPage}
-//       setSidebarOpen={setSidebarOpen}
-//       sidebarOpen={sidebarOpen}
-//     >
-//       <div className="p-4 md:p-6">
-//         <div className="mb-6 flex items-start justify-between">
-//           <div>
-//             <h1 className="text-2xl font-bold">Vacancies</h1>
-//             <p className="mt-1 text-sm text-gray-500">Manage open and closed positions</p>
-//           </div>
-//           <button
-//             onClick={handleCreate}
-//             className="inline-flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-white shadow hover:bg-blue-700"
-//           >
-//             Add Vacancy
-//           </button>
-//         </div>
-
-//         {notice && (
-//           <div
-//             className={`mb-4 rounded-md border px-4 py-2 text-sm ${
-//               notice.type === "success"
-//                 ? "border-green-200 bg-green-50 text-green-800"
-//                 : "border-red-200 bg-red-50 text-red-800"
-//             }`}
-//           >
-//             {notice.message}
-//           </div>
-//         )}
-
-//         <div className="rounded-xl border border-gray-200 bg-white p-3 shadow">
-//           <div className="mb-4 flex items-center justify-between px-1">
-//             <h3 className="text-base font-semibold text-gray-900">All Vacancies</h3>
-//             <div className="relative w-full max-w-xs">
-//               <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-//                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4"><path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 105.358 11.02l3.686 3.686a.75.75 0 101.06-1.06l-3.686-3.686A6.75 6.75 0 0010.5 3.75zm-5.25 6.75a5.25 5.25 0 1110.5 0 5.25 5.25 0 01-10.5 0z" clipRule="evenodd" /></svg>
-//               </span>
-//               <input
-//                 type="text"
-//                 placeholder="Search vacancies..."
-//                 value={searchTerm}
-//                 onChange={(e) => {
-//                   setSearchTerm(e.target.value);
-//                   setCurrentPage(1);
-//                 }}
-//                 className="w-full rounded-md border border-gray-300 bg-white px-9 py-2 text-sm shadow-sm placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-//               />
-//             </div>
-//           </div>
-
-//           <DataTable
-//             columns={columns}
-//             data={currentItems}
-//             onEdit={(item) => {
-//               setEditingItem(item);
-//               setIsModalOpen(true);
-//             }}
-//             onDelete={(id) => {
-//               setItemToDelete(id);
-//               setIsDeleteModalOpen(true);
-//             }}
-//             currentPage={currentPage}
-//             totalPages={totalPages}
-//             onPageChange={setCurrentPage}
-//             itemsPerPage={itemsPerPage}
-//             filteredCount={filteredItems.length}
-//           />
-//         </div>
-
-//         <div className="mt-6">
-//           <ActivityLog activities={activityLog} />
-//         </div>
-
-//         <ModalForm
-//           isOpen={isModalOpen}
-//           onClose={() => {
-//             setIsModalOpen(false);
-//             setEditingItem(null);
-//           }}
-//           title={editingItem ? "Edit Vacancy" : "Add Vacancy"}
-//           onSubmit={submitForm}
-//         >
-//           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-//             <input name="title" defaultValue={editingItem?.title || ""} required placeholder="Title *" className="p-2 border rounded" />
-//             <input name="department" defaultValue={editingItem?.department || ""} placeholder="Department" className="p-2 border rounded" />
-//             <input name="employment_type" defaultValue={editingItem?.employment_type || "Full-time"} required placeholder="Employment Type" className="p-2 border rounded" />
-//             <input name="work_location" defaultValue={editingItem?.work_location || "On-site"} required placeholder="Work Location" className="p-2 border rounded" />
-//             <input name="posted_date" type="date" defaultValue={editingItem?.posted_date || ""} required className="p-2 border rounded" />
-//             <input name="closing_date" type="date" defaultValue={editingItem?.closing_date || ""} required className="p-2 border rounded" />
-//             <input name="salary_min" defaultValue={editingItem?.salary_min || ""} placeholder="Salary Min" className="p-2 border rounded" />
-//             <input name="salary_max" defaultValue={editingItem?.salary_max || ""} placeholder="Salary Max" className="p-2 border rounded" />
-//             <input name="currency" defaultValue={editingItem?.currency || "ETB"} placeholder="Currency" className="p-2 border rounded" />
-//             <input name="number_of_positions" defaultValue={editingItem?.number_of_positions || 1} placeholder="Positions" className="p-2 border rounded" />
-//             <input name="contact_email" defaultValue={editingItem?.contact_email || ""} placeholder="Contact Email" className="p-2 border rounded" />
-//             <input name="contact_phone" defaultValue={editingItem?.contact_phone || ""} placeholder="Contact Phone" className="p-2 border rounded" />
-//             <input name="slug" defaultValue={editingItem?.slug || ""} placeholder="Slug" className="p-2 border rounded" />
-//             <input name="thumbnail" type="file" accept="image/*" className="p-2 border rounded" />
-//             <textarea name="job_description" defaultValue={editingItem?.job_description || ""} required placeholder="Job Description" className="p-2 border rounded md:col-span-2" rows={3} />
-//             <textarea name="requirements" defaultValue={editingItem?.requirements || ""} placeholder="Requirements" className="p-2 border rounded md:col-span-2" rows={2} />
-//             <textarea name="benefits" defaultValue={editingItem?.benefits || ""} placeholder="Benefits" className="p-2 border rounded md:col-span-2" rows={2} />
-//             <textarea name="how_to_apply" defaultValue={editingItem?.how_to_apply || ""} required placeholder="How to Apply" className="p-2 border rounded md:col-span-2" rows={2} />
-//           </div>
-//         </ModalForm>
-
-//         <DeleteConfirmModal
-//           isOpen={isDeleteModalOpen}
-//           onClose={() => setIsDeleteModalOpen(false)}
-//           onConfirm={confirmDelete}
-//           itemName={items.find((i) => i.id === itemToDelete)?.title || "this vacancy"}
-//         />
-//       </div>
-//     </AdminLayout>
-//   );
-// };
-
-// export default AdminVacancy;
 import { useState, useEffect, useRef } from "react";
 import {
   Plus,
@@ -605,6 +330,11 @@ const [perPageCount, setPerPageCount] = useState(10);
             });
             router.reload({ only: ["vacancies", "counts"] });
           },
+          onError: (errs) => {
+            setErrors(errs || {});
+            setToast({ message: "Failed to update vacancy", type: "error" });
+            setToast({ message: Object.values(errs)[0], type: 'error' });
+          },
         }
       );
     } else {
@@ -617,6 +347,11 @@ const [perPageCount, setPerPageCount] = useState(10);
             type: "success",
           });
           router.reload({ only: ["vacancies", "counts"] });
+        },
+        onError: (errs) => {
+          setErrors(errs || {});
+          setToast({ message: "Failed to create vacancy", type: "error" });
+          setToast({ message: Object.values(errs)[0], type: 'error' });
         },
       });
     }
@@ -636,6 +371,11 @@ const [perPageCount, setPerPageCount] = useState(10);
               type: "success",
             });
             router.reload({ only: ["vacancies", "counts"] });
+          },
+          onError: (errs) => {
+            setErrors(errs || {});
+            setToast({ message: "Failed to delete vacancy", type: "error" });
+            setToast({ message: Object.values(errs)[0], type: 'error' });
           },
         }
       );

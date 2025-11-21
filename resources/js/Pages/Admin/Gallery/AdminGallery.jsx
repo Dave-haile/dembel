@@ -292,13 +292,19 @@ const AdminGallery = () => {
                   fd.append('_method', 'put');
                   router.post(window.route('admin.galleries.update', selectedItem.id), fd, {
                     forceFormData: true,
-                    onError: (errs) => setErrors(errs || {}),
+                    onError: (errs) => {
+                      setErrors(errs || {});
+                      setToast({ message: Object.values(errs)[0], type: 'error' });
+                    },
                     onSuccess: () => { setIsModalOpen(false); setSelectedItem(null); setToast({ message: 'Gallery updated successfully', type: 'success' }); router.reload({ only: ['galleries','counts'] }); },
                   });
                 } else {
                   router.post(window.route('admin.galleries.store'), fd, {
                     forceFormData: true,
-                    onError: (errs) => setErrors(errs || {}),
+                    onError: (errs) => {
+                      setErrors(errs || {});
+                      setToast({ message: Object.values(errs)[0], type: 'error' });
+                    },
                     onSuccess: () => { setIsModalOpen(false); setSelectedItem(null); setToast({ message: 'Gallery created successfully', type: 'success' }); router.reload({ only: ['galleries','counts'] }); },
                   });
                 }

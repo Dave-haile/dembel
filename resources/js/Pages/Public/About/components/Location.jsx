@@ -5,12 +5,10 @@ import { MapPin, Clock, Phone, Mail, Navigation } from 'lucide-react';
 import { Map } from '../../Shared/Map';
 
 export default function Location({ location }) {
-  console.log('location', location);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   const contactInfo = typeof location.extra_data === 'string' ? JSON.parse(location.extra_data) : location.extra_data;
-  console.log('contactInfo', contactInfo);
   contactInfo.forEach((info) => {
     if (info.icon === 'MapPin') {
       info.icon = MapPin;
