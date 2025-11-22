@@ -271,18 +271,18 @@ const Tenants = () => {
 
     if (!formData.name?.trim()) newErrors.name = "Name is required";
     if (!formData.category_id) newErrors.category_id = "Category is required";
-    if (!formData.description?.trim())
-      newErrors.description = "Description is required";
-    if (!formData.location?.trim()) newErrors.location = "Location is required";
-    if (!formData.hours?.trim()) newErrors.hours = "Hours are required";
+    // if (!formData.description?.trim())
+    //   newErrors.description = "Description is required";
+    // if (!formData.location?.trim()) newErrors.location = "Location is required";
+    // if (!formData.hours?.trim()) newErrors.hours = "Hours are required";
     if (!formData.floor_id) newErrors.floor_id = "Floor is required";
-    if (!formData.room_no?.trim()) newErrors.room_no = "Room number is required";
-    if (!formData.phone?.trim()) newErrors.phone = "Phone is required";
-    if (!formData.email?.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email is invalid";
-    }
+    // if (!formData.room_no?.trim()) newErrors.room_no = "Room number is required";
+    // if (!formData.phone?.trim()) newErrors.phone = "Phone is required";
+    // if (!formData.email?.trim()) {
+    //   newErrors.email = "Email is required";
+    // } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    //   newErrors.email = "Email is invalid";
+    // }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -398,7 +398,7 @@ const Tenants = () => {
             setSelectedTenant(null);
             setLogoPreview(null);
             setToast({ message: 'Tenant updated successfully', type: 'success' });
-            router.reload({ only: ['tenants'] });
+            router.reload({ only: ['tenants', 'count'] });
           },
           onError: (errs) => {
             setErrors(errs || {});
@@ -417,7 +417,7 @@ const Tenants = () => {
             setSelectedTenant(null);
             setLogoPreview(null);
             setToast({ message: 'Tenant created successfully', type: 'success' });
-            router.reload({ only: ['tenants'] });
+            router.reload({ only: ['tenants', 'count'] });
           },
           onError: (errs) => {
             setErrors(errs || {});
@@ -439,7 +439,7 @@ const Tenants = () => {
           setIsDeleteModalOpen(false);
           setSelectedTenant(null);
           setToast({ message: 'Tenant deleted successfully', type: 'success' });
-          router.reload({ only: ['tenants'] });
+          router.reload({ only: ['tenants', 'count', 'initialTenants'] });
         },
         onError: (errs) => {
           setErrors(errs || {});
@@ -577,7 +577,6 @@ const Tenants = () => {
                     value={formData.description || ""}
                     onChange={handleInputChange}
                     error={errors.description}
-                    required
                     placeholder="Brief description"
                   />
                 </div>
@@ -616,7 +615,6 @@ const Tenants = () => {
                   value={formData.location || ""}
                   onChange={handleInputChange}
                   error={errors.location}
-                  required
                   placeholder="e.g., Fashion District"
                 />
 
@@ -627,7 +625,6 @@ const Tenants = () => {
                   value={formData.building || ""}
                   onChange={handleInputChange}
                   error={errors.building}
-                  required
                   options={[
                     { value: "Dembel", label: "Dembel" },
                     { value: "Dembel Extension", label: "Dembel Extension" },
@@ -642,12 +639,12 @@ const Tenants = () => {
                   value={formData.floor_id || ""}
                   onChange={handleInputChange}
                   error={errors.floor_id}
-                  required
                   options={usePage().props.floors?.map(floor => ({
                     value: floor.id,
                     label: floor.name
                   })) || []}
                   placeholder="Select floor"
+                  required
                 />
 
                 <FormInput
@@ -656,7 +653,6 @@ const Tenants = () => {
                   value={formData.room_no || ""}
                   onChange={handleInputChange}
                   error={errors.room_no}
-                  required
                   placeholder="e.g., 101"
                 />
 
@@ -666,7 +662,6 @@ const Tenants = () => {
                   value={formData.hours || ""}
                   onChange={handleInputChange}
                   error={errors.hours}
-                  required
                   placeholder="e.g., 10:00 AM - 9:00 PM"
                 />
 
@@ -677,7 +672,6 @@ const Tenants = () => {
                   value={formData.phone || ""}
                   onChange={handleInputChange}
                   error={errors.phone}
-                  required
                   placeholder="+1 (555) 123-4567"
                 />
 
@@ -688,7 +682,6 @@ const Tenants = () => {
                   value={formData.email || ""}
                   onChange={handleInputChange}
                   error={errors.email}
-                  required
                   placeholder="contact@example.com"
                 />
 

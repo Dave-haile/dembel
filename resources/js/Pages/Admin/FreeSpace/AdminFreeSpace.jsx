@@ -90,20 +90,6 @@ const FreeSpacesCRUD = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.name?.trim()) newErrors.name = 'Name is required';
-    if (!formData.floor_id) newErrors.floor_id = 'Floor is required';
-    if (!formData.wing_or_zone?.trim()) newErrors.wing_or_zone = 'Wing/Zone is required';
-    if (!formData.area_sqm?.trim()) newErrors.area_sqm = 'Area is required';
-    if (!formData.monthly_rent?.trim()) newErrors.monthly_rent = 'Monthly rent is required';
-    if (!formData.contact_phone?.trim()) newErrors.contact_phone = 'Contact phone is required';
-    if (!formData.contact_email?.trim()) {
-      newErrors.contact_email = 'Contact email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.contact_email)) {
-      newErrors.contact_email = 'Email is invalid';
-    }
-    if (!formData.slug?.trim()) newErrors.slug = 'Slug is required';
-    if (!formData.availability_status?.trim()) newErrors.availability_status = 'Status is required';
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -626,7 +612,6 @@ const FreeSpacesCRUD = () => {
                       value={formData.name || ''}
                       onChange={handleInputChange}
                       error={errors.name}
-                      required
                       placeholder="e.g., Office Space A1"
                     />
 
@@ -637,7 +622,6 @@ const FreeSpacesCRUD = () => {
                       value={formData.floor_id || ''}
                       onChange={handleInputChange}
                       error={errors.floor_id}
-                      required
                       options={floors.map(f => ({ value: f.id, label: f.name }))}
                     />
 
@@ -647,7 +631,6 @@ const FreeSpacesCRUD = () => {
                       value={formData.wing_or_zone || ''}
                       onChange={handleInputChange}
                       error={errors.wing_or_zone}
-                      required
                       placeholder="e.g., North Wing"
                     />
 
@@ -658,7 +641,6 @@ const FreeSpacesCRUD = () => {
                       value={formData.area_sqm || ''}
                       onChange={handleInputChange}
                       error={errors.area_sqm}
-                      required
                       placeholder="50.00"
                     />
 
@@ -688,7 +670,6 @@ const FreeSpacesCRUD = () => {
                       name="slug"
                       value={formData.slug || ''}
                       onChange={handleInputChange}
-                      required
                       placeholder="unique-space-slug"
                     />
                     <br />
@@ -724,7 +705,6 @@ const FreeSpacesCRUD = () => {
                       value={formData.monthly_rent || ''}
                       onChange={handleInputChange}
                       error={errors.monthly_rent}
-                      required
                       placeholder="1200.00"
                     />
 
@@ -794,7 +774,6 @@ const FreeSpacesCRUD = () => {
                       value={formData.contact_phone || ''}
                       onChange={handleInputChange}
                       error={errors.contact_phone}
-                      required
                       placeholder="+1 (555) 123-4567"
                     />
 
@@ -805,7 +784,6 @@ const FreeSpacesCRUD = () => {
                       value={formData.contact_email || ''}
                       onChange={handleInputChange}
                       error={errors.contact_email}
-                      required
                       placeholder="contact@example.com"
                     />
                   </div>

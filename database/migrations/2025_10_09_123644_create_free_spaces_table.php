@@ -34,7 +34,7 @@ return new class extends Migration
             $table->string('contact_email')->nullable();
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
-            $table->string('slug')->unique();
+            $table->string('slug')->nullable()->unique();
             $table->enum('availability_status', ['available', 'reserved', 'occupied'])->default('available');
             $table->timestamps();
         });

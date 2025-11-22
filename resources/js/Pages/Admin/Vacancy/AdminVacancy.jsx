@@ -112,16 +112,10 @@ const [perPageCount, setPerPageCount] = useState(10);
     const newErrors = {};
 
     if (!formData.title?.trim()) newErrors.title = "Title is required";
-    if (!formData.department?.trim())
-      newErrors.department = "Department is required";
     if (!formData.employment_type)
       newErrors.employment_type = "Employment type is required";
     if (!formData.work_location?.trim())
       newErrors.work_location = "Work location is required";
-    if (!formData.salary_min)
-      newErrors.salary_min = "Minimum salary is required";
-    if (!formData.salary_max)
-      newErrors.salary_max = "Maximum salary is required";
     if (
       formData.salary_min &&
       formData.salary_max &&
@@ -138,13 +132,9 @@ const [perPageCount, setPerPageCount] = useState(10);
     if (!formData.number_of_positions || formData.number_of_positions < 1) {
       newErrors.number_of_positions = "Number of positions must be at least 1";
     }
-    if (!formData.contact_email?.trim()) {
-      newErrors.contact_email = "Contact email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.contact_email)) {
+    if (!/\S+@\S+\.\S+/.test(formData.contact_email)) {
       newErrors.contact_email = "Email is invalid";
     }
-    if (!formData.contact_phone?.trim())
-      newErrors.contact_phone = "Contact phone is required";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -698,7 +688,6 @@ const [perPageCount, setPerPageCount] = useState(10);
                       value={formData.department || ""}
                       onChange={handleInputChange}
                       error={errors.department}
-                      required
                       options={departments.map((d) => ({ value: d, label: d }))}
                     />
 
@@ -752,7 +741,6 @@ const [perPageCount, setPerPageCount] = useState(10);
                       value={formData.salary_min || ""}
                       onChange={handleInputChange}
                       error={errors.salary_min}
-                      required
                       placeholder="5000"
                     />
 
@@ -763,7 +751,6 @@ const [perPageCount, setPerPageCount] = useState(10);
                       value={formData.salary_max || ""}
                       onChange={handleInputChange}
                       error={errors.salary_max}
-                      required
                       placeholder="7000"
                     />
 
@@ -865,7 +852,6 @@ const [perPageCount, setPerPageCount] = useState(10);
                       value={formData.contact_email || ""}
                       onChange={handleInputChange}
                       error={errors.contact_email}
-                      required
                       placeholder="hr@example.com"
                     />
 
@@ -876,7 +862,6 @@ const [perPageCount, setPerPageCount] = useState(10);
                       value={formData.contact_phone || ""}
                       onChange={handleInputChange}
                       error={errors.contact_phone}
-                      required
                       placeholder="+251911223344"
                     />
 

@@ -481,7 +481,7 @@ export default function ActivityLog() {
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                <td className="px-3 py-4 whitespace-normal">
                                                     <div className="text-sm text-gray-900">
                                                         {activity.subject_id ? (
                                                             <Link
@@ -496,7 +496,7 @@ export default function ActivityLog() {
                                                         {activity.description}
                                                     </div>
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                <td className="px-3 py-4 whitespace-nowrap">
                                                     <div className="flex items-center">
                                                         <div className="flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
                                                             <FiUser className="h-4 w-4 text-gray-500" />
@@ -511,12 +511,12 @@ export default function ActivityLog() {
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td className="px-6 py-4">
-                                                    <div className="text-sm text-gray-900 max-w-xs truncate">
+                                                <td className="px-3 py-4">
+                                                    <div className="text-sm text-gray-900 max-w-xs truncate whitespace-normal">
                                                         {renderChanges(activity.changes)}
                                                     </div>
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                <td className="px-1 py-4 whitespace-nowrap text-sm text-gray-500">
                                                     <div className="flex items-center">
                                                         <FiClock className="mr-1.5 h-4 w-4 text-gray-400" />
                                                         <span title={format(new Date(activity.created_at), 'PPpp')}>
@@ -524,7 +524,7 @@ export default function ActivityLog() {
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
                                                     <button
                                                         onClick={() => viewActivityDetails(activity)}
                                                         className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -537,7 +537,7 @@ export default function ActivityLog() {
                                         ))
                                     ) : (
                                         <tr>
-                                            <td colSpan="6" className="px-6 py-4 text-center text-sm text-gray-500">
+                                            <td colSpan="6" className="px-3 py-4 text-center text-sm text-gray-500">
                                                 No activities found.
                                             </td>
                                         </tr>

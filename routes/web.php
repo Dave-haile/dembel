@@ -1,6 +1,19 @@
 <?php
 
 use App\Http\Controllers\AboutContentController;
+use App\Http\Controllers\Admin\AdminAboutContentController;
+use App\Http\Controllers\Admin\AdminApplicationController;
+use App\Http\Controllers\Admin\AdminDepartmentController;
+use App\Http\Controllers\Admin\AdminFloorController;
+use App\Http\Controllers\Admin\AdminFreeSpaceController;
+use App\Http\Controllers\Admin\AdminGalleryController;
+use App\Http\Controllers\Admin\AdminMallController;
+use App\Http\Controllers\Admin\AdminNewsController;
+use App\Http\Controllers\Admin\AdminServiceController;
+use App\Http\Controllers\Admin\AdminSettingController;
+use App\Http\Controllers\Admin\AdminTenantController;
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AdminVacancyController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\FreeSpaceController;
@@ -23,53 +36,54 @@ Route::get('/', [HomeController::class, 'index']);
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
     // Gallery CRUD
-    Route::get('/gallery', [AdminController::class, 'gallery'])->name('admin.gallery');
-    Route::get('/galleries/list', [AdminController::class, 'galleriesList'])->name('admin.galleries.list');
-    Route::get('/galleries/{gallery}', [AdminController::class, 'galleryShow'])->name('admin.galleries.show');
-    Route::post('/galleries', [AdminController::class, 'galleryStore'])->name('admin.galleries.store');
-    Route::match(['put', 'patch'], '/galleries/{gallery}', [AdminController::class, 'galleryUpdate'])->name('admin.galleries.update');
-    Route::delete('/galleries/{gallery}', [AdminController::class, 'galleryDestroy'])->name('admin.galleries.destroy');
+    Route::get('/gallery', [AdminGalleryController::class, 'gallery'])->name('admin.gallery');
+    Route::get('/galleries/list', [AdminGalleryController::class, 'galleriesList'])->name('admin.galleries.list');
+    Route::get('/galleries/{gallery}', [AdminGalleryController::class, 'galleryShow'])->name('admin.galleries.show');
+    Route::post('/galleries', [AdminGalleryController::class, 'galleryStore'])->name('admin.galleries.store');
+    Route::match(['put', 'patch'], '/galleries/{gallery}', [AdminGalleryController::class, 'galleryUpdate'])->name('admin.galleries.update');
+    Route::delete('/galleries/{gallery}', [AdminGalleryController::class, 'galleryDestroy'])->name('admin.galleries.destroy');
     // Tenants CRUD (JSON API)
-    Route::get('/tenants', [AdminController::class, 'tenants'])->name('admin.tenants');
-    Route::get('/tenants/list', [AdminController::class, 'tenantList'])->name('admin.tenants.list');
-    Route::get('/tenants/{tenant}', [AdminController::class, 'tenantShow'])->name('admin.tenants.show');
-    Route::post('/tenants', [AdminController::class, 'tenantStore'])->name('admin.tenants.store');
-    Route::match(['put', 'patch'], '/tenants/{tenant}', [AdminController::class, 'tenantUpdate'])->name('admin.tenants.update');
-    Route::delete('/tenants/{tenant}', [AdminController::class, 'tenantDestroy'])->name('admin.tenants.destroy');
+    Route::get('/tenants', [AdminTenantController::class, 'tenants'])->name('admin.tenants');
+    Route::get('/tenants/list', [AdminTenantController::class, 'tenantList'])->name('admin.tenants.list');
+    Route::get('/tenants/{tenant}', [AdminTenantController::class, 'tenantShow'])->name('admin.tenants.show');
+    Route::post('/tenants', [AdminTenantController::class, 'tenantStore'])->name('admin.tenants.store');
+    Route::match(['put', 'patch'], '/tenants/{tenant}', [AdminTenantController::class, 'tenantUpdate'])->name('admin.tenants.update');
+    Route::delete('/tenants/{tenant}', [AdminTenantController::class, 'tenantDestroy'])->name('admin.tenants.destroy');
     // Free Spaces CRUD (JSON API)
-    Route::get('/free-spaces', [AdminController::class, 'freeSpaces'])->name('admin.free-spaces');
-    Route::get('/free-spaces/list', [AdminController::class, 'freeSpacesList'])->name('admin.free-spaces.list');
-    Route::get('/free-spaces/{freeSpace}', [AdminController::class, 'freeSpaceShow'])->name('admin.free-spaces.show');
-    Route::post('/free-spaces', [AdminController::class, 'freeSpaceStore'])->name('admin.free-spaces.store');
-    Route::match(['put', 'patch'], '/free-spaces/{freeSpace}', [AdminController::class, 'freeSpaceUpdate'])->name('admin.free-spaces.update');
-    Route::delete('/free-spaces/{freeSpace}', [AdminController::class, 'freeSpaceDestroy'])->name('admin.free-spaces.destroy');
+    Route::get('/free-spaces', [AdminFreeSpaceController::class, 'freeSpaces'])->name('admin.free-spaces');
+    Route::get('/free-spaces/list', [AdminFreeSpaceController::class, 'freeSpacesList'])->name('admin.free-spaces.list');
+    Route::get('/free-spaces/{freeSpace}', [AdminFreeSpaceController::class, 'freeSpaceShow'])->name('admin.free-spaces.show');
+    Route::post('/free-spaces', [AdminFreeSpaceController::class, 'freeSpaceStore'])->name('admin.free-spaces.store');
+    Route::match(['put', 'patch'], '/free-spaces/{freeSpace}', [AdminFreeSpaceController::class, 'freeSpaceUpdate'])->name('admin.free-spaces.update');
+    Route::delete('/free-spaces/{freeSpace}', [AdminFreeSpaceController::class, 'freeSpaceDestroy'])->name('admin.free-spaces.destroy');
     // Vacancies CRUD (JSON API)
-    Route::get('/vacancies', [AdminController::class, 'vacancies'])->name('admin.vacancies');
-    Route::get('/vacancies/list', [AdminController::class, 'vacanciesList'])->name('admin.vacancies.list');
-    Route::get('/vacancies/{vacancy}', [AdminController::class, 'vacancyShow'])->name('admin.vacancies.show');
-    Route::post('/vacancies', [AdminController::class, 'vacancyStore'])->name('admin.vacancies.store');
-    Route::match(['put', 'patch'], '/vacancies/{vacancy}', [AdminController::class, 'vacancyUpdate'])->name('admin.vacancies.update');
-    Route::delete('/vacancies/{vacancy}', [AdminController::class, 'vacancyDestroy'])->name('admin.vacancies.destroy');
+    Route::get('/vacancies', [AdminVacancyController::class, 'vacancies'])->name('admin.vacancies');
+    Route::get('/vacancies/list', [AdminVacancyController::class, 'vacanciesList'])->name('admin.vacancies.list');
+    Route::get('/vacancies/{vacancy}', [AdminVacancyController::class, 'vacancyShow'])->name('admin.vacancies.show');
+    Route::post('/vacancies', [AdminVacancyController::class, 'vacancyStore'])->name('admin.vacancies.store');
+    Route::match(['put', 'patch'], '/vacancies/{vacancy}', [AdminVacancyController::class, 'vacancyUpdate'])->name('admin.vacancies.update');
+    Route::delete('/vacancies/{vacancy}', [AdminVacancyController::class, 'vacancyDestroy'])->name('admin.vacancies.destroy');
     // Services CRUD (JSON API)
-    Route::get('/services', [AdminController::class, 'services'])->name('admin.services');
-    Route::get('/services/list', [AdminController::class, 'servicesList'])->name('admin.services.list');
-    Route::get('/services/{service}', [AdminController::class, 'serviceShow'])->name('admin.services.show');
-    Route::post('/services', [AdminController::class, 'serviceStore'])->name('admin.services.store');
-    Route::match(['put', 'patch'], '/services/{service}', [AdminController::class, 'serviceUpdate'])->name('admin.services.update');
-    Route::delete('/services/{service}', [AdminController::class, 'serviceDestroy'])->name('admin.services.destroy');
+    Route::get('/services', [AdminServiceController::class, 'services'])->name('admin.services');
+    Route::get('/services/list', [AdminServiceController::class, 'servicesList'])->name('admin.services.list');
+    Route::get('/services/{service}', [AdminServiceController::class, 'serviceShow'])->name('admin.services.show');
+    Route::post('/services', [AdminServiceController::class, 'serviceStore'])->name('admin.services.store');
+    Route::match(['put', 'patch'], '/services/{service}', [AdminServiceController::class, 'serviceUpdate'])->name('admin.services.update');
+    Route::delete('/services/{service}', [AdminServiceController::class, 'serviceDestroy'])->name('admin.services.destroy');
     // Users page & CRUD (JSON API)
-    Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
-    Route::get('/users/list', [AdminController::class, 'usersList'])->name('admin.users.list');
-    Route::get('/users/{user}', [AdminController::class, 'userShow'])->name('admin.users.show');
-    Route::post('/users', [AdminController::class, 'userStore'])->name('admin.users.store');
-    Route::match(['put', 'patch'], '/users/{user}', [AdminController::class, 'userUpdate'])->name('admin.users.update');
-    Route::delete('/users/{user}', [AdminController::class, 'userDestroy'])->name('admin.users.destroy');
-    Route::get('/applications', [AdminController::class, 'applications'])->name('admin.applications');
-    Route::get('/applications/list', [AdminController::class, 'applicationsList'])->name('admin.applications.list');
-    Route::get('/applications/{application}', [AdminController::class, 'applicationShow'])->name('admin.applications.show');
-    Route::post('/applications', [AdminController::class, 'applicationStore'])->name('admin.applications.store');
-    Route::match(['put', 'patch'], '/applications/{application}', [AdminController::class, 'applicationUpdate'])->name('admin.applications.update');
-    Route::delete('/applications/{application}', [AdminController::class, 'applicationDestroy'])->name('admin.applications.destroy');
+    Route::get('/users', [AdminUserController::class, 'users'])->name('admin.users');
+    Route::get('/users/list', [AdminUserController::class, 'usersList'])->name('admin.users.list');
+    Route::get('/users/{user}', [AdminUserController::class, 'userShow'])->name('admin.users.show');
+    Route::post('/users', [AdminUserController::class, 'userStore'])->name('admin.users.store');
+    Route::match(['put', 'patch'], '/users/{user}', [AdminUserController::class, 'userUpdate'])->name('admin.users.update');
+    Route::delete('/users/{user}', [AdminUserController::class, 'userDestroy'])->name('admin.users.destroy');
+    // Applications page & CRUD (JSON API)
+    Route::get('/applications', [AdminApplicationController::class, 'applications'])->name('admin.applications');
+    Route::get('/applications/list', [AdminApplicationController::class, 'applicationsList'])->name('admin.applications.list');
+    Route::get('/applications/{application}', [AdminApplicationController::class, 'applicationShow'])->name('admin.applications.show');
+    Route::post('/applications', [AdminApplicationController::class, 'applicationStore'])->name('admin.applications.store');
+    Route::match(['put', 'patch'], '/applications/{application}', [AdminApplicationController::class, 'applicationUpdate'])->name('admin.applications.update');
+    Route::delete('/applications/{application}', [AdminApplicationController::class, 'applicationDestroy'])->name('admin.applications.destroy');
     // Categories page & CRUD (JSON API)
     Route::get('/categories', [AdminController::class, 'categories'])->name('admin.categories');
     Route::get('/categories/list', [AdminController::class, 'categoriesList'])->name('admin.categories.list');
@@ -85,19 +99,19 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::match(['put', 'patch'], '/contacts/{contact}', [AdminController::class, 'contactUpdate'])->name('admin.contacts.update');
     Route::delete('/contacts/{contact}', [AdminController::class, 'contactDestroy'])->name('admin.contacts.destroy');
     // Departments page & CRUD (JSON API)
-    Route::get('/departments', [AdminController::class, 'departments'])->name('admin.departments');
-    Route::get('/departments/list', [AdminController::class, 'departmentsList'])->name('admin.departments.list');
-    Route::get('/departments/{department}', [AdminController::class, 'departmentShow'])->name('admin.departments.show');
-    Route::post('/departments', [AdminController::class, 'departmentStore'])->name('admin.departments.store');
-    Route::match(['put', 'patch'], '/departments/{department}', [AdminController::class, 'departmentUpdate'])->name('admin.departments.update');
-    Route::delete('/departments/{department}', [AdminController::class, 'departmentDestroy'])->name('admin.departments.destroy');
+    Route::get('/departments', [AdminDepartmentController::class, 'departments'])->name('admin.departments');
+    Route::get('/departments/list', [AdminDepartmentController::class, 'departmentsList'])->name('admin.departments.list');
+    Route::get('/departments/{department}', [AdminDepartmentController::class, 'departmentShow'])->name('admin.departments.show');
+    Route::post('/departments', [AdminDepartmentController::class, 'departmentStore'])->name('admin.departments.store');
+    Route::match(['put', 'patch'], '/departments/{department}', [AdminDepartmentController::class, 'departmentUpdate'])->name('admin.departments.update');
+    Route::delete('/departments/{department}', [AdminDepartmentController::class, 'departmentDestroy'])->name('admin.departments.destroy');
     // News page & CRUD (JSON API)
-    Route::get('/news', [AdminController::class, 'news'])->name('admin.news');
-    Route::get('/news/list', [AdminController::class, 'newsList'])->name('admin.news.list');
-    Route::get('/news/{news}', [AdminController::class, 'newsShow'])->name('admin.news.show');
-    Route::post('/news', [AdminController::class, 'newsStore'])->name('admin.news.store');
-    Route::match(['put', 'patch'], '/news/{news}', [AdminController::class, 'newsUpdate'])->name('admin.news.update');
-    Route::delete('/news/{news}', [AdminController::class, 'newsDestroy'])->name('admin.news.destroy');
+    Route::get('/news', [AdminNewsController::class, 'news'])->name('admin.news');
+    Route::get('/news/list', [AdminNewsController::class, 'newsList'])->name('admin.news.list');
+    Route::get('/news/{news}', [AdminNewsController::class, 'newsShow'])->name('admin.news.show');
+    Route::post('/news', [AdminNewsController::class, 'newsStore'])->name('admin.news.store');
+    Route::match(['put', 'patch'], '/news/{news}', [AdminNewsController::class, 'newsUpdate'])->name('admin.news.update');
+    Route::delete('/news/{news}', [AdminNewsController::class, 'newsDestroy'])->name('admin.news.destroy');
     // Slides page & CRUD (JSON API)
     Route::get('/slides', [AdminController::class, 'slides'])->name('admin.slides');
     Route::get('/slides/list', [AdminController::class, 'slidesList'])->name('admin.slides.list');
@@ -113,27 +127,25 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::match(['put', 'patch'], '/events/{event}', [AdminController::class, 'eventUpdate'])->name('admin.events.update');
     Route::delete('/events/{event}', [AdminController::class, 'eventDestroy'])->name('admin.events.destroy');
     // Floors page & CRUD (JSON API)
-    Route::get('/floors', [AdminController::class, 'floors'])->name('admin.floors');
-    Route::get('/floors/list', [AdminController::class, 'floorsList'])->name('admin.floors.list');
-    Route::get('/floors/{floor}', [AdminController::class, 'floorShow'])->name('admin.floors.show');
-    Route::post('/floors', [AdminController::class, 'floorStore'])->name('admin.floors.store');
-    Route::match(['put', 'patch'], '/floors/{floor}', [AdminController::class, 'floorUpdate'])->name('admin.floors.update');
-    Route::delete('/floors/{floor}', [AdminController::class, 'floorDestroy'])->name('admin.floors.destroy');
+    Route::get('/floors', [AdminFloorController::class, 'floors'])->name('admin.floors');
+    Route::get('/floors/list', [AdminFloorController::class, 'floorsList'])->name('admin.floors.list');
+    Route::get('/floors/{floor}', [AdminFloorController::class, 'floorShow'])->name('admin.floors.show');
+    Route::post('/floors', [AdminFloorController::class, 'floorStore'])->name('admin.floors.store');
+    Route::match(['put', 'patch'], '/floors/{floor}', [AdminFloorController::class, 'floorUpdate'])->name('admin.floors.update');
+    Route::delete('/floors/{floor}', [AdminFloorController::class, 'floorDestroy'])->name('admin.floors.destroy');
     // Settings page & update
-    Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
-    Route::post('/settings', [AdminController::class, 'settingsUpdate'])->name('admin.settings.update');
+    Route::get('/settings', [AdminSettingController::class, 'settings'])->name('admin.settings');
+    Route::post('/settings', [AdminSettingController::class, 'settingsUpdate'])->name('admin.settings.update');
     // About Contents CRUD (JSON API)
-    Route::get('/about-contents', [AdminController::class, 'aboutContents'])->name('admin.about-contents');
-    Route::get('/about-contents/list', [AdminController::class, 'aboutContentsList'])->name('admin.about-contents.list');
-    Route::post('/about-contents', [AdminController::class, 'aboutContentStore'])->name('admin.about-contents.store');
-    Route::match(['post', 'put'], '/about-contents/{aboutContent}', [AdminController::class, 'aboutContentUpdate'])->name('admin.about-contents.update');
-    Route::delete('/about-contents/{aboutContent}', [AdminController::class, 'aboutContentDestroy'])->name('admin.about-contents.destroy');
+    Route::get('/about-contents', [AdminAboutContentController::class, 'aboutContents'])->name('admin.about-contents');
+    Route::get('/about-contents/list', [AdminAboutContentController::class, 'aboutContentsList'])->name('admin.about-contents.list');
+    Route::post('/about-contents', [AdminAboutContentController::class, 'aboutContentStore'])->name('admin.about-contents.store');
+    Route::match(['post', 'put'], '/about-contents/{aboutContent}', [AdminAboutContentController::class, 'aboutContentUpdate'])->name('admin.about-contents.update');
+    Route::delete('/about-contents/{aboutContent}', [AdminAboutContentController::class, 'aboutContentDestroy'])->name('admin.about-contents.destroy');
 
     // Activity Log
     Route::get('/activity-log', [AdminController::class, 'activityPage'])->name('admin.activity-log.index');
     Route::get('/api/activity', [AdminController::class, 'activity'])->name('admin.activity.index');
-
-    // Add other admin routes here as needed
     Route::get('/activity/{subject}', [AdminController::class, 'activity'])->name('admin.activity.show');
 
     // Teams page & CRUD (JSON API)
@@ -145,17 +157,17 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::delete('/teams/{team}', [AdminController::class, 'teamDestroy'])->name('admin.teams.destroy');
 
     // Malls page & CRUD (JSON API)
-    Route::get('/malls', [AdminController::class, 'malls'])->name('admin.malls');
-    Route::get('/malls/list', [AdminController::class, 'mallsList'])->name('admin.malls.list');
-    Route::get('/malls/{mall}', [AdminController::class, 'mallShow'])->name('admin.malls.show');
-    Route::post('/malls', [AdminController::class, 'mallStore'])->name('admin.malls.store');
-    Route::match(['put', 'patch'], '/malls/{mall}', [AdminController::class, 'mallUpdate'])->name('admin.malls.update');
-    Route::delete('/malls/{mall}', [AdminController::class, 'mallDestroy'])->name('admin.malls.destroy');
+    Route::get('/malls', [AdminMallController::class, 'malls'])->name('admin.malls');
+    Route::get('/malls/list', [AdminMallController::class, 'mallsList'])->name('admin.malls.list');
+    Route::get('/malls/{mall}', [AdminMallController::class, 'mallShow'])->name('admin.malls.show');
+    Route::post('/malls', [AdminMallController::class, 'mallStore'])->name('admin.malls.store');
+    Route::match(['put', 'patch'], '/malls/{mall}', [AdminMallController::class, 'mallUpdate'])->name('admin.malls.update');
+    Route::delete('/malls/{mall}', [AdminMallController::class, 'mallDestroy'])->name('admin.malls.destroy');
 
     // Instagram page & CRUD (JSON API)
-    Route::post('instagram-images', [AdminController::class, 'instagramStore'])->name('admin.instagram.store');
-    Route::put('instagram-images/{id}', [AdminController::class, 'instagramUpdate'])->name('admin.instagram.update');
-    Route::delete('instagram-images/{id}', [AdminController::class, 'instagramDestroy'])->name('admin.instagram.destroy');
+    Route::post('instagram-images', [AdminGalleryController::class, 'instagramStore'])->name('admin.instagram.store');
+    Route::put('instagram-images/{id}', [AdminGalleryController::class, 'instagramUpdate'])->name('admin.instagram.update');
+    Route::delete('instagram-images/{id}', [AdminGalleryController::class, 'instagramDestroy'])->name('admin.instagram.destroy');
 });
 
 Route::get('/about', [AboutContentController::class, 'index'])->name('about.index');
@@ -186,8 +198,8 @@ Route::get('/vacancies', [VacancyController::class, 'index'])->name('vacancies.i
 
 Route::get('/mall', [MallController::class, 'index'])->name('mall.index');
 
-Route::get('/contact', fn () => Inertia::render('Public/Contact/ContactUs'))->name('contact.index');
+Route::get('/contact', fn() => Inertia::render('Public/Contact/ContactUs'))->name('contact.index');
 
 Route::get('/announcement', [AnnouncementController::class, 'index'])->name('announcements.index');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
