@@ -23,11 +23,11 @@ class HomeController extends Controller
         $services = Service::approved()->orderBy('id', 'DESC')->limit(3)->get();
         $gallery = Gallery::approved()->orderBy('id', 'DESC')->limit(6)->get();
         $event = Event::approved()->orderBy('created_at', 'DESC')->limit(3)->get();
-        $tenants = Tenant::with('category')->orderBy('id', 'ASC')->limit(7)->get();
+        $tenants = Tenant::select('id', 'name', 'category_id', 'logo')->with('category')->orderBy('id', 'ASC')->limit(7)->get();
         $restaurant = Tenant::where('category_id', 7)->limit(3)->get();
         $About = AboutContent::where('component', 'A Legacy of Excellence')->first();
 
-        Log::info('About content:'.var_export($About, true));
+        Log::info('About content:' . var_export($tenants, true));
 
         return Inertia::render('Public/Landing/Landing', [
             'sliders' => $sliders,
@@ -38,7 +38,6 @@ class HomeController extends Controller
             'tenants' => $tenants,
             'restaurant' => $restaurant,
             'about' => $About,
-            'wasSuccessful' => true,
         ]);
     }
 

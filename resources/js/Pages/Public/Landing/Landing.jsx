@@ -3,7 +3,7 @@ import { Head } from "@inertiajs/react";
 import MainLayout from "../Shared/MainLayout";
 import Slider from "./Slider";
 import WhoWeAre from "./WhoWeAre";
-import Services from "./Services";
+import DiningAndEntertainment from "./DiningAndEntertainment";
 import Gallery from "./Gallery";
 import Testimonials from "./Testimonials";
 import MallHighlights from "./MallHighlights";
@@ -28,7 +28,7 @@ const Home = ({
       <Slider slides={sliders} />
       <WhoWeAre about={about} />
       <FeaturedTenants tenants={tenants} />
-      <Services services={services} restaurant={restaurant} />
+      <DiningAndEntertainment restaurant={restaurant} />
       <EventsAndNews events={event} />
       <section className="panel h-screen">
         <Gallery galleries={gallery} />

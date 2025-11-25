@@ -1,16 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
-import { Plus, Edit, Trash2, Eye, Search, CheckCircle, XCircle } from 'lucide-react';
+import { usePage, Head, router } from '@inertiajs/react';
+import AdminLayout from '../Shared/AdminLayout';
 import Toast from '../components/Toast';
 import DeleteConfirmation from '../components/DeleteConfirmation';
-import FormInput from '../components/FormInput';
 import RecentActivities from '../components/RecentActivities';
-import Modal from '../components/Modal';
-import AdminLayout from '../Shared/AdminLayout';
-import { usePage, Head, router } from '@inertiajs/react';
+import Header from './components/Header';
+import StatsGrid from './components/StatsGrid';
+import Filters from './components/Filters';
+import FreeSpaceTable from './components/FreeSpaceTable';
+import CreateEditModal from './components/CreateEditModal';
+import ViewSpaceModal from './components/ViewSpaceModal';
 
 const FreeSpacesCRUD = () => {
-  const { freeSpaces, floors, activities: active, counts } = usePage().props
-  const [spaces, setSpaces] = useState(freeSpaces)
+  const { freeSpaces, floors, activities: active, counts } = usePage().props;
+
+  // State mirrors original file
+  const [spaces, setSpaces] = useState(freeSpaces);
   const [activities] = useState(active);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
@@ -25,7 +30,7 @@ const FreeSpacesCRUD = () => {
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [perPageCount, setPerPageCount] = useState(10); // initial load size
+  const [perPageCount, setPerPageCount] = useState(10);
   const maxColumns = 6;
   const [isColumnMenuOpen, setIsColumnMenuOpen] = useState(false);
   const [selectedColumns, setSelectedColumns] = useState([
@@ -37,17 +42,6 @@ const FreeSpacesCRUD = () => {
   ]);
   const columnMenuRef = useRef(null);
 
-  // Lock body scroll when the form modal is open
-  useEffect(() => {
-    if (isModalOpen) {
-      const prev = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-      return () => {
-        document.body.style.overflow = prev;
-      };
-    }
-  }, [isModalOpen]);
-
   // Keep spaces in sync with latest server props after Inertia responses
   useEffect(() => {
     setSpaces(freeSpaces);
@@ -55,7 +49,7 @@ const FreeSpacesCRUD = () => {
 
   const itemsPerPage = perPageCount === 'all' ? (spaces?.length || 0) : perPageCount;
 
-  const filteredSpaces = spaces.filter(space => {
+  const filteredSpaces = (spaces || []).filter(space => {
     const matchesSearch = (space.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       (space.wing_or_zone || '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = !filterStatus || space.availability_status === filterStatus;
@@ -147,9 +141,9 @@ const FreeSpacesCRUD = () => {
     setErrors({});
     setIsModalOpen(true);
   };
+
   const handleLogoFile = (file) => {
     if (!file) return;
-    // Frontend validation: only images and max 5MB
     const MAX_SIZE = 5 * 1024 * 1024;
     if (!file.type.startsWith('image/')) {
       setErrors((prev) => ({ ...prev, logo: 'Please select a valid image file.' }));
@@ -221,7 +215,6 @@ const FreeSpacesCRUD = () => {
     }
 
     const fd = new FormData();
-    // Basic details
     fd.append('name', formData.name ?? '');
     if (formData.floor_id) fd.append('floor_id', String(formData.floor_id));
     fd.append('wing_or_zone', formData.wing_or_zone ?? '');
@@ -236,11 +229,9 @@ const FreeSpacesCRUD = () => {
     fd.append('rent_currency', formData.rent_currency ?? '');
     if (Array.isArray(formData.rent_includes)) fd.append('rent_includes', JSON.stringify(formData.rent_includes));
     fd.append('negotiable', formData.negotiable ? 1 : 0);
-    // File
     if (formData.thumbnail instanceof File) {
       fd.append('thumbnail', formData.thumbnail);
     }
-    // Optional gallery array not implemented in UI yet
     fd.append('virtual_tour_url', formData.virtual_tour_url ?? '');
     fd.append('short_description', formData.short_description ?? '');
     fd.append('full_description', formData.full_description ?? '');
@@ -313,8 +304,6 @@ const FreeSpacesCRUD = () => {
       );
     }
   };
-
-  // (Activity logging is handled server-side via AdminController)
 
   const getStatusBadge = (status) => {
     const colors = {
@@ -408,189 +397,48 @@ const FreeSpacesCRUD = () => {
     <AdminLayout>
       <Head title="Admin Free Space" />
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800">Free Spaces Management</h1>
-            <p className="text-gray-600 mt-1">Manage available rental spaces</p>
-          </div>
-          <button
-            onClick={handleCreate}
-            className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
-          >
-            <Plus className="w-4 h-4" />
-            Add New Space
-          </button>
-        </div>
+        <Header onCreate={handleCreate} />
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            <p className="text-sm text-gray-600 mb-1">Total Spaces</p>
-            <p className="text-3xl font-bold text-gray-800">{counts.count}</p>
-          </div>
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            <p className="text-sm text-gray-600 mb-1">Available</p>
-            <p className="text-3xl font-bold text-green-600">
-              {counts.available}
-            </p>
-          </div>
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            <p className="text-sm text-gray-600 mb-1">Reserved</p>
-            <p className="text-3xl font-bold text-yellow-600">
-              {counts.reserved}
-            </p>
-          </div>
-          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            <p className="text-sm text-gray-600 mb-1">Occupied</p>
-            <p className="text-3xl font-bold text-red-600">
-              {counts.occupied}
-            </p>
-          </div>
-        </div>
+        <StatsGrid counts={counts} />
 
         <div className="grid grid-cols-1 gap-6">
           <div className="lg:col-span-2 space-y-6 shadow-2xl rounded-xl p-6 min-h-[calc(100vh-16rem)] hover:shadow-none transition-all">
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <div className="flex flex-col md:flex-row gap-4 mb-6">
-                <div className="flex-1 relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Search spaces..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                  />
-                </div>
-                <select
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
-                  className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                >
-                  <option value="">All Status &nbsp; &nbsp; &nbsp;</option>
-                  <option value="available">Available</option>
-                  <option value="reserved">Reserved</option>
-                  <option value="occupied">Occupied</option>
-                </select>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600">Add more:</span>
-                  {[5, 10, 20].map((n) => (
-                    <button
-                      key={n}
-                      type="button"
-                      onClick={() => fetchFreeSpaces((perPageCount === 'all' ? spaces.length : (perPageCount || 0)) + n)}
-                      disabled={loading}
-                      className="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
-                    >
-                      {n}
-                    </button>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => fetchFreeSpaces('all')}
-                    disabled={loading}
-                    className="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
-                  >
-                    Load all
-                  </button>
-                </div>
-                <div className="relative" ref={columnMenuRef}>
-                  <button
-                    type="button"
-                    onClick={() => setIsColumnMenuOpen((v) => !v)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-                    title="Customize columns"
-                  >
-                    Columns
-                  </button>
-                  {isColumnMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-10 p-2">
-                      <p className="px-2 py-1 text-xs text-gray-500">Select up to {maxColumns} columns</p>
-                      <div className="max-h-60 overflow-auto divide-y divide-gray-100">
-                        {allColumns.map((col) => (
-                          <label key={col.key} className="flex items-center gap-2 px-2 py-2 cursor-pointer hover:bg-gray-50">
-                            <input
-                              type="checkbox"
-                              checked={selectedColumns.includes(col.key)}
-                              onChange={() => toggleColumn(col.key)}
-                              className="w-4 h-4 rounded text-green-600 focus:ring-green-500"
-                            />
-                            <span className="text-sm text-gray-700">{col.label}</span>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
 
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gray-50 border-b">
-                    <tr>
-                      {selectedColumns.map((key) => {
-                        const col = allColumns.find((c) => c.key === key);
-                        return (
-                          <th key={key} className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">{col?.label}</th>
-                        );
-                      })}
-                      <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100">
-                    {visibleSpaces.length > 0 ? (
-                      visibleSpaces.map((space) => (
-                        <tr key={space.id} className="hover:bg-gray-50 transition-colors">
-                          {selectedColumns.map((key) => {
-                            const col = allColumns.find((c) => c.key === key);
-                            return (
-                              <td key={key} className="px-4 py-4">
-                                {col?.render(space)}
-                              </td>
-                            );
-                          })}
-                          <td className="px-4 py-4">
-                            <div className="flex items-center justify-end gap-2">
-                              <button
-                                onClick={() => handleView(space)}
-                                className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                title="View"
-                              >
-                                <Eye className="w-4 h-4" />
-                              </button>
-                              <button
-                                onClick={() => handleEdit(space)}
-                                className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                                title="Edit"
-                              >
-                                <Edit className="w-4 h-4" />
-                              </button>
-                              <button
-                                onClick={() => handleDelete(space)}
-                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                title="Delete"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan={selectedColumns.length + 1} className="px-4 py-8 text-center text-gray-500">
-                          No spaces found
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
+              <Filters
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                filterStatus={filterStatus}
+                setFilterStatus={setFilterStatus}
+                fetchFreeSpaces={fetchFreeSpaces}
+                perPageCount={perPageCount}
+                setIsColumnMenuOpen={setIsColumnMenuOpen}
+                isColumnMenuOpen={isColumnMenuOpen}
+                columnMenuRef={columnMenuRef}
+                allColumns={allColumns}
+                selectedColumns={selectedColumns}
+                toggleColumn={toggleColumn}
+                loading={loading}
+                spaces={spaces}
+                maxColumns={maxColumns}
+              />
+
+              <FreeSpaceTable
+                selectedColumns={selectedColumns}
+                allColumns={allColumns}
+                visibleSpaces={visibleSpaces}
+                handleView={handleView}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
+              />
+
               <div className="flex items-center justify-between mt-4 pt-4 border-t">
                 <p className="text-sm text-gray-600">
                   Showing {Math.min(visibleSpaces.length, filteredSpaces.length)} of {filteredSpaces.length} spaces
                 </p>
                 {loading && <span className="text-sm text-gray-500">Loading…</span>}
               </div>
+
             </div>
           </div>
 
@@ -600,351 +448,36 @@ const FreeSpacesCRUD = () => {
         </div>
 
         {isModalOpen && (
-          <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={selectedSpace ? 'Edit Space' : 'Add New Space'}>
-            <form onSubmit={handleSubmit} className="p-6">
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Basic Information</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormInput
-                      label="Space Name"
-                      name="name"
-                      value={formData.name || ''}
-                      onChange={handleInputChange}
-                      error={errors.name}
-                      placeholder="e.g., Office Space A1"
-                    />
-
-                    <FormInput
-                      label="Floor"
-                      name="floor_id"
-                      type="select"
-                      value={formData.floor_id || ''}
-                      onChange={handleInputChange}
-                      error={errors.floor_id}
-                      options={floors.map(f => ({ value: f.id, label: f.name }))}
-                    />
-
-                    <FormInput
-                      label="Wing/Zone"
-                      name="wing_or_zone"
-                      value={formData.wing_or_zone || ''}
-                      onChange={handleInputChange}
-                      error={errors.wing_or_zone}
-                      placeholder="e.g., North Wing"
-                    />
-
-                    <FormInput
-                      label="Area (sq m)"
-                      name="area_sqm"
-                      type="number"
-                      value={formData.area_sqm || ''}
-                      onChange={handleInputChange}
-                      error={errors.area_sqm}
-                      placeholder="50.00"
-                    />
-
-                    <FormInput
-                      label="Dimensions"
-                      name="dimensions"
-                      value={formData.dimensions || ''}
-                      onChange={handleInputChange}
-                      placeholder="5m x 10m"
-                    />
-
-                    <FormInput
-                      label="Availability Status"
-                      name="availability_status"
-                      type="select"
-                      value={formData.availability_status || 'available'}
-                      onChange={handleInputChange}
-                      options={[
-                        { value: 'available', label: 'Available' },
-                        { value: 'reserved', label: 'Reserved' },
-                        { value: 'occupied', label: 'Occupied' }
-                      ]}
-                    />
-
-                    <FormInput
-                      label="Slug"
-                      name="slug"
-                      value={formData.slug || ''}
-                      onChange={handleInputChange}
-                      placeholder="unique-space-slug"
-                    />
-                    <br />
-                    <div className="grid grid-cols-2 gap-4">
-                      {[
-                        { name: 'has_window', label: 'Has Window' },
-                        { name: 'has_ventilation', label: 'Has Ventilation' },
-                        { name: 'has_plumbing', label: 'Has Plumbing' },
-                        { name: 'has_electricity', label: 'Has Electricity' }
-                      ].map(item => (
-                        <label key={item.name} className="flex items-center gap-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            name={item.name}
-                            checked={formData[item.name] || false}
-                            onChange={handleInputChange}
-                            className="w-4 h-4 text-green-600 rounded focus:ring-2 focus:ring-green-500"
-                          />
-                          <span className="text-sm text-gray-700">{item.label}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Pricing</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <FormInput
-                      label="Monthly Rent"
-                      name="monthly_rent"
-                      type="number"
-                      value={formData.monthly_rent || ''}
-                      onChange={handleInputChange}
-                      error={errors.monthly_rent}
-                      placeholder="1200.00"
-                    />
-
-                    <FormInput
-                      label="Currency"
-                      name="rent_currency"
-                      value={formData.rent_currency || 'ETB'}
-                      onChange={handleInputChange}
-                      placeholder="ETB"
-                    />
-
-                    <div className="flex items-end">
-                      <label className="flex items-center gap-2 cursor-pointer pb-2">
-                        <input
-                          type="checkbox"
-                          name="negotiable"
-                          checked={formData.negotiable || false}
-                          onChange={handleInputChange}
-                          className="w-4 h-4 text-green-600 rounded focus:ring-2 focus:ring-green-500"
-                        />
-                        <span className="text-sm text-gray-700 font-medium">Negotiable</span>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Description</h3>
-                  <div className="space-y-4">
-                    <FormInput
-                      label="Short Description"
-                      name="short_description"
-                      type="textarea"
-                      value={formData.short_description || ''}
-                      onChange={handleInputChange}
-                      placeholder="Brief description..."
-                      rows={2}
-                    />
-
-                    <FormInput
-                      label="Full Description"
-                      name="full_description"
-                      type="textarea"
-                      value={formData.full_description || ''}
-                      onChange={handleInputChange}
-                      placeholder="Detailed description..."
-                      rows={4}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Contact Information</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <FormInput
-                      label="Contact Person"
-                      name="contact_person"
-                      value={formData.contact_person || ''}
-                      onChange={handleInputChange}
-                      placeholder="Jane Doe"
-                    />
-
-                    <FormInput
-                      label="Contact Phone"
-                      name="contact_phone"
-                      type="tel"
-                      value={formData.contact_phone || ''}
-                      onChange={handleInputChange}
-                      error={errors.contact_phone}
-                      placeholder="+1 (555) 123-4567"
-                    />
-
-                    <FormInput
-                      label="Contact Email"
-                      name="contact_email"
-                      type="email"
-                      value={formData.contact_email || ''}
-                      onChange={handleInputChange}
-                      error={errors.contact_email}
-                      placeholder="contact@example.com"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Media</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Thumbnail</label>
-                      <div
-                        onDrop={onLogoDrop}
-                        onDragOver={onLogoDragOver}
-                        onDragEnter={onLogoDragOver}
-                        onDragLeave={onLogoDragLeave}
-                        onClick={() => fileInputRef.current?.click()}
-                        className={`w-full px-4 py-8 border-2 rounded-lg text-center cursor-pointer transition-colors ${isDragging
-                          ? 'border-green-400 bg-green-50 ring-2 ring-green-300'
-                          : 'border-dashed border-gray-300 hover:bg-gray-50'
-                          }`}
-                      >
-                        {logoPreview ? (
-                          <img src={logoPreview} alt="Logo preview" className="mx-auto h-20 w-20 object-cover rounded" />
-                        ) : typeof formData.thumbnail === "string" && formData.thumbnail ? (
-                          <img src={`/${formData.thumbnail}`} alt="Current thumbnail" className="mx-auto h-20 w-20 object-cover rounded" />
-                        ) : (
-                          <div className="text-gray-500">
-                            Drag & drop image here, or click to select
-                          </div>
-                        )}
-                      </div>
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        name="thumbnail"
-                        accept="image/*"
-                        onChange={onLogoInputChange}
-                        className="hidden"
-                      />
-                    </div>
-
-                    <FormInput
-                      label="Virtual Tour URL"
-                      name="virtual_tour_url"
-                      value={formData.virtual_tour_url || ''}
-                      onChange={handleInputChange}
-                      placeholder="https://virtualtour.example.com"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex justify-end gap-3 mt-6 pt-6 border-t">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                >
-                  {selectedSpace ? 'Update Space' : 'Create Space'}
-                </button>
-              </div>
-            </form>
-          </Modal>
-          //   </div>
-          // </div>
+          <CreateEditModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            title={selectedSpace ? 'Edit Space' : 'Add New Space'}
+            formData={formData}
+            setFormData={setFormData}
+            errors={errors}
+            handleInputChange={handleInputChange}
+            handleSubmit={handleSubmit}
+            fileInputRef={fileInputRef}
+            isDragging={isDragging}
+            setIsDragging={setIsDragging}
+            logoPreview={logoPreview}
+            setLogoPreview={setLogoPreview}
+            onLogoInputChange={onLogoInputChange}
+            onLogoDrop={onLogoDrop}
+            onLogoDragOver={onLogoDragOver}
+            onLogoDragLeave={onLogoDragLeave}
+            floors={floors}
+            selectedSpace={selectedSpace}
+          />
         )}
 
         {isViewModalOpen && selectedSpace && (
-          <Modal isOpen={isViewModalOpen} onClose={() => setIsViewModalOpen(false)} title="Space Details">
-            <div className="p-6 space-y-6">
-              <div className="flex items-start gap-4 pb-4 border-b">
-                <img
-                  src={`/${selectedSpace.thumbnail}`}
-                  alt={selectedSpace.name}
-                  className="w-32 h-32 rounded-lg object-cover"
-                />
-                <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-gray-800">{selectedSpace.name}</h3>
-                  <p className="text-gray-600 mt-1">{selectedSpace.short_description}</p>
-                  <div className="flex items-center gap-2 mt-3">
-                    <span className={`px-3 py-1 rounded text-sm font-medium ${getStatusBadge(selectedSpace.availability_status)}`}>
-                      {selectedSpace.availability_status}
-                    </span>
-                    {selectedSpace.negotiable && (
-                      <span className="px-3 py-1 bg-blue-50 text-blue-700 rounded text-sm font-medium">
-                        Negotiable
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm text-gray-500">Floor</p>
-                  <p className="text-gray-800 font-medium">{selectedSpace.floor?.name}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Wing/Zone</p>
-                  <p className="text-gray-800 font-medium">{selectedSpace.wing_or_zone}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Area</p>
-                  <p className="text-gray-800 font-medium">{selectedSpace.area_sqm} m²</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Dimensions</p>
-                  <p className="text-gray-800 font-medium">{selectedSpace.dimensions || 'N/A'}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Monthly Rent</p>
-                  <p className="text-gray-800 font-medium">${selectedSpace.monthly_rent} {selectedSpace.rent_currency}</p>
-                </div>
-              </div>
-
-              <div className="pt-4 border-t">
-                <p className="text-sm text-gray-500 mb-3">Amenities</p>
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { key: 'has_window', label: 'Window' },
-                    { key: 'has_ventilation', label: 'Ventilation' },
-                    { key: 'has_plumbing', label: 'Plumbing' },
-                    { key: 'has_electricity', label: 'Electricity' }
-                  ].map(item => (
-                    <div key={item.key} className="flex items-center gap-2">
-                      {selectedSpace[item.key] ? (
-                        <CheckCircle className="w-5 h-5 text-green-600" />
-                      ) : (
-                        <XCircle className="w-5 h-5 text-gray-300" />
-                      )}
-                      <span className="text-sm text-gray-700">{item.label}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {selectedSpace.full_description && (
-                <div className="pt-4 border-t">
-                  <p className="text-sm text-gray-500 mb-2">Full Description</p>
-                  <p className="text-gray-800">{selectedSpace.full_description}</p>
-                </div>
-              )}
-
-              <div className="pt-4 border-t">
-                <p className="text-sm text-gray-500 mb-2">Contact Information</p>
-                <div className="space-y-1">
-                  {selectedSpace.contact_person && (
-                    <p className="text-gray-800"><strong>Person:</strong> {selectedSpace.contact_person}</p>
-                  )}
-                  <p className="text-gray-800"><strong>Phone:</strong> {selectedSpace.contact_phone}</p>
-                  <p className="text-gray-800"><strong>Email:</strong> {selectedSpace.contact_email}</p>
-                </div>
-              </div>
-            </div>
-          </Modal>
+          <ViewSpaceModal
+            isOpen={isViewModalOpen}
+            onClose={() => setIsViewModalOpen(false)}
+            selectedSpace={selectedSpace}
+            getStatusBadge={getStatusBadge}
+          />
         )}
 
         <DeleteConfirmation
@@ -961,7 +494,9 @@ const FreeSpacesCRUD = () => {
             onClose={() => setToast(null)}
           />
         )}
-      </div></AdminLayout>
+
+      </div>
+    </AdminLayout>
   );
 };
 

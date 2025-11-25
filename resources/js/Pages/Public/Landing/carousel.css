@@ -1,4 +1,4 @@
-/* Only effects/state selectors not expressible in Tailwind */
+/* carousel.css */
 .carousel .list .item:nth-child(1) {
     z-index: 1;
 }
@@ -6,11 +6,12 @@
 /* Ensure carousel is below header */
 .carousel {
     z-index: 10;
+    touch-action: pan-y;
 }
+
 .carousel .list,
 .carousel .thumbnail,
-.carousel .arrows,
-.carousel .time {
+.carousel .arrows {
     z-index: 40;
 }
 
@@ -21,6 +22,7 @@
     opacity: 0;
     animation: showContent 0.5s 1s linear 1 forwards;
 }
+
 @keyframes showContent {
     to {
         transform: translateY(0px);
@@ -28,9 +30,11 @@
         opacity: 1;
     }
 }
+
 .carousel .list .item:nth-child(1) .content .title {
     animation-delay: 900ms !important;
 }
+
 .carousel .list .item:nth-child(1) .content .topic {
     animation-delay: 1.1s !important;
 }
@@ -45,6 +49,7 @@
     border-radius: 30px;
     animation: showImage 0.5s linear 1 forwards;
 }
+
 @keyframes showImage {
     to {
         bottom: 0;
@@ -60,18 +65,22 @@
     overflow: hidden;
     animation: showThumbnail 0.5s linear 1 forwards;
 }
+
 .carousel.prev .list .item img {
     z-index: 40;
 }
+
 @keyframes showThumbnail {
     from {
         width: 0;
         opacity: 0;
     }
 }
+
 .carousel.next .thumbnail {
     animation: effectNext 0.5s linear 1 forwards;
 }
+
 @keyframes effectNext {
     from {
         transform: translateX(150px);
@@ -85,14 +94,17 @@
     left: 0;
     top: 0;
 }
+
 .carousel.next .time,
 .carousel.prev .time {
     animation: runningTime 3s linear 1 forwards;
 }
+
 @keyframes runningTime {
     from {
         width: 100%;
     }
+
     to {
         width: 0;
     }
@@ -102,12 +114,14 @@
 .carousel.prev .list .item:nth-child(2) {
     z-index: 2;
 }
+
 .carousel.prev .list .item:nth-child(2) img {
     animation: outFrame 0.5s linear 1 forwards;
     position: absolute;
     bottom: 0;
     left: 0;
 }
+
 @keyframes outFrame {
     to {
         width: 150px;
@@ -117,6 +131,7 @@
         border-radius: 20px;
     }
 }
+
 .carousel.prev .thumbnail .item:nth-child(1) {
     overflow: hidden;
     opacity: 0;
@@ -127,6 +142,7 @@
 .carousel.prev .list .item:nth-child(2) .content .topic {
     animation: contentOut 1.5s linear 1 forwards !important;
 }
+
 @keyframes contentOut {
     to {
         transform: translateY(-150px);
@@ -135,12 +151,77 @@
     }
 }
 
-/* small screens */
-@media screen and (max-width: 678px) {
+/* Mobile responsiveness */
+@media screen and (max-width: 767px) {
     .carousel .list .item .content {
         padding-right: 0;
+        top: 15% !important;
     }
+
     .carousel .list .item .content .title {
-        font-size: 30px;
+        font-size: 2rem !important;
+        line-height: 1.2 !important;
+    }
+
+    .carousel .list .item .content .topic {
+        font-size: 1.5rem !important;
+        line-height: 1.2 !important;
+    }
+
+    .thumbnail {
+        bottom: 4rem !important;
+        padding: 0 1rem;
+    }
+
+    .arrows {
+        bottom: 6rem !important;
+    }
+
+    /* Adjust thumbnail size for mobile */
+    .thumbnail .item {
+        width: 80px !important;
+        height: 100px !important;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .carousel .list .item .content .title {
+        font-size: 1.75rem !important;
+    }
+
+    .carousel .list .item .content .topic {
+        font-size: 1.25rem !important;
+    }
+
+    .thumbnail .item {
+        width: 70px !important;
+        height: 90px !important;
+    }
+
+    .arrows {
+        gap: 1rem !important;
+    }
+}
+
+/* Hide scrollbar for thumbnail container */
+.thumbnail::-webkit-scrollbar {
+    display: none;
+}
+
+.thumbnail {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Smooth transitions for better mobile experience */
+.carousel * {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Improve touch targets for mobile */
+@media (max-width: 768px) {
+    button {
+        min-height: 44px;
+        min-width: 44px;
     }
 }
