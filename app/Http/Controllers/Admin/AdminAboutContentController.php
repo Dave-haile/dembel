@@ -69,12 +69,13 @@ class AdminAboutContentController extends Controller
     if ($request->extra_data === null || $request->extra_data === '' || $request->extra_data === '[]') {
       $request->merge(['extra_data' => null]);
     }
+    // In both store and update methods, update the validation rules
     $validator = Validator::make($request->all(), [
       'component' => 'required|string|max:255',
       'title' => 'nullable|string|max:255',
-      'subtitle' => 'nullable|string|max:255',
+      'subtitle' => 'nullable|string',
       'description' => 'nullable|string',
-      'image_url' => 'nullable|string',
+      'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Changed from image_url to image
       'position' => 'nullable|integer',
       'extra_data' => 'nullable|array',
     ]);
@@ -85,7 +86,13 @@ class AdminAboutContentController extends Controller
 
     $validated = $validator->validated();
 
+    if (isset($validated['image'])) {
+      $path = $request->file('image')->store('about', 'public');
+      $validated['image_url'] = 'storage/' . $path;
+    }
+
     $aboutContent = AboutContent::create($validated);
+
 
     // Log activity
     $activity = new ActivityLog;
@@ -102,6 +109,7 @@ class AdminAboutContentController extends Controller
 
   public function aboutContentUpdate(Request $request, AboutContent $aboutContent)
   {
+    Log::info('About Content Requet ' . var_export($request->all(), true));
     if ($request->extra_data === null || $request->extra_data === '' || $request->extra_data === '[]') {
       $request->merge(['extra_data' => null]);
     }
@@ -111,9 +119,11 @@ class AdminAboutContentController extends Controller
       'subtitle' => 'nullable|string|max:255',
       'description' => 'nullable|string',
       'image_url' => 'nullable|string',
+      // 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
       'position' => 'nullable|integer',
       'extra_data' => 'nullable|array',
     ]);
+    Log::info('About Content Validator ' . var_export($validator->validated(), true));
 
     if ($validator->fails()) {
       throw ValidationException::withMessages($validator->errors()->toArray());
@@ -121,6 +131,21 @@ class AdminAboutContentController extends Controller
 
     $aboutContent->update($validator->validated());
 
+    if ($request->hasFile('image')) {
+      $old = $aboutContent->image_url;
+
+      $path = $request->file('image')->store('about', 'public');
+
+      $aboutContent->image_url = 'storage/' . $path;
+      $aboutContent->save();
+
+      if ($old && str_starts_with($old, 'storage/')) {
+        $diskPath = str_replace('storage/', '', $old);
+        Storage::disk('public')->delete($diskPath);
+      }
+    }
+
+    Log::info('About Content Updated ' . var_export($aboutContent->toArray(), true));
     // Log activity
     $activity = new ActivityLog;
     $activity->user_id = Auth::user()->id;
@@ -136,6 +161,13 @@ class AdminAboutContentController extends Controller
 
   public function aboutContentDestroy(AboutContent $aboutContent)
   {
+    $old = $aboutContent->image_url;
+    if ($old && str_starts_with($old, 'storage/')) {
+      $diskPath = str_replace('storage/', '', $old);
+      if (Storage::disk('public')->exists($diskPath)) {
+        Storage::disk('public')->delete($diskPath);
+      }
+    }
     $aboutContent->delete();
 
     // Log activity

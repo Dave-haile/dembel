@@ -20,17 +20,17 @@ const Home = ({
   tenants,
   restaurant,
   about,
+  aboutDine,
 }) => {
-
   return (
     <MainLayout services={services}>
       <Head title="Home" />
       <Slider slides={sliders} />
       <WhoWeAre about={about} />
       <FeaturedTenants tenants={tenants} />
-      <DiningAndEntertainment restaurant={restaurant} />
+      <DiningAndEntertainment restaurant={restaurant} aboutDine={aboutDine} />
       <EventsAndNews events={event} />
-      <section className="panel h-screen">
+      <section>
         <Gallery galleries={gallery} />
       </section>
       <Testimonials testimonials={testimonials} />

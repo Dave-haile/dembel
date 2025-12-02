@@ -16,7 +16,7 @@ const News = ({ news, language = "en" }) => {
   };
 
   return (
-    <section className="py-20 bg-white">
+    <section className="bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
@@ -64,10 +64,10 @@ const News = ({ news, language = "en" }) => {
                 {(language === "am"
                   ? item.sub_title_am
                   : item.sub_title_en) && (
-                  <p className="text-sm text-blue-800 font-medium mb-2">
-                    {language === "am" ? item.sub_title_am : item.sub_title_en}
-                  </p>
-                )}
+                    <p className="text-sm text-blue-800 font-medium mb-2">
+                      {language === "am" ? item.sub_title_am : item.sub_title_en}
+                    </p>
+                  )}
 
                 <p className="text-gray-600 leading-relaxed mb-6">
                   {language === "am" ? item.excerpt_am : item.excerpt_en}

@@ -332,16 +332,6 @@ const WhoWeAre = ({ about }) => {
         }
     };
 
-    const featureItem = {
-        hidden: { opacity: 0, y: 30, scale: 0.9 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            transition: { duration: 0.6, ease: "easeOut" }
-        }
-    };
-
     const slideInLeft = {
         hidden: { opacity: 0, x: -80 },
         visible: {
@@ -370,26 +360,37 @@ const WhoWeAre = ({ about }) => {
     };
 
     // GSAP ScrollTrigger for stacking effect
-    // useEffect(() => {
-    //     if (sectionRef.current) {
-    //         gsap.to(sectionRef.current, {
-    //             scrollTrigger: {
-    //                 trigger: sectionRef.current,
-    //                 start: "top top",
-    //                 end: "bottom top",
-    //                 pin: true,
-    //                 pinSpacing: false,
-    //                 scrub: true,
-    //             },
-    //         });
-    //     }
+    useEffect(() => {
+        const el = sectionRef.current;
+        if (!el) return;
 
-    //     return () => {
-    //         ScrollTrigger.getAll().forEach((trigger) => {
-    //             if (trigger.trigger === sectionRef.current) trigger.kill();
-    //         });
-    //     };
-    // }, []);
+        const fullHeight = el.offsetHeight;
+
+        let ctx = gsap.context(() => {
+            // 1️⃣ Scroll normally while user reads the content
+            ScrollTrigger.create({
+                trigger: el,
+                start: "top top",
+                end: () => `+=${fullHeight - window.innerHeight}`,
+                pin: false,
+            });
+
+            // 2️⃣ Once bottom is reached → pin + overlap effect
+            ScrollTrigger.create({
+                trigger: el,
+                start: () => `top+=${fullHeight - window.innerHeight} top`,
+                end: () => `+=${window.innerHeight * 1.1}`, // tuning overlap duration
+                pin: true,
+                scrub: true,
+                pinSpacing: false, // allow next section to slide over ⚡
+                markers: false,
+            });
+        });
+
+        return () => ctx.revert();
+    }, []);
+
+
 
     useEffect(() => {
         const letters = document.querySelectorAll(".coolors-title span span");
@@ -448,8 +449,11 @@ const WhoWeAre = ({ about }) => {
                     variants={fadeInUp}
                     className="text-center mb-16"
                 >
+                    <span className="inline-block py-1 px-3 rounded-full bg-slate-50 border border-slate-100 text-slate-900 text-xs font-bold tracking-[0.2em] uppercase mb-6">
+                        Established 2002
+                    </span>
 
-                    <h2 className="coolors-title text-center font-extrabold text-6xl md:text-7xl lg:text-8xl tracking-[18px] leading-snug" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                    <h2 className="coolors-title text-slate-950 font-serif text-center font-extrabold text-6xl md:text-7xl lg:text-8xl tracking-[18px] leading-snug">
                         {headerText.map((line, i) => (
                             <div key={i} className="flex justify-center flex-wrap">
                                 {line.split(" ").map((word, wi) => (
@@ -485,36 +489,58 @@ const WhoWeAre = ({ about }) => {
                         { icon: MapPinned, title: "40,000m² of Space", desc: "World-class retail and business area" },
                         { icon: Award, title: "A Historic Pioneer", desc: "One of Ethiopia's first malls" }
                     ].map((item, index) => (
-                        <motion.div
-                            key={index}
-                            variants={featureItem}
-                            whileHover={{
-                                y: -8,
-                                scale: 1.02,
-                                transition: { duration: 0.3 }
-                            }}
-                            className="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100"
-                        >
-                            <div className="relative z-10 text-center p-6">
-                                <motion.div
-                                    whileHover={{ rotate: 5, scale: 1.1 }}
-                                    className="inline-flex items-center justify-center w-20 h-20 bg-secondary group-hover:bg-accent-500 rounded-2xl mb-6 transition-colors duration-300"
-                                >
-                                    <item.icon className="w-20 h-20 text-primary group-hover:text-white transition-colors duration-300" />
-                                </motion.div>
-                                <h3 className="text-xl font-semibold text-gray-800 mb-3 group-hover:text-accent-700 transition-colors duration-300">
-                                    {item.title}
-                                </h3>
-                                <p className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
-                                    {item.desc}
-                                </p>
-                            </div>
-                            <div className="absolute inset-0 bg-gradient-to-br from-amber-50 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        </motion.div>
-                    ))}
+                        <div key={index} className="feature-card group p-6 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:border-gold-300/30 transition-all duration-300 flex flex-col items-center text-center relative overflow-hidden">
+                            {/* Hover Gradient */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-gold-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                            <motion.div
+                                whileHover={{ rotate: 5, scale: 1.1 }}
+                            >
+                                <div className="w-16 h-16 rounded-xl bg-slate-950 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg relative z-10">
+                                    <item.icon className="w-8 h-8 text-gold-400" />
+                                </div>
+                            </motion.div>
+                            <h3 className="text-xl font-serif font-bold text-slate-950 mb-3 relative z-10">
+                                {item.title}
+                            </h3>
+                            <p className="text-sm text-gray-500 leading-relaxed relative z-10">
+                                {item.desc}
+                            </p>
+                        </div>
+
+                    ))
+                        //     .map((item, index) => (
+                        //     <motion.div
+                        //         key={index}
+                        //         variants={featureItem}
+                        //         whileHover={{
+                        //             y: -8,
+                        //             scale: 1.02,
+                        //             transition: { duration: 0.3 }
+                        //         }}
+                        //         className="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100"
+                        //     >
+                        //         <div className="relative z-10 text-center p-6">
+                        //             <motion.div
+                        //                 whileHover={{ rotate: 5, scale: 1.1 }}
+                        //                 className="inline-flex items-center justify-center w-20 h-20 bg-secondary group-hover:bg-accent-500 rounded-2xl mb-6 transition-colors duration-300"
+                        //             >
+                        //                 <item.icon className="w-20 h-20 text-primary group-hover:text-white transition-colors duration-300" />
+                        //             </motion.div>
+                        //             <h3 className="text-xl font-semibold text-gray-800 mb-3 group-hover:text-accent-700 transition-colors duration-300">
+                        //                 {item.title}
+                        //             </h3>
+                        //             <p className="text-gray-600 group-hover:text-gray-700 transition-colors duration-300">
+                        //                 {item.desc}
+                        //             </p>
+                        //         </div>
+                        //         <div className="absolute inset-0 bg-gradient-to-br from-amber-50 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        //     </motion.div>
+                        // ))
+                    }
                 </motion.div>
 
-                <div ref={storyRef} className="flex flex-col lg:flex-row items-center gap-16 mb-20">
+                <div ref={storyRef} className="flex flex-col lg:flex-row items-center gap-16 mb-20 font-serif">
                     <motion.div
                         initial="hidden"
                         animate={isStoryInView ? "visible" : "hidden"}
@@ -523,10 +549,12 @@ const WhoWeAre = ({ about }) => {
                     >
                         <motion.h3
                             variants={slideInLeft}
-                            className="text-4xl font-bold text-gray-800 mb-8"
+                            className="text-4xl font-bold text-slate-950 mb-8"
                         >
                             {about.title.split('Excellence')[0]}
-                            <span className="text-primary-600">{about.title.split('of')[1]}</span>
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-600 to-gold-400">
+                                {about.title.split('of')[1]}
+                            </span>
                         </motion.h3>
                         <motion.div
                             variants={staggerContainer}
@@ -559,7 +587,7 @@ const WhoWeAre = ({ about }) => {
                             className="relative overflow-hidden rounded-2xl shadow-2xl"
                         >
                             <img
-                                src={`/${about.image_url || 'storage/img/dembel.jpg'}`}
+                                src={`/${about.image_url || 'img/dembel.jpg'}`}
                                 alt="Dembel City Center Building"
                                 className="w-full h-96 object-cover transform hover:scale-105 transition-transform duration-700"
                             />
@@ -569,7 +597,7 @@ const WhoWeAre = ({ about }) => {
                             initial={{ opacity: 0, scale: 0 }}
                             animate={isStoryInView ? { opacity: 1, scale: 1 } : {}}
                             transition={{ delay: 0.5, duration: 0.6 }}
-                            className="absolute -top-4 -right-4 w-24 h-24 bg-primary-700 rounded-full opacity-20"
+                            className="absolute -top-4 -right-4 w-24 h-24 bg-slate-950 rounded-full opacity-20"
                         />
                     </motion.div>
                 </div>
@@ -588,7 +616,7 @@ const WhoWeAre = ({ about }) => {
                         <motion.div variants={scaleIn}>
                             <Link
                                 href="/tenant"
-                                className="inline-block bg-primary-600 hover:bg-accent-600 text-white font-bold py-4 px-12 rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                                className="inline-block bg-slate-950 hover:bg-slate-800 text-white font-bold py-4 px-12 rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
                             >
                                 Explore Our Stores
                             </Link>
@@ -596,7 +624,7 @@ const WhoWeAre = ({ about }) => {
                         <motion.div variants={scaleIn}>
                             <Link
                                 href="/contact"
-                                className="inline-block border-2 border-gray-800 hover:bg-accent-600 text-gray-800 hover:text-white hover:border-white font-bold py-4 px-12 rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                                className="inline-block border-2 border-gray-800 hover:bg-slate-950 text-gray-800 hover:text-white hover:border-white font-bold py-4 px-12 rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
                             >
                                 View Mall Map
                             </Link>

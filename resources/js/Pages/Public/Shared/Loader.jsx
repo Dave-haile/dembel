@@ -37,7 +37,7 @@ export default function DembelLoader() {
           initial={{ rotate: 0 }}
           animate={{ rotate: -360 }}
           transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-          className="absolute w-32 h-32 text-[#fbee21]"
+          className="absolute w-32 h-32 text-accent-600"
           viewBox="0 0 100 100"
           fill="none"
           stroke="currentColor"

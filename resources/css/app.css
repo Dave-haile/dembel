@@ -174,12 +174,12 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #e04622;
+  background: var(--primary);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #c0392b;
+  background: var(--primary);
 }
 
 /* Image slider animations */
@@ -346,5 +346,49 @@ body.no-scroll {
   .tenant-card {
     min-width: 15rem;
     width: 15rem;
+  }
+}
+
+@keyframes slide-rtl {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes slide-ltr {
+  from {
+    transform: translateX(-50%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.track-rtl {
+  animation: slide-rtl 40s linear infinite;
+}
+
+.track-ltr {
+  animation: slide-ltr 40s linear infinite;
+}
+
+.featured-slider.is-paused .track-rtl,
+.featured-slider.is-paused .track-ltr {
+  animation-play-state: paused;
+}
+
+.featured-slider:hover .track-rtl,
+.featured-slider:hover .track-ltr {
+  animation-play-state: paused;
+}
+
+@keyframes shine {
+  100% {
+    transform: translateX(100%);
   }
 }

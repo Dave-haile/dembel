@@ -25,9 +25,10 @@ class HomeController extends Controller
         $event = Event::approved()->orderBy('created_at', 'DESC')->limit(3)->get();
         $tenants = Tenant::select('id', 'name', 'category_id', 'logo')->with('category')->orderBy('id', 'ASC')->limit(7)->get();
         $restaurant = Tenant::where('category_id', 7)->limit(3)->get();
-        $About = AboutContent::where('component', 'A Legacy of Excellence')->first();
+        $aboutLegacy = AboutContent::where('component', 'A Legacy of Excellence')->first();
+        $aboutDine = AboutContent::Where('component', 'Dining & Entertainment')->first();
 
-        Log::info('About content:' . var_export($tenants, true));
+        Log::info('About content:' . var_export($aboutLegacy, true));
 
         return Inertia::render('Public/Landing/Landing', [
             'sliders' => $sliders,
@@ -37,7 +38,8 @@ class HomeController extends Controller
             'event' => $event,
             'tenants' => $tenants,
             'restaurant' => $restaurant,
-            'about' => $About,
+            'about' => $aboutLegacy,
+            'aboutDine' => $aboutDine,
         ]);
     }
 
