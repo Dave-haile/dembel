@@ -69,6 +69,7 @@ class DatabaseSeeder extends Seeder
             [
                 'title_en' => 'Welcome to Our Platform',
                 'title_am' => 'እንኳን ወደ መድረካችን በደህና መጡ',
+                'description' => 'Discover a world of premium shopping, exquisite dining, and entertainment in the heart of Addis Ababa.',
                 'image' => 'storage/sliders/welcome-banner.jpg',
                 'priority' => 1,
                 'created_by' => 1,
@@ -79,6 +80,7 @@ class DatabaseSeeder extends Seeder
             [
                 'title_en' => 'Special Offers',
                 'title_am' => 'ልዩ ቅናሾች',
+                'description' => 'Special offers and discounts on a wide range of products and services.',
                 'image' => 'storage/sliders/special-offers.jpg',
                 'priority' => 2,
                 'created_by' => 1,
@@ -89,6 +91,7 @@ class DatabaseSeeder extends Seeder
             [
                 'title_en' => 'New Arrivals',
                 'title_am' => 'አዲስ የተመጣጡ እቃዎች',
+                'description' => 'New arrivals and exclusive products available in the mall.',
                 'image' => 'storage/sliders/new-arrivals.jpg',
                 'priority' => 3,
                 'created_by' => 1,
@@ -99,6 +102,7 @@ class DatabaseSeeder extends Seeder
             [
                 'title_en' => 'Summer Collection',
                 'title_am' => 'የበጋ ስብስቦች',
+                'description' => 'Summer collection of products and services available in the mall.',
                 'image' => 'storage/sliders/summer-collection.jpg',
                 'priority' => 4,
                 'created_by' => 1,
@@ -109,6 +113,7 @@ class DatabaseSeeder extends Seeder
             [
                 'title_en' => 'Limited Time Deal',
                 'title_am' => 'ለአንደኛ ጊዜ የተወሰነ ድርጅት',
+                'description' => 'Limited time deals and discounts on a wide range of products and services.',
                 'image' => 'storage/sliders/limited-deal.jpg',
                 'priority' => 5,
                 'created_by' => 1,
@@ -119,8 +124,9 @@ class DatabaseSeeder extends Seeder
             [
                 'title_en' => 'Premium Services',
                 'title_am' => 'የፕሪሚየም አገልግሎቶች',
-                'image' => null,
-                'priority' => 0,
+                'description' => 'Premium services and products available in the mall.',
+                'image' => 'storage/sliders/premium-services.jpg',
+                'priority' => 6,
                 'created_by' => 1,
                 'approval' => false,
                 'created_at' => now(),
@@ -129,6 +135,7 @@ class DatabaseSeeder extends Seeder
             [
                 'title_en' => 'Customer Reviews',
                 'title_am' => 'የደንበኞች አስተያየቶች',
+                'description' => 'Customer reviews and feedback on the products and services available in the mall.',
                 'image' => 'storage/sliders/customer-reviews.jpg',
                 'priority' => 6,
                 'created_by' => 1,
@@ -139,6 +146,7 @@ class DatabaseSeeder extends Seeder
             [
                 'title_en' => 'Join Our Community',
                 'title_am' => 'እንቁላል ወደ እኛ ማህበረሰብ',
+                'description' => 'Join our community and stay updated with the latest news and offers.',
                 'image' => 'storage/sliders/join-community.jpg',
                 'priority' => 7,
                 'created_by' => 1,
@@ -149,6 +157,7 @@ class DatabaseSeeder extends Seeder
             [
                 'title_en' => 'Explore New Features',
                 'title_am' => 'አዲስ ባህሪያትን ያስሱ',
+                'description' => 'Explore new features and products available in the mall.',
                 'image' => 'storage/sliders/new-features.jpg',
                 'priority' => 8,
                 'created_by' => 1,
@@ -159,6 +168,7 @@ class DatabaseSeeder extends Seeder
             [
                 'title_en' => 'Thank You for Visiting',
                 'title_am' => 'ለማግኘትዎ እናመሰግናለን',
+                'description' => 'Thank you for visiting our mall and we hope you enjoy your shopping experience.',
                 'image' => 'storage/sliders/thank-you.jpg',
                 'priority' => 9,
                 'created_by' => 1,
@@ -169,6 +179,7 @@ class DatabaseSeeder extends Seeder
             [
                 'title_en' => 'Exclusive Member Benefits',
                 'title_am' => 'የተለየ የአባል ጥቅሞች',
+                'description' => 'Exclusive member benefits and discounts on a wide range of products and services.',
                 'image' => 'storage/sliders/member-benefits.jpg',
                 'priority' => 10,
                 'created_by' => 1,
@@ -179,6 +190,7 @@ class DatabaseSeeder extends Seeder
             [
                 'title_en' => 'Holiday Specials',
                 'title_am' => 'የበዓል ልዩ ነገሮች',
+                'description' => 'Holiday specials and discounts on a wide range of products and services.',
                 'image' => 'storage/sliders/holiday-specials.jpg',
                 'priority' => 11,
                 'created_by' => 1,
@@ -2072,6 +2084,17 @@ class DatabaseSeeder extends Seeder
                     ],
                 ]),
                 'position' => 3,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [   
+                'component' => 'Dining & Entertainment',
+                'title' => 'Dining & Entertainment',
+                'subtitle' => 'Taste the Extraordinary, 50+ Cuisines',
+                'description' => 'Experience culinary excellence from around the world. Whether you crave an intimate fine dining experience or a vibrant atmosphere for casual bites, our curated selection of restaurants offers something to ignite every palate.',
+                'image_url' => null,
+                'extra_data' => null,
+                'position' => 2,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

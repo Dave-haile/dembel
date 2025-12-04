@@ -188,6 +188,13 @@ html {
   transform: translateX(100%);
 }
 
+.section-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  /* recommended for GSAP slide/paper effects */
+}
+
 .slide-enter-active {
   opacity: 1;
   transform: translateX(0);

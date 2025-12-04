@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('sliders', function (Blueprint $table) {
             $table->id();
             $table->string('title_en');
-            $table->string('title_am');
-            $table->string('image')->nullable();
+            $table->string('title_am')->nullable();
+            $table->text('description')->nullable();
+            $table->string('image');
             $table->integer('priority')->default(0);
 
             $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();

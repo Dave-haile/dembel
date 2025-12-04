@@ -41,6 +41,7 @@ const AdminSlides = () => {
         return (
             (s.title_en || "").toLowerCase().includes(t) ||
             (s.title_am || "").toLowerCase().includes(t) ||
+            (s.description || "").toLowerCase().includes(t) ||
             String(s.priority ?? "").toLowerCase().includes(t)
         );
     });
@@ -99,7 +100,7 @@ const AdminSlides = () => {
     useEffect(() => () => { if (imagePreview) URL.revokeObjectURL(imagePreview); }, [imagePreview]);
 
     const handleCreate = () => {
-        setFormData({ title_en: "", title_am: "", priority: 0, approval: true, image: "" });
+        setFormData({ title_en: "", title_am: "", description: "", priority: 0, approval: true, image: "" });
         setSelectedSlide(null);
         setErrors({});
         setImagePreview(null);
@@ -123,6 +124,7 @@ const AdminSlides = () => {
         const fd = new FormData();
         fd.append("title_en", formData.title_en ?? "");
         if (formData.title_am) fd.append("title_am", formData.title_am);
+        if (formData.description) fd.append("description", formData.description);
         if (formData.priority !== undefined && formData.priority !== null) fd.append("priority", String(formData.priority));
         fd.append("approval", formData.approval ? "1" : "0");
         if (formData.image instanceof File) fd.append("image", formData.image);
@@ -272,6 +274,7 @@ const AdminSlides = () => {
                                         <div className="absolute bottom-0 left-0 right-0 p-4">
                                             <h4 className="text-white font-semibold">{s.title_en}</h4>
                                             <p className="text-white/80 text-sm">{s.title_am || '—'}</p>
+                                            <p className="text-white/80 text-sm line-clamp-2">{s.description || ''}</p>
                                             <div className="mt-2 text-xs flex items-center gap-2 flex-wrap">
                                                 <span className="px-2 py-1 rounded bg-indigo-100/90 text-indigo-800">Priority: {s.priority ?? 0}</span>
                                                 <span className={`px-2 py-1 rounded ${s.approval ? 'bg-green-100/90 text-green-800' : 'bg-yellow-100/90 text-yellow-800'}`}>{s.approval ? 'Approved' : 'Pending'}</span>
@@ -301,6 +304,7 @@ const AdminSlides = () => {
                                                 <div className="flex-1">
                                                     <h3 className="text-lg font-semibold text-gray-800">{s.title_en}</h3>
                                                     <p className="text-sm text-gray-600 break-words">{s.title_am}</p>
+                                                    <p className="text-sm text-gray-600 line-clamp-2">{s.description || ''}</p>
                                                     <div className="mt-2 text-xs flex items-center gap-2 flex-wrap">
                                                         <span className="px-2 py-1 rounded bg-indigo-100 text-indigo-700">Priority: {s.priority ?? 0}</span>
                                                         <span className={`px-2 py-1 rounded ${s.approval ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>{s.approval ? 'Approved' : 'Pending'}</span>
@@ -331,6 +335,7 @@ const AdminSlides = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <FormInput label="Title (EN)" name="title_en" value={formData.title_en || ""} onChange={handleInputChange} error={errors.title_en} required />
                             <FormInput label="Title (AM)" name="title_am" value={formData.title_am || ""} onChange={handleInputChange} />
+                            <FormInput label="Description" name="description" value={formData.description || ""} onChange={handleInputChange} type="textarea" />
                             <FormInput label="Priority" name="priority" type="number" value={formData.priority ?? 0} onChange={handleInputChange} error={errors.priority} />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -373,6 +378,10 @@ const AdminSlides = () => {
                                 <div>
                                     <p className="text-sm text-gray-500">Title (AM)</p>
                                     <p className="text-gray-800 font-medium">{selectedSlide.title_am || '—'}</p>
+                                </div>
+                                <div className="col-span-2">
+                                    <p className="text-sm text-gray-500">Description</p>
+                                    <p className="text-gray-800 font-medium">{selectedSlide.description || '—'}</p>
                                 </div>
                                 <div>
                                     <p className="text-sm text-gray-500">Priority</p>

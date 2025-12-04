@@ -31,6 +31,7 @@
         "vite": "^7.0.4"
     },
     "dependencies": {
+        "@react-spring/web": "^10.0.3",
         "date-fns": "^4.1.0",
         "framer-motion": "^12.23.22",
         "gsap": "^3.13.0",

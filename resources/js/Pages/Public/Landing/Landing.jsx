@@ -26,16 +26,38 @@ const Home = ({
     <MainLayout services={services}>
       <Head title="Home" />
       <Slider slides={sliders} />
-      <WhoWeAre about={about} />
-      <FeaturedTenants tenants={tenants} />
-      <DiningAndEntertainment restaurant={restaurant} aboutDine={aboutDine} />
-      <EventsAndNews events={event} />
-      <section>
+      <div className="section-wrapper" data-gsap-safe>
+        <WhoWeAre about={about} />
+      </div>
+
+      <div className="section-wrapper" data-gsap-safe>
+        <FeaturedTenants tenants={tenants} />
+      </div>
+
+      <div className="section-wrapper" data-gsap-safe>
+        <DiningAndEntertainment restaurant={restaurant} aboutDine={aboutDine} />
+      </div>
+
+      <div className="section-wrapper" data-gsap-safe>
+        <EventsAndNews events={event} />
+      </div>
+
+      <div className="section-wrapper" data-gsap-safe>
         <Gallery galleries={gallery} />
-      </section>
-      <Testimonials testimonials={testimonials} />
-      <MallHighlights />
-      <VisitUs />
+      </div>
+
+      <div className="section-wrapper" data-gsap-safe>
+        <Testimonials testimonials={testimonials} />
+      </div>
+
+      <div className="section-wrapper" data-gsap-safe>
+        <MallHighlights />
+      </div>
+
+      <div className="section-wrapper" data-gsap-safe>
+        <VisitUs />
+      </div>
+
     </MainLayout>
   );
 };

@@ -861,6 +861,7 @@ class AdminController extends Controller
         $validator = Validator::make($request->all(), [
             'title_en' => ['required', 'string', 'max:255'],
             'title_am' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
             'priority' => ['nullable', 'integer'],
             'image' => ['nullable', 'image', 'max:5120'],
             'approval' => ['boolean'],
@@ -897,6 +898,7 @@ class AdminController extends Controller
         $validator = Validator::make($request->all(), [
             'title_en' => ['sometimes', 'required', 'string', 'max:255'],
             'title_am' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
             'priority' => ['nullable', 'integer'],
             'image' => ['nullable', 'image', 'max:5120'],
             'approval' => ['boolean'],

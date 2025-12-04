@@ -29,6 +29,7 @@ class HomeController extends Controller
         $aboutDine = AboutContent::Where('component', 'Dining & Entertainment')->first();
 
         Log::info('About content:' . var_export($aboutLegacy, true));
+        Log::info('About dine content:' . var_export($aboutDine, true));
 
         return Inertia::render('Public/Landing/Landing', [
             'sliders' => $sliders,
