@@ -127,8 +127,8 @@ const EventsAndNews = ({ events = [] }) => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
 
-                    {/* Date Badge */}
-                    <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-sm rounded-xl p-3 shadow-lg text-center min-w-[4.5rem]">
+                    {/* Allign it right in mobile view and left in desktop view */}
+                    <div className="absolute top-6 right-6 lg:left-6 bg-white/90 backdrop-blur-sm rounded-xl p-3 shadow-lg text-center min-w-[4.5rem]">
                       <span className="block text-xs font-bold text-slate-500 uppercase">{formatDate(featuredEvent.event_date).month}</span>
                       <span className="block text-2xl font-black text-slate-900 leading-none">{formatDate(featuredEvent.event_date).day}</span>
                     </div>
