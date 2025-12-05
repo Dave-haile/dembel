@@ -4,7 +4,6 @@ import { useRef } from 'react';
 import { Heart, Users, Leaf, Star, Shield, Zap } from 'lucide-react';
 
 export default function MissionValues({ missionValues }) {
-  console.log('mission values', missionValues);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
@@ -30,7 +29,6 @@ export default function MissionValues({ missionValues }) {
       value.color = 'from-purple-500 to-indigo-500';
     }
   });
-  console.log('value', values);
 
   return (
     <section ref={ref} className="py-24 px-4 bg-gradient-to-b from-slate-50 to-white">

@@ -2448,6 +2448,7 @@ class DatabaseSeeder extends Seeder
         DB::table('teams')->insert($team);
         DB::table('free_spaces')->insert($freeSpaces);
         DB::table('malls')->insert($mall);
+        DB::table('instagram_images')->insert($instagram);
         DB::table('about_contents')->insert($aboutContent);
     }
 }

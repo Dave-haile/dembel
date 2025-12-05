@@ -154,7 +154,7 @@ const Tenants = () => {
     setFormData((prev) => ({ ...prev, logo: file }));
     const url = URL.createObjectURL(file);
     setLogoPreview(url);
-    console.log("SELECTED LOGO FILE:", file);
+    // console.log("SELECTED LOGO FILE:", file);
   };
 
   const onLogoInputChange = (e) => {
@@ -398,7 +398,7 @@ const Tenants = () => {
             setSelectedTenant(null);
             setLogoPreview(null);
             setToast({ message: 'Tenant updated successfully', type: 'success' });
-            router.reload({ only: ['tenants', 'count'] });
+            router.reload({ only: ['tenants', 'initialTenants', 'count'] });
           },
           onError: (errs) => {
             setErrors(errs || {});
@@ -417,7 +417,7 @@ const Tenants = () => {
             setSelectedTenant(null);
             setLogoPreview(null);
             setToast({ message: 'Tenant created successfully', type: 'success' });
-            router.reload({ only: ['tenants', 'count'] });
+            router.reload({ only: ['tenants', 'initialTenants', 'count'] });
           },
           onError: (errs) => {
             setErrors(errs || {});
@@ -431,7 +431,7 @@ const Tenants = () => {
 
   const confirmDelete = () => {
     if (selectedTenant) {
-      console.log("DELETE TENANT:", selectedTenant);
+      // console.log("DELETE TENANT:", selectedTenant);
       router.post(window.route('admin.tenants.destroy', selectedTenant.id), {
         _method: 'delete',
       }, {

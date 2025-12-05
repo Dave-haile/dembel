@@ -282,15 +282,6 @@ const SpaceDetailsSidebar = ({
                     </a>
                   </div>
                 </div>
-
-                <div className="mt-6 space-y-3">
-                  <button className="w-full bg-blue-800 hover:bg-blue-900 text-white py-3 px-4 rounded-lg font-semibold transition-colors duration-200">
-                    Reserve Now
-                  </button>
-                  <button className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 px-4 rounded-lg font-semibold transition-colors duration-200">
-                    Schedule Viewing
-                  </button>
-                </div>
               </div>
             </div>
           </div>

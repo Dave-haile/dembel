@@ -32,13 +32,13 @@ const NewsCard = ({ news, onClick, category }) => {
           {formatDate(news.created_at)}
         </div>
 
-        <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-orange-600 transition-colors">
+        <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-accent-600 transition-colors">
           {news.title_en}
         </h3>
 
         <p className="text-gray-600 mb-4 line-clamp-3">{news.excerpt_en}</p>
 
-        <div className="flex items-center text-orange-600 font-medium group-hover:text-orange-700">
+        <div className="flex items-center text-accent-600 font-medium group-hover:text-accent-700">
           Read More
           <ChevronRight className="w-4 h-4 ml-1" />
         </div>

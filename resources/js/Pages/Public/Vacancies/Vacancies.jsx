@@ -6,9 +6,9 @@ import JobFilters from "./components/JobFilters";
 import JobCard from "./components/JobCard";
 import JobDetailsModal from "./components/JobDetailsModal";
 import TalentPoolCTA from "./components/TalentPoolCTA";
+import { toast } from "react-toastify";
 
 const Vacancy = ({ vacancies: van }) => {
-  console.log(van);
   const [vacancies, setVacancies] = useState([]);
   const [filteredVacancies, setFilteredVacancies] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
@@ -68,8 +68,7 @@ const Vacancy = ({ vacancies: van }) => {
 
   // Handle CV submission
   const handleCvSubmit = useCallback(() => {
-    // Add your CV submission logic here
-    console.log('CV submission clicked');
+    toast.info('Coming Soon')
   }, []);
 
   return (

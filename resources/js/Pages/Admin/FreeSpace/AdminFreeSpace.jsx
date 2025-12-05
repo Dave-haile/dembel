@@ -158,7 +158,7 @@ const FreeSpacesCRUD = () => {
     setFormData((prev) => ({ ...prev, thumbnail: file }));
     const url = URL.createObjectURL(file);
     setLogoPreview(url);
-    console.log("SELECTED LOGO FILE:", file);
+    // console.log("SELECTED LOGO FILE:", file);
   };
 
   const onLogoInputChange = (e) => {

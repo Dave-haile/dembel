@@ -4,13 +4,11 @@ import { useRef, useState } from 'react';
 import { Linkedin, Mail } from 'lucide-react';
 
 export default function Team({ team }) {
-  console.log('team', team);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [hovered, setHovered] = useState(false);
 
   const teamData = typeof team.extra_data === 'string' ? JSON.parse(team.extra_data) : team.extra_data;
-  console.log('teamData', teamData);
 
   return (
     <section ref={ref} className="py-24 px-4 bg-white">

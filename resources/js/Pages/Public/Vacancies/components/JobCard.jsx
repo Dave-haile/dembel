@@ -40,7 +40,7 @@ const JobCard = ({ job, onClick }) => {
             </span>
           </div>
         </div>
-        <button className="mt-4 w-full py-2 bg-gold-600 hover:bg-gold-700 text-white font-medium rounded-lg transition-colors">
+          <button className="mt-4 w-full py-2 bg-gold-600 hover:bg-gold-700 text-white font-medium rounded-lg transition-colors">
           Apply Now
         </button>
       </div>

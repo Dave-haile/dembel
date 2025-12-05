@@ -8,9 +8,6 @@ import { BarChart, DonutChart, LineChart } from '../components/Charts';
 
 const Dashboard = () => {
   const { counts, tables, tenants, activities } = usePage().props;
-  console.log('activities', activities)
-  console.log('tenants', tenants);
-
   const quickActions = [
     {
       id: 'add-tenant',
@@ -102,9 +99,6 @@ const Dashboard = () => {
             columns={tenantColumns}
             data={tenants}
             itemsPerPage={5}
-            onEdit={(item) => console.log('Edit', item)}
-            onDelete={(item) => console.log('Delete', item)}
-            onView={(item) => console.log('View', item)}
           />
         </div>
       </div>

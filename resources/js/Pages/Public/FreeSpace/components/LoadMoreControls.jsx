@@ -21,7 +21,7 @@ const LoadMoreControls = ({
         </p>
       </div>
 
-      <div className="flex flex-wrap justify-center gap-3 border-2">
+      <div className="flex flex-wrap justify-center gap-3">
         {[5, 10, 15].map((amount) => (
           <button
             key={amount}

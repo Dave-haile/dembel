@@ -309,7 +309,7 @@ const FreeSpaces = () => {
 
   const confirmDelete = () => {
     if (selectedSpace) {
-      console.log('DELETE Free Space:', selectedSpace);
+      // console.log('DELETE Free Space:', selectedSpace);
       setFreeSpaces(freeSpaces.filter(s => s.id !== selectedSpace.id));
       // toast({
       //   title: 'Success',
@@ -326,7 +326,7 @@ const FreeSpaces = () => {
     if (selectedSpace) {
       // Update
       const updatedSpace = { ...selectedSpace, ...formData };
-      console.log('UPDATE Free Space:', updatedSpace);
+      // console.log('UPDATE Free Space:', updatedSpace);
       setFreeSpaces(freeSpaces.map(s => s.id === selectedSpace.id ? updatedSpace  : s));
       // toast({
       //   title: 'Success',
@@ -339,7 +339,7 @@ const FreeSpaces = () => {
         id: Math.max(...freeSpaces.map(s => s.id)) + 1,
         floor: mockFloors.find(f => f.id === formData.floor_id) || mockFloors[0],
       };
-      console.log('CREATE Free Space:', newSpace);
+      // console.log('CREATE Free Space:', newSpace);
       setFreeSpaces([...freeSpaces, newSpace]);
       // toast({
       //   title: 'Success',

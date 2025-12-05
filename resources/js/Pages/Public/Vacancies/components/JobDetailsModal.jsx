@@ -1,11 +1,19 @@
 import React from 'react';
 import { X, Mail, Phone, Map } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 const JobDetailsModal = ({ job, onClose }) => {
   if (!job) return null;
 
+  const handleApplyNow = () => {
+    toast.info('Coming Soon')
+    onClose()
+  }
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div
+     onClick={onClose}
+     className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div 
         className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
@@ -90,7 +98,9 @@ const JobDetailsModal = ({ job, onClose }) => {
             <p className="text-gray-700 mb-4">
               {job.how_to_apply}
             </p>
-            <button className="px-6 py-3 bg-gold-600 hover:bg-gold-700 text-white font-medium rounded-lg transition-colors">
+            <button 
+            onClick={handleApplyNow}
+            className="px-6 py-3 bg-accent-700 hover:bg-accent-700 text-white font-medium rounded-lg transition-colors">
               Apply Now
             </button>
           </div>

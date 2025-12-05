@@ -31,7 +31,7 @@ export const useCrud = (initialData, entityName) => {
       user: "Admin",
     };
     setActivityLog((prev) => [log, ...prev.slice(0, 9)]); // Keep last 10
-    console.log(`[ACTIVITY] ${action} ${entityName}:`, item);
+    // console.log(`[ACTIVITY] ${action} ${entityName}:`, item);
   };
 
   // CRUD Functions
@@ -39,7 +39,7 @@ export const useCrud = (initialData, entityName) => {
     const item = { ...newItem, id: Date.now() };
     setItems((prev) => [...prev, item]);
     logActivity("Created", item);
-    console.log(`[CREATE] ${entityName}:`, item);
+    // console.log(`[CREATE] ${entityName}:`, item);
     return item;
   };
 
@@ -49,7 +49,7 @@ export const useCrud = (initialData, entityName) => {
     );
     const item = { id, ...updatedItem };
     logActivity("Updated", item);
-    console.log(`[UPDATE] ${entityName} ID ${id}:`, updatedItem);
+    // console.log(`[UPDATE] ${entityName} ID ${id}:`, updatedItem);
     return item;
   };
 
@@ -57,7 +57,7 @@ export const useCrud = (initialData, entityName) => {
     const deleted = items.find((i) => i.id === id);
     setItems((prev) => prev.filter((item) => item.id !== id));
     if (deleted) logActivity("Deleted", deleted);
-    console.log(`[DELETE] ${entityName} ID ${id}`);
+    // console.log(`[DELETE] ${entityName} ID ${id}`);
   };
 
   return {

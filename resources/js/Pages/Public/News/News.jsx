@@ -63,7 +63,7 @@ export default function News({ news: newss, pagination: initialPagination }) {
   const [pagination, setPagination] = useState({
     current_page: 1,
     last_page: 1,
-    per_page: 3,
+    per_page: initialPagination?.per_page || 6,
     total: 0,
     has_more: false,
   });
@@ -111,7 +111,7 @@ export default function News({ news: newss, pagination: initialPagination }) {
     setLoading(true);
     try {
       const response = await fetch(
-        `/news/load?page=${pagination.current_page + 1}&per_page=${amount}`
+        `/news-events/load?page=${pagination.current_page + 1}&per_page=${amount}`
       );
       const data = await response.json();
 
@@ -120,7 +120,7 @@ export default function News({ news: newss, pagination: initialPagination }) {
         setPagination({
           current_page: data.current_page,
           last_page: data.last_page,
-          per_page: data.per_page,
+          per_page: data.per_page, // Use the per_page from backend response
           total: data.total,
           has_more: data.has_more,
         });
@@ -145,7 +145,7 @@ export default function News({ news: newss, pagination: initialPagination }) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
           <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12 text-white">
             <div className="max-w-4xl mx-auto">
-              <span className="px-4 py-2 bg-orange-600 text-white rounded-full text-sm font-medium mb-4 inline-block">
+              <span className="px-4 py-2 bg-primary-700 text-white rounded-full text-sm font-medium mb-4 inline-block">
                 Featured News
               </span>
               <h1 className="text-3xl md:text-5xl font-bold mb-4">
@@ -156,7 +156,7 @@ export default function News({ news: newss, pagination: initialPagination }) {
               </p>
               <button
                 onClick={() => handleNewsClick(featuredNews)}
-                className="inline-flex items-center px-6 py-3 bg-white text-orange-600 font-medium rounded-lg hover:bg-gray-100 transition-colors"
+                className="inline-flex items-center px-6 py-3 bg-white text-primary-700 font-medium rounded-lg hover:bg-gray-100 transition-colors"
               >
                 Read Full Story
                 <ChevronRight className="w-5 h-5 ml-2" />
@@ -221,8 +221,8 @@ export default function News({ news: newss, pagination: initialPagination }) {
             disabled={loading}
             className={`inline-flex items-center text-xl px-2 py-1 font-semibold rounded-lg transition-all duration-200 ${
               loading
-                ? "bg-blue-600 cursor-not-allowed"
-                : "bg-blue-800 hover:bg-blue-900 hover:scale-105"
+                ? "bg-primary-600 cursor-not-allowed"
+                : "bg-accent-700 hover:bg-blue-900 hover:scale-105"
             } text-white disabled:cursor-not-allowed`}
           >
             {loading ? (
@@ -232,7 +232,7 @@ export default function News({ news: newss, pagination: initialPagination }) {
               </>
             ) : (
               <>
-                Load 5 More
+                Load {5} More
                 <ChevronRight size={16} className="ml-1" />
               </>
             )}

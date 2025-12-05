@@ -14,13 +14,11 @@ import {
 } from 'lucide-react';
 
 export default function Facilities({ facilities }) {
-  console.log('facilities', facilities);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
   const extra_data = typeof facilities.extra_data === 'string' ? JSON.parse(facilities.extra_data) : facilities.extra_data;
-  console.log('extra_data', extra_data);
 
   extra_data.forEach((facility) => {
     if (facility.title === 'Fine Dining') {

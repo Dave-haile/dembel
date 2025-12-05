@@ -105,7 +105,7 @@ const AdminService = () => {
           setToast({ message: "Image is too large (max 5MB).", type: "error" });
           return;
         }
-        console.log("[AdminService] Selected file:", { name: file.name, type: file.type, size: file.size });
+        // console.log("[AdminService] Selected file:", { name: file.name, type: file.type, size: file.size });
         setFormData((prev) => ({ ...prev, [name]: file }));
         const url = URL.createObjectURL(file);
         setLogoPreview(url);
@@ -239,7 +239,7 @@ const AdminService = () => {
 
     if (selectedService) {
       fd.append("_method", "put");
-      console.log(fd);
+      // console.log(fd);
       router.post(window.route("admin.services.update", selectedService.id), fd, {
         forceFormData: true,
         onError: (errs) => {

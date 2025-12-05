@@ -83,7 +83,6 @@ export default function AnnouncementsPage() {
   };
 
   const handleAnnouncementClick = (announcement) => {
-    console.log("View details for:", announcement);
     if (announcement.type === "free_space") {
       router.visit(route("free-space.index"));
     }

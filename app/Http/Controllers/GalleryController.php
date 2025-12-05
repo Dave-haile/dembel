@@ -12,7 +12,6 @@ class GalleryController extends Controller
     {
         $gallery = Gallery::approved()->orderBy('id', 'DESC')->get();
         $instagram = DB::table('instagram_images')->where('approval', true)->orderBy('id', 'DESC')->get();
-        Log::info($gallery);
 
         return inertia('Public/Gallery/Gallery', [
             'gallery' => $gallery,

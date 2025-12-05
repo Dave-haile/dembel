@@ -9,6 +9,8 @@ import VisitUs from "./components/VisitUs";
 import Lightbox from "./components/Lightbox";
 
 const Gallery = ({ gallery = [], instagram = [] }) => {
+  console.log('gallery', gallery);
+  console.log('instagram', instagram);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [lightboxImage, setLightboxImage] = useState(null);
   const [isVisible, setIsVisible] = useState(false);

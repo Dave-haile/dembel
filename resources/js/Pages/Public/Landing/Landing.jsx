@@ -1,7 +1,6 @@
 import React from "react";
 import { Head } from "@inertiajs/react";
 import MainLayout from "../Shared/MainLayout";
-import Slider from "./Slider";
 import WhoWeAre from "./WhoWeAre";
 import DiningAndEntertainment from "./DiningAndEntertainment";
 import Gallery from "./Gallery";
@@ -10,6 +9,7 @@ import MallHighlights from "./MallHighlights";
 import FeaturedTenants from "./FeaturedTenants";
 import VisitUs from "./VisitUs";
 import EventsAndNews from "./EventsPromotions";
+import HeroSlider from "./Slider";
 
 const Home = ({
   sliders,
@@ -25,7 +25,7 @@ const Home = ({
   return (
     <MainLayout services={services}>
       <Head title="Home" />
-      <Slider slides={sliders} />
+      <HeroSlider slides={sliders} />
       <div className="section-wrapper" data-gsap-safe>
         <WhoWeAre about={about} />
       </div>

@@ -82,7 +82,7 @@ const AdminGallery = () => {
     setErrors((prev) => ({ ...prev, image: '' }));
     const url = URL.createObjectURL(file);
     setLogoPreview(url);
-    console.log("SELECTED LOGO FILE:", file);
+    // console.log("SELECTED LOGO FILE:", file);
   };
 
   const onLogoDrop = (e) => {

@@ -21,7 +21,7 @@ class ServiceController extends Controller
     public function show($id)
     {
         $service = Service::approved()->findOrFail($id);
-        $allServices = Service::approved()->orderBy('id', 'DESC')->get();
+        $allServices = Service::approved()->select('id', 'title_en')->orderBy('id', 'DESC')->get();
 
         return Inertia::render('Public/Service/ServiceDetail', [
             'service' => $service,

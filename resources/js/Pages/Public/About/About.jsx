@@ -466,8 +466,6 @@ import Location from "./components/Location";
 
 const About = () => {
   const { aboutContent, testimonials } = usePage().props;
-  console.log('aboutContent', aboutContent);
-  // console.log('testimonials', testimonials);
   const aboutHero = aboutContent.find((item) => item.component === "AboutHero");
   const aboutMallStory = aboutContent.find((item) => item.component === "MallStory");
   const aboutMissionValues = aboutContent.find((item) => item.component === "MissionValues");

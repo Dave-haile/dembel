@@ -44,28 +44,6 @@ class NewsController extends Controller
         $perPage = $request->get('per_page', 10);
         $page = $request->get('page', 1);
 
-        // Handle "All" option - load all remaining items
-        if ($perPage === 'all') {
-            $totalNews = News::count();
-            $loadedNews = ($page - 1) * 10; // Assuming initial load was 10
-            $remainingNews = $totalNews - $loadedNews;
-
-            $news = News::approved()
-                ->orderBy('created_at', 'desc')
-                ->skip($loadedNews)
-                ->take($remainingNews)
-                ->get();
-
-            return response()->json([
-                'data' => $news,
-                'current_page' => $page,
-                'last_page' => $page,
-                'per_page' => $remainingNews,
-                'total' => $totalNews,
-                'has_more' => false,
-            ]);
-        }
-
         $news = News::approved()
             ->orderBy('created_at', 'desc')
             ->paginate($perPage, ['*'], 'page', $page);

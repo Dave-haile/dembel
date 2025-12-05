@@ -24,7 +24,6 @@ function Counter({ value, suffix = '' }) {
 }
 
 export default function Stats({ stats }) {
-  console.log('stats', stats);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const extra_data = typeof stats.extra_data === 'string' ? JSON.parse(stats.extra_data) : stats.extra_data;
@@ -40,7 +39,6 @@ export default function Stats({ stats }) {
     }
   });
 
-  console.log('extra_data_stat', extra_data);
   return (
     <section ref={ref} className="py-24 px-4 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white relative overflow-hidden">
       <div className="absolute inset-0 opacity-10">
