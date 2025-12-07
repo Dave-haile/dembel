@@ -64,7 +64,6 @@ class AdminController extends Controller
             AND name NOT IN ('migrations', 'jobs', 'failed_jobs', 'job_batches', 'cache','cache_locks', 'sessions','password_reset_tokens')
         ");
 
-        $tenants = Tenant::with('category')->orderBy('created_at', 'desc')->take(5)->get();
         $activities = ActivityLog::with('user')
             ->orderBy('created_at', 'desc')
             ->take(10)
@@ -75,7 +74,6 @@ class AdminController extends Controller
         return Inertia::render('Admin/Dashboard/Dashboard', [
             'counts' => $data,
             'tables' => $tableNames,
-            'tenants' => $tenants,
             'activities' => $activities,
         ]);
     }

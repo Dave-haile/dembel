@@ -7,7 +7,6 @@ import { Link } from "@inertiajs/react";
 gsap.registerPlugin(ScrollTrigger);
 
 const DiningAndEntertainment = ({ restaurant, aboutDine }) => {
-  console.log(aboutDine);
   const containerRef = useRef(null);
   const imagesRef = useRef(null);
   const textRef = useRef(null);
@@ -27,49 +26,40 @@ const DiningAndEntertainment = ({ restaurant, aboutDine }) => {
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // Parallax effect for images
-      // We animate the grid items slightly differently to create depth
-      const mm = gsap.matchMedia();
+      // Fade in and slide up text
+      gsap.fromTo(textRef.current,
+        { opacity: 0, y: 50 }, // Change x to y for vertical slide-up
+        { 
+          opacity: 1,
+          y: 0, // Animate to y: 0
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 70%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
 
-      // Desktop animation
-      mm.add("(min-width: 1024px)", () => {
-        // Fade in and slide up text
-        gsap.fromTo(textRef.current,
-          { opacity: 0, x: 50 },
-          {
+      // Staggered image entry
+      const imageElements = imagesRef.current?.querySelectorAll('.grid-img');
+      if (imageElements) {
+        gsap.fromTo(imageElements,
+          { y: 60, opacity: 0 },
+          { 
+            y: 0,
             opacity: 1,
-            x: 0,
-            duration: 1,
-            ease: "power3.out",
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "back.out(1.2)",
             scrollTrigger: {
               trigger: containerRef.current,
-              start: "top 70%",
-              end: "bottom 80%",
-              toggleActions: "play none none reverse"
+              start: "top 75%",
             }
           }
         );
-
-        // Staggered image entry
-        const imageElements = imagesRef.current?.querySelectorAll('.grid-img');
-        if (imageElements) {
-          gsap.fromTo(imageElements,
-            { y: 60, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.8,
-              stagger: 0.2,
-              ease: "back.out(1.2)",
-              scrollTrigger: {
-                trigger: containerRef.current,
-                start: "top 75%",
-              }
-            }
-          );
-        }
-      });
-
+      }
     }, containerRef);
 
     return () => ctx.revert();

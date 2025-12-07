@@ -1,5 +1,4 @@
 import QuickActions from '../components/QuickActions';
-import DataTable from '../components/DataTable';
 import ActivityFeed from '../components/ActivityFeed';
 import AdminLayout from '../Shared/AdminLayout';
 import { Head, router, usePage } from '@inertiajs/react';
@@ -7,7 +6,7 @@ import KPICards from '../components/KpiCards';
 import { BarChart, DonutChart, LineChart } from '../components/Charts';
 
 const Dashboard = () => {
-  const { counts, tables, tenants, activities } = usePage().props;
+  const { counts, tables, activities } = usePage().props;
   const quickActions = [
     {
       id: 'add-tenant',
@@ -35,37 +34,6 @@ const Dashboard = () => {
     },
   ];
 
-  const tenantColumns = [
-    { key: 'name', label: 'Tenant Name' },
-    { key: 'unit', label: 'Unit' },
-    {
-      key: 'category',
-      label: 'Category',
-      render: (value) => (value && typeof value === 'object' ? value.name ?? '—' : value ?? '—'),
-    },
-    {
-      key: 'status',
-      label: 'Status',
-      render: (value) => (
-        <span
-          className={`px-3 py-1 rounded-full text-xs font-medium ${value === 'Active'
-            ? 'bg-green-100 text-green-700'
-            : 'bg-yellow-100 text-yellow-700'
-            }`}
-        >
-          {value}
-        </span>
-      ),
-    },
-    {
-      key: 'rent',
-      label: 'Rent',
-      render: (value) => {
-        const num = Number(value);
-        return Number.isFinite(num) ? `$${num.toLocaleString()}` : '—';
-      },
-    },
-  ];
 
   return (
     <AdminLayout>
@@ -91,15 +59,6 @@ const Dashboard = () => {
             />
           </div>
           <ActivityFeed activities={activities} />
-        </div>
-
-        <div>
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Recent Tenants</h2>
-          <DataTable
-            columns={tenantColumns}
-            data={tenants}
-            itemsPerPage={5}
-          />
         </div>
       </div>
     </AdminLayout>

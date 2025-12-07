@@ -1,22 +1,23 @@
 /* eslint-disable no-undef */
 import { useEffect, useRef, useState } from "react";
 import { Search, Bell, Menu, User, Settings, LogOut } from "lucide-react";
-import { useForm, usePage } from "@inertiajs/react";
+import { router, useForm, usePage } from "@inertiajs/react";
 
 export default function TopBar({ onMenuClick, sidebarOpen }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [notifications] = useState(3);
   const { auth } = usePage().props;
-  const dropDownRef = useRef(null);
+  const dropdownRef = useRef(null);
 
   const { post } = useForm();
 
   const handleLogout = () => {
+    console.log('loged out')
     post(route("logout"));
   };
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (showDropdown && dropDownRef.current && !dropDownRef.current.contains(e.target)) {
+      if (showDropdown && dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setShowDropdown(false);
       }
     };
@@ -69,7 +70,6 @@ export default function TopBar({ onMenuClick, sidebarOpen }) {
           <div className="relative">
             <button
               onClick={() => setShowDropdown(!showDropdown)}
-              ref={dropDownRef}
               className="flex items-center space-x-2 p-2 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold">
@@ -90,12 +90,16 @@ export default function TopBar({ onMenuClick, sidebarOpen }) {
             </button>
 
             {showDropdown && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2">
-                <button className="w-full flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 text-gray-700 transition-colors">
+              <div ref={dropdownRef} className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2">
+                <button 
+                onClick={()=> router.visit(route('admin.settings'))}
+                className="w-full flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 text-gray-700 transition-colors">
                   <User size={18} />
                   <span>Profile</span>
                 </button>
-                <button className="w-full flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 text-gray-700 transition-colors">
+                <button 
+                onClick={()=> router.visit(route('admin.settings'))}
+                className="w-full flex items-center space-x-2 px-4 py-2 hover:bg-gray-100 text-gray-700 transition-colors">
                   <Settings size={18} />
                   <span>Settings</span>
                 </button>

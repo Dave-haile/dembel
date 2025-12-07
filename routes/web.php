@@ -202,4 +202,6 @@ Route::get('/contact', fn() => Inertia::render('Public/Contact/ContactUs'))->nam
 
 Route::get('/announcement', [AnnouncementController::class, 'index'])->name('announcements.index');
 
+
+
 require __DIR__ . '/auth.php';

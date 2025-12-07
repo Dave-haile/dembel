@@ -24,31 +24,37 @@ export default function FeaturedStores({ tenants = [] }) {
           end: "bottom top",
           pin: true,
           pinSpacing: false,
-          scrub: true,
+          scrub: 1,
         },
       });
 
+      // Calculate total width of the content to determine how far to scroll
+      const getScrollWidth = (ref) => ref.current ? ref.current.scrollWidth - ref.current.clientWidth : 0;
+
+      // Create a wrapper function for infinite scrolling
+      const createInfiniteScroll = (ref, duration, direction) => {
+        const scrollWidth = getScrollWidth(ref);
+        const wrapVal = gsap.utils.wrap(0, scrollWidth);
+
+        return gsap.to(ref.current, {
+          x: direction === 'right' ? -scrollWidth : scrollWidth,
+          ease: "none",
+          duration: duration,
+          repeat: -1,
+          modifiers: {
+            x: x => wrapVal(parseFloat(x)) + "px"
+          },
+        });
+      };
+
       // Row 1 Animation (Right to Left)
       if (row1Ref.current) {
-        tween1.current = gsap.to(row1Ref.current, {
-          xPercent: -50,
-          ease: "none",
-          duration: 80,
-          repeat: -1,
-        });
+        tween1.current = createInfiniteScroll(row1Ref, 80, 'right');
       }
 
       // Row 2 Animation (Left to Right)
       if (row2Ref.current) {
-        tween2.current = gsap.fromTo(row2Ref.current,
-          { xPercent: -50 },
-          {
-            xPercent: 0,
-            ease: "none",
-            duration: 85,
-            repeat: -1,
-          }
-        );
+        tween2.current = createInfiniteScroll(row2Ref, 85, 'left');
       }
     }, containerRef);
 
@@ -109,7 +115,7 @@ export default function FeaturedStores({ tenants = [] }) {
           <div className="flex flex-col gap-12 w-full px-6 mb-8 flex-1 justify-center">
             {/* Row 1: Right to Left */}
             <div
-              className="w-full overflow-hidden -rotate-1 hover:rotate-0 transition-transform duration-500"
+              className="w-full -rotate-1 hover:rotate-0 transition-transform duration-500"
               onMouseEnter={() => tween1.current?.pause()}
               onMouseLeave={() => tween1.current?.play()}
               onTouchStart={() => tween1.current?.pause()}
@@ -124,7 +130,7 @@ export default function FeaturedStores({ tenants = [] }) {
 
             {/* Row 2: Left to Right */}
             <div
-              className="w-full overflow-hidden rotate-1 hover:rotate-0 transition-transform duration-500"
+              className="w-full rotate-1 hover:rotate-0 transition-transform duration-500"
               onMouseEnter={() => tween2.current?.pause()}
               onMouseLeave={() => tween2.current?.play()}
               onTouchStart={() => tween2.current?.pause()}
