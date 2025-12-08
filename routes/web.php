@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\AdminVacancyController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FreeSpaceController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\HomeController;
@@ -198,7 +199,7 @@ Route::get('/vacancies', [VacancyController::class, 'index'])->name('vacancies.i
 
 Route::get('/mall', [MallController::class, 'index'])->name('mall.index');
 
-Route::get('/contact', fn() => Inertia::render('Public/Contact/ContactUs'))->name('contact.index');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
 
 Route::get('/announcement', [AnnouncementController::class, 'index'])->name('announcements.index');
 

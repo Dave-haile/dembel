@@ -177,36 +177,10 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-export default function FAQSection() {
+export default function FAQSection({ data }) {
   const [openIndex, setOpenIndex] = useState(null);
 
-  const faqs = [
-    {
-      question: "What are the mall's opening hours?",
-      answer:
-        "Dembel City Center is open Monday through Sunday from 9:00 AM to 9:00 PM. Individual stores may have varying hours, so please contact them directly for specific timing.",
-    },
-    {
-      question: "Where can I park my car?",
-      answer:
-        "We offer ample parking spaces in our multi-level parking facility. Parking is free for the first 2 hours, and hourly rates apply thereafter. VIP parking is also available for premium customers.",
-    },
-    {
-      question: "Who do I contact for leasing opportunities?",
-      answer:
-        "For leasing inquiries, please contact our Leasing Manager, Meron Tadesse, at leasing@dembelmall.et or call +251 11 234 5678. We'd be happy to discuss available spaces and partnership opportunities.",
-    },
-    {
-      question: "Do you have facilities for people with disabilities?",
-      answer:
-        "Yes, Dembel City Center is fully accessible with wheelchair ramps, elevators, accessible restrooms, and designated parking spaces. Our staff is also trained to assist visitors with special needs.",
-    },
-    {
-      question: "Can I host events at the mall?",
-      answer:
-        "Absolutely! We have dedicated event spaces available for corporate events, product launches, and exhibitions. Please contact our Operations Manager at +251 11 345 6789 to discuss your requirements and availability.",
-    },
-  ];
+  const faqs = data;
 
   const toggleFAQ = (index) => {
     setOpenIndex(openIndex === index ? null : index);

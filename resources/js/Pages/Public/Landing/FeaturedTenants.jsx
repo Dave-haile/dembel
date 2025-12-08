@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useMemo, useCallback } from "react";
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Link } from "@inertiajs/react";
@@ -14,6 +14,21 @@ export default function FeaturedStores({ tenants = [] }) {
   const tween1 = useRef(null);
   const tween2 = useRef(null);
 
+  const createInfiniteScroll = useCallback((ref, duration, direction) => {
+    const toValue = direction === 'right' ? -50 : 0;
+    const fromValue = direction === 'right' ? 0 : -50;
+
+    return gsap.fromTo(ref.current,
+      { xPercent: fromValue },
+      {
+        xPercent: toValue,
+        ease: "none",
+        duration: duration,
+        repeat: -1,
+      }
+    );
+  }, []);
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Pin the entire section for the "paper on paper" effect
@@ -24,28 +39,9 @@ export default function FeaturedStores({ tenants = [] }) {
           end: "bottom top",
           pin: true,
           pinSpacing: false,
-          scrub: 1,
+          scrub: true,
         },
       });
-
-      // Calculate total width of the content to determine how far to scroll
-      const getScrollWidth = (ref) => ref.current ? ref.current.scrollWidth - ref.current.clientWidth : 0;
-
-      // Create a wrapper function for infinite scrolling
-      const createInfiniteScroll = (ref, duration, direction) => {
-        const scrollWidth = getScrollWidth(ref);
-        const wrapVal = gsap.utils.wrap(0, scrollWidth);
-
-        return gsap.to(ref.current, {
-          x: direction === 'right' ? -scrollWidth : scrollWidth,
-          ease: "none",
-          duration: duration,
-          repeat: -1,
-          modifiers: {
-            x: x => wrapVal(parseFloat(x)) + "px"
-          },
-        });
-      };
 
       // Row 1 Animation (Right to Left)
       if (row1Ref.current) {
@@ -63,11 +59,11 @@ export default function FeaturedStores({ tenants = [] }) {
       tween1.current = null;
       tween2.current = null;
     };
-  }, [tenants]);
+  }, [tenants, createInfiniteScroll]);
 
   if (!tenants || tenants.length === 0) return null;
 
-  const items = [...tenants, ...tenants, ...tenants, ...tenants];
+  const items = useMemo(() => [...tenants, ...tenants, ...tenants, ...tenants], [tenants]);
 
   return (
     <section className="w-full py-8 px-4 flex justify-center relative min-h-screen z-10">
@@ -121,7 +117,7 @@ export default function FeaturedStores({ tenants = [] }) {
               onTouchStart={() => tween1.current?.pause()}
               onTouchEnd={() => tween1.current?.play()}
             >
-              <div ref={row1Ref} className="flex gap-8 w-max pl-6">
+              <div ref={row1Ref} className="flex gap-8 pl-6 min-w-max">
                 {items.map((t, idx) => (
                   <TenantCard key={`r1-${t.id}-${idx}`} tenant={t} />
                 ))}
@@ -136,7 +132,7 @@ export default function FeaturedStores({ tenants = [] }) {
               onTouchStart={() => tween2.current?.pause()}
               onTouchEnd={() => tween2.current?.play()}
             >
-              <div ref={row2Ref} className="flex gap-8 w-max pl-6">
+              <div ref={row2Ref} className="flex gap-8 pl-6 min-w-max">
                 {items.map((t, idx) => (
                   <TenantCard key={`r2-${t.id}-${idx}`} tenant={t} />
                 ))}
@@ -164,7 +160,7 @@ export default function FeaturedStores({ tenants = [] }) {
 }
 
 // Sub-component for cleaner code
-const TenantCard = ({ tenant }) => (
+const TenantCard = React.memo(({ tenant }) => (
   <Link
     href={`/tenant/${tenant.id}`}
     className="group relative flex-shrink-0 w-80 h-52 bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 block"
@@ -198,4 +194,4 @@ const TenantCard = ({ tenant }) => (
     {/* Shine effect on hover */}
     <div className="absolute inset-0 -translate-x-full group-hover:animate-[shine_1.5s_ease-in-out] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
   </Link>
-);
+));

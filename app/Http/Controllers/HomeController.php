@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AboutContent;
+use App\Models\Contact;
 use App\Models\Event;
 use App\Models\Gallery;
 use App\Models\News;
@@ -27,6 +28,7 @@ class HomeController extends Controller
         $restaurant = Tenant::where('category_id', 7)->limit(3)->get();
         $aboutLegacy = AboutContent::where('component', 'A Legacy of Excellence')->first();
         $aboutDine = AboutContent::Where('component', 'Dining & Entertainment')->first();
+        $vistUs = Contact::where('component', 'Get in Touch')->first();
 
         Log::info('About content:' . var_export($aboutLegacy, true));
         Log::info('About dine content:' . var_export($aboutDine, true));
@@ -41,6 +43,7 @@ class HomeController extends Controller
             'restaurant' => $restaurant,
             'about' => $aboutLegacy,
             'aboutDine' => $aboutDine,
+            'visit' => $vistUs
         ]);
     }
 

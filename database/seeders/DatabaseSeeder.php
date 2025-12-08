@@ -2087,7 +2087,7 @@ class DatabaseSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [   
+            [
                 'component' => 'Dining & Entertainment',
                 'title' => 'Dining & Entertainment',
                 'subtitle' => 'Taste the Extraordinary, 50+ Cuisines',
@@ -2431,6 +2431,183 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => now(),
             ],
         ];
+
+        $contacts = [
+            [
+                'component' => 'HeroSection',
+                'data' => json_encode([
+                    'title' => "We're Here to Help",
+                    'description' => "Visit, call, or write to us anytime — we'd love to hear from you.",
+                    'buttonText' => 'View Our Location',
+                    'buttonLink' => '/contact-us',
+                    'image' => 'https://images.pexels.com/photos/380769/pexels-photo-380769.jpeg?auto=compress&cs=tinysrgb&w=1600',
+                ]),
+                'position' => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'component' => 'Get in Touch',
+                'data' => json_encode([
+                    [
+                        'title' => 'Address',
+                        'details' => ['Africa Avenue, Addis Ababa, Ethiopia'],
+                        'link' => json_encode([
+                            'text' => 'Get Directions',
+                            'href' => 'https://www.google.com/maps/dir/?api=1&destination=9.032001,38.757761',
+                        ]),
+                    ],
+                    [
+                        'title' => 'Phone',
+                        'details' => ['+251 11 123 4567', '+251 11 765 4321'],
+                        'extra' => 'Guest Services'
+                    ],
+                    [
+                        'title' => 'Email',
+                        'details' => ['info@dembelmall.et', 'leasing@dembelmall.et'],
+                        'extra' => 'General Inquiries'
+                    ],
+                    [
+                        'title' => 'Hours',
+                        'details' => [
+                            'Mon - Thu: 10:00 AM - 10:00 PM',
+                            'Fri - Sat: 10:00 AM - 11:00 PM',
+                            'Sun: 11:00 AM - 9:00 PM',
+                        ],
+                    ],
+                    [
+                        'title' => 'fax',
+                        'details' => ['+251 11 123 4567'],
+                        'extra' => 'Fax'
+                    ],
+                    [
+                        'title' => 'facebook_url',
+                        'details' => ['https://www.facebook.com/dembelmall'],
+                        'extra' => 'Facebook'
+                    ],
+                    [
+                        'title' => 'instagram_url',
+                        'details' => ['https://www.instagram.com/dembelmall'],
+                        'extra' => 'Instagram'
+                    ],
+                    [
+                        'title' => 'youtube_url',
+                        'details' => ['https://www.youtube.com/dembelmall'],
+                        'extra' => 'YouTube'
+                    ],
+                    [
+                        'title' => 'telegram_url',
+                        'details' => ['https://www.telegram.com/dembelmall'],
+                        'extra' => 'Telegram'
+                    ],
+                    [
+                        'title' => 'linkedin_url',
+                        'details' => ['https://www.linkedin.com/dembelmall'],
+                        'extra' => 'LinkedIn'
+                    ],
+                    [
+                        'title' => 'tiktok_url',
+                        'details' => ['https://www.tiktok.com/dembelmall'],
+                        'extra' => 'TikTok'
+                    ],
+                    [
+                        'title' => 'twitter_url',
+                        'details' => ['https://www.twitter.com/dembelmall'],
+                        'extra' => 'Twitter'
+                    ],
+                ]),
+                'position' => 2,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'component' => 'Frequently Asked Questions',
+                'data' => json_encode([
+                    [
+                        'question' => "What are the mall's opening hours?",
+                        'answer' => "Dembel City Center is open Monday through Sunday from 9:00 AM to 9:00 PM. Individual stores may have varying hours, so please contact them directly for specific timing.",
+                    ],
+                    [
+                        'question' => 'Where can I park my car?',
+                        'answer' => "We offer ample parking spaces in our multi-level parking facility. Parking is free for the first 2 hours, and hourly rates apply thereafter. VIP parking is also available for premium customers.",
+                    ],
+                    [
+                        'question' => 'Who do I contact for leasing opportunities?',
+                        'answer' => "For leasing inquiries, please contact our Leasing Manager, Meron Tadesse, at leasing@dembelmall.et or call +251 11 234 5678. We'd be happy to discuss available spaces and partnership opportunities.",
+                    ],
+                    [
+                        'question' => 'Do you have facilities for people with disabilities?',
+                        'answer' => "Yes, Dembel City Center is fully accessible with wheelchair ramps, elevators, accessible restrooms, and designated parking spaces. Our staff is also trained to assist visitors with special needs.",
+                    ],
+                    [
+                        'question' => 'Can I host events at the mall?',
+                        'answer' => "Absolutely! We have dedicated event spaces available for corporate events, product launches, and exhibitions. Please contact our Operations Manager at +251 11 345 6789 to discuss your requirements and availability.",
+                    ],
+                ]),
+                'position' => 3,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'component' => 'Social Links',
+                'data' => json_encode([
+                    [
+                        'title' => 'facebook_url',
+                        'details' => ['https://www.facebook.com/dembelmall'],
+                        'extra' => 'Facebook'
+                    ],
+                    [
+                        'title' => 'instagram_url',
+                        'details' => ['https://www.instagram.com/dembelmall'],
+                        'extra' => 'Instagram'
+                    ],
+                    [
+                        'title' => 'youtube_url',
+                        'details' => ['https://www.youtube.com/dembelmall'],
+                        'extra' => 'YouTube'
+                    ],
+                    [
+                        'title' => 'telegram_url',
+                        'details' => ['https://www.telegram.com/dembelmall'],
+                        'extra' => 'Telegram'
+                    ],
+                    [
+                        'title' => 'linkedin_url',
+                        'details' => ['https://www.linkedin.com/dembelmall'],
+                        'extra' => 'LinkedIn'
+                    ],
+                    [
+                        'title' => 'tiktok_url',
+                        'details' => ['https://www.tiktok.com/dembelmall'],
+                        'extra' => 'TikTok'
+                    ],
+                    [
+                        'title' => 'twitter_url',
+                        'details' => ['https://www.twitter.com/dembelmall'],
+                        'extra' => 'Twitter'
+                    ],
+                    [
+                        'title' => 'website_url',
+                        'details' => ['https://www.dembelmall.com'],
+                        'extra' => 'Website'
+                    ],
+                ]),
+                'position' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'component' => 'MapEmbed',
+                'data' => json_encode([
+                    'url' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3935.765738504823!2d38.757761!3d9.032001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b8f7e387c5743%3A0x4691343ccd4e0d20!2sDembel%20City%20Centre!5e0!3m2!1sen!2set!4v1733678400000!5m2!1sen!2set',
+                ]),
+                'position' => 5,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ];
+
+
         DB::table('users')->insert($users);
         DB::table('categories')->insert($category);
         DB::table('sliders')->insert($sliders);
@@ -2450,6 +2627,7 @@ class DatabaseSeeder extends Seeder
         DB::table('malls')->insert($mall);
         DB::table('instagram_images')->insert($instagram);
         DB::table('about_contents')->insert($aboutContent);
+        DB::table('contacts')->insert($contacts);
     }
 }
 // foreach ($vacancies as $index => $vacancy) {

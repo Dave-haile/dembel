@@ -79,10 +79,12 @@
 // export default MapEmbed;
 import { ExternalLink } from "lucide-react";
 
-export default function MapEmbed() {
+export default function MapEmbed({ data }) {
   const mapUrl =
+    data?.url ||
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.3175539799893!2d38.7577605!3d9.0320009!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOcKwMDEnNTUuMiJOIDM4wrA0NSczNS45IkU!5e0!3m2!1sen!2set!4v1234567890";
   const googleMapsLink =
+    data?.googleMapsLink ||
     "https://www.google.com/maps/search/?api=1&query=9.032001,38.757761";
 
   return (

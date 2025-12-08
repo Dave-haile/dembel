@@ -271,7 +271,7 @@ export default function Header({ user }) {
                 {/* Logo Container - Using the one provided in context or fallback */}
                 <div className="bg-white rounded-full p-1 w-full h-full flex items-center justify-center overflow-hidden shadow-lg group-hover:shadow-yellow-400/50 transition-shadow">
                   <img
-                    src="/img/logo-construction.png"
+                    src="/img/favicon2.jpg"
                     onError={(e) => {
                       // Fallback if image fails
                       e.target.src = "https://ui-avatars.com/api/?name=DC&background=0f172a&color=facc15&font-size=0.5";

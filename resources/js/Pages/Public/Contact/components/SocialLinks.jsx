@@ -167,9 +167,10 @@
 
 // export default SocialLinks;
 import { useState } from "react";
-import { Facebook, Instagram, Youtube, Send, CheckCircle } from "lucide-react";
+import { Facebook, Instagram, Youtube, Send, CheckCircle, Twitter, Linkedin } from "lucide-react";
+import { FaTiktok } from "react-icons/fa";
 
-export default function SocialLinks() {
+export default function SocialLinks({ data }) {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
@@ -182,32 +183,48 @@ export default function SocialLinks() {
     }, 3000);
   };
 
-  const socials = [
-    {
-      name: "Facebook",
-      icon: <Facebook size={28} />,
-      url: "https://facebook.com/dembelmall",
-      color: "hover:text-blue-600",
-    },
-    {
-      name: "Instagram",
-      icon: <Instagram size={28} />,
-      url: "https://instagram.com/dembelmall",
-      color: "hover:text-pink-600",
-    },
-    {
-      name: "YouTube",
-      icon: <Youtube size={28} />,
-      url: "https://youtube.com/@dembelmall",
-      color: "hover:text-red-600",
-    },
-    {
-      name: "Telegram",
-      icon: <Send size={28} />,
-      url: "https://t.me/dembelmall",
-      color: "hover:text-blue-500",
-    },
-  ];
+  const getSocialIcon = (title) => {
+    switch (title) {
+      case "facebook_url":
+        return <Facebook size={28} />;
+      case "instagram_url":
+        return <Instagram size={28} />;
+      case "youtube_url":
+        return <Youtube size={28} />;
+      case "telegram_url":
+        return <Send size={28} />;
+      case "twitter_url":
+        return <Twitter size={28} />;
+      case "linkedin_url":
+        return <Linkedin size={28} />;
+      case "tiktok_url":
+        return <FaTiktok />
+
+      default:
+        return null;
+    }
+  };
+
+  const getSocialColor = (title) => {
+    switch (title) {
+      case "facebook_url":
+        return "hover:text-blue-600";
+      case "instagram_url":
+        return "hover:text-pink-600";
+      case "youtube_url":
+        return "hover:text-red-600";
+      case "telegram_url":
+        return "hover:text-blue-500";
+      case "twitter_url":
+        return "hover:text-blue-400";
+      case "linkedin_url":
+        return "hover:text-blue-700";
+      case "tiktok_url":
+        return "hover:text-black";
+      default:
+        return "";
+    }
+  };
 
   return (
     <section className="py-20 px-4 bg-gradient-to-br from-gray-900 via-blue-900 to-pink-900 text-white">
@@ -220,17 +237,17 @@ export default function SocialLinks() {
         </div>
 
         <div className="flex justify-center space-x-8 mb-16">
-          {socials.map((social, index) => (
+          {data.map((social, index) => (
             <a
               key={index}
-              href={social.url}
+              href={social.details[0]}
               target="_blank"
               rel="noopener noreferrer"
-              className={`text-white ${social.color} transition-all duration-300 hover:scale-125 animate-fade-in`}
+              className={`text-white ${getSocialColor(social.title)} transition-all duration-300 hover:scale-125 animate-fade-in`}
               style={{ animationDelay: `${index * 100}ms` }}
-              aria-label={social.name}
+              aria-label={social.title}
             >
-              {social.icon}
+              {getSocialIcon(social.title)}
             </a>
           ))}
         </div>

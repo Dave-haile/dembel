@@ -118,16 +118,77 @@
 
 // export default VisitUs;
 
-import React, { useRef, useLayoutEffect } from "react";
+import React, { useRef, useLayoutEffect, useState, useEffect } from "react";
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Clock, MapPin, Phone, Navigation, Mail, ArrowUpRight } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const VisitUs = () => {
+const VisitUs = ({ visit }) => {
   const containerRef = useRef(null);
   const contentRef = useRef(null);
+
+  const [visitData, setVisitData] = useState({
+    address: { details: ["Africa Avenue, Addis Ababa, Ethiopia"], link: null },
+    phone: { details: ["+251 11 123 4567"], extra: "Guest Services" },
+    email: { details: ["info@dembelmall.com"], extra: "General Inquiries" },
+    hours: [
+      { day: "Mon - Thu", hours: "10:00 AM - 10:00 PM" },
+      { day: "Fri - Sat", hours: "10:00 AM - 11:00 PM" },
+      { day: "Sunday", hours: "11:00 AM - 9:00 PM" },
+    ]
+  });
+
+  useEffect(() => {
+    if (visit && visit.data) {
+      try {
+        const parsedData = JSON.parse(visit.data);
+        const newVisitData = { ...visitData };
+
+        parsedData.forEach(item => {
+          switch (item.title) {
+            case "Address":
+              newVisitData.address = {
+                details: item.details || ["Africa Avenue, Addis Ababa, Ethiopia"],
+                link: item.link ? JSON.parse(item.link) : null
+              };
+              break;
+            case "Phone":
+              newVisitData.phone = {
+                details: item.details || ["+251 11 123 4567"],
+                extra: item.extra || "Guest Services"
+              };
+              break;
+            case "Email":
+              newVisitData.email = {
+                details: item.details || ["info@dembelmall.com"],
+                extra: item.extra || "General Inquiries"
+              };
+              break;
+            case "Hours":
+              // Convert the hours array to the format expected by the component
+              const hoursArray = item.details.map((hourString, index) => {
+                const parts = hourString.split(': ');
+                if (parts.length === 2) {
+                  return { day: parts[0], hours: parts[1] };
+                }
+                // Fallback for different format
+                return { day: `Day ${index + 1}`, hours: hourString };
+              });
+              newVisitData.hours = hoursArray.length > 0 ? hoursArray : visitData.hours;
+              break;
+            default:
+              break;
+          }
+        });
+
+        setVisitData(newVisitData);
+      } catch (error) {
+        console.error("Error parsing visit data:", error);
+      }
+    }
+  }, [visit]);
 
   useLayoutEffect(() => {
     const container = containerRef.current;
@@ -156,12 +217,6 @@ const VisitUs = () => {
 
     return () => ctx.revert();
   }, []);
-
-  const openingHours = [
-    { day: "Mon - Thu", hours: "10:00 AM - 10:00 PM" },
-    { day: "Fri - Sat", hours: "10:00 AM - 11:00 PM" },
-    { day: "Sunday", hours: "11:00 AM - 9:00 PM" },
-  ];
 
   return (
     // SECTION STYLING:
@@ -200,7 +255,7 @@ const VisitUs = () => {
                   <h3 className="text-xl font-bold text-white">Opening Hours</h3>
                 </div>
                 <div className="space-y-4">
-                  {openingHours.map((schedule, index) => (
+                  {visitData.hours.map((schedule, index) => (
                     <div key={index} className="flex justify-between items-center py-2 border-b border-white/5 last:border-0">
                       <span className="text-slate-400 font-medium">{schedule.day}</span>
                       <span className="text-white font-bold tracking-wide">{schedule.hours}</span>
@@ -216,8 +271,8 @@ const VisitUs = () => {
                     <Phone size={20} />
                     <span className="font-bold text-sm uppercase tracking-wider">Phone</span>
                   </div>
-                  <p className="text-white font-semibold">+251 11 123 4567</p>
-                  <p className="text-slate-400 text-sm mt-1">Guest Services</p>
+                  <p className="text-white font-semibold">{visitData.phone.details[0]}</p>
+                  <p className="text-slate-400 text-sm mt-1">{visitData.phone.extra}</p>
                 </div>
 
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
@@ -225,15 +280,15 @@ const VisitUs = () => {
                     <Mail size={20} />
                     <span className="font-bold text-sm uppercase tracking-wider">Email</span>
                   </div>
-                  <p className="text-white font-semibold">info@dembelmall.com</p>
-                  <p className="text-slate-400 text-sm mt-1">General Inquiries</p>
+                  <p className="text-white font-semibold">{visitData.email.details[0]}</p>
+                  <p className="text-slate-400 text-sm mt-1">{visitData.email.extra}</p>
                 </div>
               </div>
 
               {/* CTA Button */}
               <div className="reveal-item pt-4">
                 <a
-                  href="https://www.google.com/maps/dir/?api=1&destination=Dembel+City+Center,+Addis+Ababa"
+                  href={visitData.address.link ? visitData.address.link.href : "https://www.google.com/maps/dir/?api=1&destination=Dembel+City+Center,+Addis+Ababa"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group w-full flex items-center justify-between bg-yellow-400 hover:bg-yellow-300 text-slate-900 p-5 rounded-2xl font-bold text-lg transition-all duration-300 shadow-[0_0_20px_rgba(250,204,21,0.3)] hover:shadow-[0_0_30px_rgba(250,204,21,0.5)] transform hover:-translate-y-1"
@@ -270,7 +325,7 @@ const VisitUs = () => {
                 <div className="absolute bottom-6 left-6 right-6 bg-slate-900/90 backdrop-blur-md p-4 rounded-xl border border-white/10 z-20 flex items-start gap-3">
                   <MapPin className="text-yellow-400 shrink-0 mt-1" size={20} />
                   <div>
-                    <p className="text-white font-semibold text-sm">Africa Avenue (Bole Road)</p>
+                    <p className="text-white font-semibold text-sm">{visitData.address.details[0]}</p>
                     <p className="text-slate-400 text-xs mt-0.5">Addis Ababa, Ethiopia</p>
                   </div>
                 </div>

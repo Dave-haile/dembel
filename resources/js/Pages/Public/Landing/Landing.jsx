@@ -21,6 +21,7 @@ const Home = ({
   restaurant,
   about,
   aboutDine,
+  visit,
 }) => {
   return (
     <MainLayout services={services}>
@@ -55,7 +56,7 @@ const Home = ({
       </div>
 
       <div className="section-wrapper" data-gsap-safe>
-        <VisitUs />
+        <VisitUs visit={visit} />
       </div>
 
     </MainLayout>

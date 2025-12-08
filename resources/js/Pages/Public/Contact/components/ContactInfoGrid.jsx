@@ -139,35 +139,26 @@
 // };
 
 // export default ContactInfoGrid;
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Map, Facebook, Twitter, Linkedin, Instagram, Youtube, Send } from "lucide-react";
 
-export default function ContactInfoGrid() {
-  const contactInfo = [
-    {
-      icon: <MapPin size={32} />,
-      title: "Address",
-      details: ["Africa Avenue, Addis Ababa, Ethiopia"],
-      link: {
-        text: "Get Directions",
-        href: "https://www.google.com/maps/dir/?api=1&destination=9.032001,38.757761",
-      },
-    },
-    {
-      icon: <Phone size={32} />,
-      title: "Phone",
-      details: ["+251 11 123 4567", "+251 11 765 4321"],
-    },
-    {
-      icon: <Mail size={32} />,
-      title: "Email",
-      details: ["info@dembelmall.et", "leasing@dembelmall.et"],
-    },
-    {
-      icon: <Clock size={32} />,
-      title: "Hours",
-      details: ["Mon–Sun: 9:00 AM – 9:00 PM"],
-    },
-  ];
+export default function ContactInfoGrid({ data }) {
+  const needed = ["Address", "Phone", "Email", "Hours"];
+  const filtered = data.filter(item => needed.includes(item.title));
+
+  const getIcon = (title) => {
+    switch (title) {
+      case "Address":
+        return <MapPin size={32} />;
+      case "Phone":
+        return <Phone size={32} />;
+      case "Email":
+        return <Mail size={32} />;
+      case "Hours":
+        return <Clock size={32} />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <section className="py-20 px-4 bg-gradient-to-br from-gray-50 to-blue-50">
@@ -182,14 +173,14 @@ export default function ContactInfoGrid() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {contactInfo.map((info, index) => (
+          {filtered.map((info, index) => (
             <div
               key={index}
               className="bg-white rounded-2xl shadow-md hover:shadow-xl p-8 transition-all duration-300 hover:-translate-y-2 group animate-fade-in"
               style={{ animationDelay: `${index * 100}ms` }}
             >
               <div className="text-pink-600 group-hover:text-pink-700 mb-4 transition-colors">
-                {info.icon}
+                {getIcon(info.title)}
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">
                 {info.title}
@@ -203,12 +194,12 @@ export default function ContactInfoGrid() {
               </div>
               {info.link && (
                 <a
-                  href={info.link.href}
+                  href={JSON.parse(info.link).href}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-block mt-4 text-blue-600 hover:text-blue-700 font-semibold transition-colors"
                 >
-                  {info.link.text} →
+                  {JSON.parse(info.link).text} →
                 </a>
               )}
             </div>

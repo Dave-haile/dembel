@@ -13,17 +13,13 @@ return new class extends Migration
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->id(); // unsigned BIGINT auto-increment
-            $table->string('address', 191);
-            $table->string('phone', 191);
-            $table->string('fax', 191);
-            $table->string('email', 191);
+            $table->string('component');
+            $table->json('data')->nullable();
+            $table->integer('position')->default(0);
             $table->timestamps();
-        });
+        });   
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('contacts');

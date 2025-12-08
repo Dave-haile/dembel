@@ -509,12 +509,11 @@ class AdminController extends Controller
     // Contacts page & CRUD
     public function contacts()
     {
-        $contacts = Contact::orderByDesc('created_at')->limit(10)->get();
+        $contacts = Contact::orderBy('position')->orderByDesc('created_at')->get();
         $total = DB::table('contacts')->count();
-        $withEmail = DB::table('contacts')->whereNotNull('email')->where('email', '!=', '')->count();
         $counts = [
             'total' => $total,
-            'with_email' => $withEmail,
+            'components' => $contacts->count(),
         ];
         $activities = ActivityLog::with('user')
             ->where('subject_type', 'contact')
@@ -531,7 +530,7 @@ class AdminController extends Controller
 
     public function contactsList(Request $request)
     {
-        $query = Contact::orderByDesc('created_at');
+        $query = Contact::orderBy('position')->orderByDesc('created_at');
         $perPageRaw = $request->query('per_page', 10);
         if ($perPageRaw === 'all') {
             $items = $query->get();
@@ -559,14 +558,20 @@ class AdminController extends Controller
     public function contactStore(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'address' => ['required', 'string', 'max:191'],
-            'phone' => ['required', 'string', 'max:191'],
-            'fax' => ['nullable', 'string', 'max:191'],
-            'email' => ['required', 'email', 'max:191'],
+            'component' => ['required', 'string', 'max:191'],
+            'data' => ['required', 'string'],
+            'position' => ['required', 'integer', 'min:1'],
         ]);
 
         if ($validator->fails()) {
             throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        // Validate that data is valid JSON
+        $data = $request->data;
+        json_decode($data);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw ValidationException::withMessages(['data' => 'Data must be valid JSON']);
         }
 
         $contact = Contact::create($validator->validated());
@@ -576,24 +581,32 @@ class AdminController extends Controller
         $activity->action = 'created';
         $activity->subject_type = 'contact';
         $activity->subject_id = $contact->id;
-        $activity->description = 'Contact created';
+        $activity->description = 'Contact component created';
         $activity->changes = $validator->validated();
         $activity->save();
 
-        return redirect()->back()->with('success', 'Contact created successfully');
+        return redirect()->back()->with('success', 'Contact component created successfully');
     }
 
     public function contactUpdate(Request $request, Contact $contact)
     {
         $validator = Validator::make($request->all(), [
-            'address' => ['sometimes', 'required', 'string', 'max:191'],
-            'phone' => ['sometimes', 'required', 'string', 'max:191'],
-            'fax' => ['nullable', 'string', 'max:191'],
-            'email' => ['sometimes', 'required', 'email', 'max:191'],
+            'component' => ['sometimes', 'required', 'string', 'max:191'],
+            'data' => ['sometimes', 'required', 'string'],
+            'position' => ['sometimes', 'required', 'integer', 'min:1'],
         ]);
 
         if ($validator->fails()) {
             throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+
+        // Validate that data is valid JSON if provided
+        if ($request->has('data')) {
+            $data = $request->data;
+            json_decode($data);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw ValidationException::withMessages(['data' => 'Data must be valid JSON']);
+            }
         }
 
         $original = $contact->getOriginal();
@@ -610,11 +623,11 @@ class AdminController extends Controller
         $activity->action = 'updated';
         $activity->subject_type = 'contact';
         $activity->subject_id = $contact->id;
-        $activity->description = 'Contact updated';
+        $activity->description = 'Contact component updated';
         $activity->changes = $diff;
         $activity->save();
 
-        return redirect()->back()->with('success', 'Contact updated successfully');
+        return redirect()->back()->with('success', 'Contact component updated successfully');
     }
 
     public function contactDestroy(Contact $contact)

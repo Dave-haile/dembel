@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect } from "react";
+import React, { useRef, useLayoutEffect, useMemo } from "react";
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, Star, Utensils } from 'lucide-react';
@@ -6,30 +6,30 @@ import { Link } from "@inertiajs/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const DiningAndEntertainment = ({ restaurant, aboutDine }) => {
+const DiningAndEntertainment = React.memo(({ restaurant, aboutDine }) => {
   const containerRef = useRef(null);
   const imagesRef = useRef(null);
   const textRef = useRef(null);
 
   // Extract images safely, ensuring we have at least 3 for the grid
-  const defaultImages = [
+  const defaultImages = useMemo(() => [
     "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80",
     "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80",
     "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800&q=80"
-  ];
+  ], []);
 
-  const displayImages = restaurant
+  const displayImages = useMemo(() => restaurant
     .map(r => r.logo)
     .filter(Boolean)
     .concat(defaultImages)
-    .slice(0, 3);
+    .slice(0, 3), [restaurant, defaultImages]);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       // Fade in and slide up text
       gsap.fromTo(textRef.current,
         { opacity: 0, y: 50 }, // Change x to y for vertical slide-up
-        { 
+        {
           opacity: 1,
           y: 0, // Animate to y: 0
           duration: 1,
@@ -47,7 +47,7 @@ const DiningAndEntertainment = ({ restaurant, aboutDine }) => {
       if (imageElements) {
         gsap.fromTo(imageElements,
           { y: 60, opacity: 0 },
-          { 
+          {
             y: 0,
             opacity: 1,
             duration: 0.8,
@@ -64,11 +64,11 @@ const DiningAndEntertainment = ({ restaurant, aboutDine }) => {
 
     return () => ctx.revert();
   }, []);
-  const subtitleParts = (aboutDine.subtitle || "")
+  const subtitleParts = useMemo(() => (aboutDine.subtitle || "")
     .split(",")
-    .map((s) => s.trim());
-  const taste = subtitleParts[0] || "Fine Dining";
-  const cuisines = subtitleParts[1] || "International";
+    .map((s) => s.trim()), [aboutDine.subtitle]);
+  const taste = useMemo(() => subtitleParts[0] || "Fine Dining", [subtitleParts]);
+  const cuisines = useMemo(() => subtitleParts[1] || "International", [subtitleParts]);
   return (
     <section className="w-full py-8 px-4 flex justify-center sticky top-8 z-20">
       <div
@@ -190,6 +190,6 @@ const DiningAndEntertainment = ({ restaurant, aboutDine }) => {
       </div>
     </section>
   );
-};
+});
 
 export default DiningAndEntertainment;
