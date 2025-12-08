@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('phone', 20);
             $table->string('alt_phone', 20)->nullable();
             $table->date('birth_date')->nullable();
-            $table->string('email', 100)->unique();
+            $table->string('email', 100);
             $table->string('photo')->nullable(); // store file path, not raw data
             $table->string('subcity', 50)->nullable();
             $table->string('woreda', 50)->nullable();

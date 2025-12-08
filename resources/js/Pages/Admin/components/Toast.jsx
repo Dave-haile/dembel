@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { CheckCircle, XCircle, X } from 'lucide-react';
 
-const Toast = ({ message, type, onClose, duration = 3000 }) => {
+const Toast = ({ message, type, onClose, duration = 3000, className }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
@@ -11,7 +11,7 @@ const Toast = ({ message, type, onClose, duration = 3000 }) => {
   }, [duration, onClose]);
 
   return (
-    <div className="fixed top-4 right-4 z-[60] animate-slide-in">
+    <div className={`fixed ${className || 'top-4'} right-4 z-[60] animate-slide-in`}>
       <div
         className={`flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg min-w-[300px] ${
           type === 'success'

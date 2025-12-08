@@ -5,7 +5,7 @@ import { Link } from "@inertiajs/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function FeaturedStores({ tenants = [] }) {
+function FeaturedTenants({ tenants = [] }) {
   const containerRef = useRef(null);
   const row1Ref = useRef(null);
   const row2Ref = useRef(null);
@@ -81,7 +81,7 @@ export default function FeaturedStores({ tenants = [] }) {
           <div className="pt-8 md:pt-12">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
               <div className="max-w-2xl">
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight mt-4">
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight mt-12">
                   Featured <span className="text-accent">Tenants</span>
                 </h2>
                 <p className="text-blue-200 text-lg md:text-xl mt-6 max-w-lg leading-relaxed">
@@ -160,7 +160,8 @@ export default function FeaturedStores({ tenants = [] }) {
 }
 
 // Sub-component for cleaner code
-const TenantCard = React.memo(({ tenant }) => (
+const TenantCard = React.memo(({ tenant }) => {
+  return (
   <Link
     href={`/tenant/${tenant.id}`}
     className="group relative flex-shrink-0 w-80 h-52 bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 block"
@@ -194,4 +195,7 @@ const TenantCard = React.memo(({ tenant }) => (
     {/* Shine effect on hover */}
     <div className="absolute inset-0 -translate-x-full group-hover:animate-[shine_1.5s_ease-in-out] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
   </Link>
-));
+  );
+});
+TenantCard.displayName = 'TenantCard';
+export default FeaturedTenants;

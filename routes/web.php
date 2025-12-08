@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutContentController;
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Admin\AdminAboutContentController;
 use App\Http\Controllers\Admin\AdminApplicationController;
 use App\Http\Controllers\Admin\AdminDepartmentController;
@@ -203,6 +204,6 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact.index
 
 Route::get('/announcement', [AnnouncementController::class, 'index'])->name('announcements.index');
 
-
+Route::post('/applications', [ApplicationController::class, 'store'])->name('applications.store');
 
 require __DIR__ . '/auth.php';

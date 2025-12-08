@@ -124,9 +124,7 @@ class AdminTenantController extends Controller
     public function tenantShow(Tenant $tenant)
     {
         $tenant->load(['category', 'floor']);
-        return Inertia::render('Admin/Tenants/Show', [
-            'tenant' => $tenant
-        ]);
+        return redirect()->back()->with('success', $tenant);
     }
 
     public function toggleStatus(Tenant $tenant)
