@@ -29,9 +29,11 @@ class HomeController extends Controller
         $aboutLegacy = AboutContent::where('component', 'A Legacy of Excellence')->first();
         $aboutDine = AboutContent::Where('component', 'Dining & Entertainment')->first();
         $vistUs = Contact::where('component', 'Get in Touch')->first();
+        $mall = AboutContent::where('component','MallHighlights')->first();
+        $video = AboutContent::where('component','VideoSection')->first();
 
-        Log::info('About content:' . var_export($aboutLegacy, true));
-        Log::info('About dine content:' . var_export($aboutDine, true));
+        // Log::info('About content:' . var_export($aboutLegacy, true));
+        Log::info('About dine content:' . var_export($mall, true));
 
         return Inertia::render('Public/Landing/Landing', [
             'sliders' => $sliders,
@@ -43,7 +45,9 @@ class HomeController extends Controller
             'restaurant' => $restaurant,
             'about' => $aboutLegacy,
             'aboutDine' => $aboutDine,
-            'visit' => $vistUs
+            'visit' => $vistUs,
+            'mall'=> $mall,
+            'video'=> $video
         ]);
     }
 

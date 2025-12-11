@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import { useEffect, useRef, useState } from "react";
 import { Search, Bell, Menu, User, Settings, LogOut } from "lucide-react";
-import { router, useForm, usePage } from "@inertiajs/react";
+import { Link, router, useForm, usePage } from "@inertiajs/react";
 
 export default function TopBar({ onMenuClick, sidebarOpen }) {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -12,7 +12,6 @@ export default function TopBar({ onMenuClick, sidebarOpen }) {
   const { post } = useForm();
 
   const handleLogout = () => {
-    console.log('loged out')
     post(route("logout"));
   };
   useEffect(() => {
@@ -59,6 +58,9 @@ export default function TopBar({ onMenuClick, sidebarOpen }) {
         </div>
 
         <div className="flex items-center space-x-4">
+        <Link href={'/'} className="relative p-2 hover:bg-primary-800 rounded-lg transition-colors bg-primary-600 text-white">
+          Back to home
+          </Link>
           <button className="relative p-2 hover:bg-gray-100 rounded-lg transition-colors">
             <Bell size={24} className="text-gray-600" />
             {notifications > 0 && (

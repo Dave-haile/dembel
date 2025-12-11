@@ -285,7 +285,7 @@ const TalentPoolCTA = () => {
 
             {/* Drawer Panel */}
             <div 
-                className="relative w-full max-w-xl bg-white h-full shadow-2xl overflow-y-auto animate-slide-in-right md:rounded-l-2xl flex flex-col"
+                className="relative w-full max-w-xl bg-white h-full mt-[4.5rem] shadow-2xl overflow-y-auto animate-slide-in-right md:rounded-l-2xl flex flex-col"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="sticky top-0 bg-white z-10 border-b border-slate-100 p-6 flex justify-between items-center shrink-0">

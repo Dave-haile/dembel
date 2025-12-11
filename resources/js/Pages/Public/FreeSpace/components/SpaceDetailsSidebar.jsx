@@ -49,7 +49,7 @@ const SpaceDetailsSidebar = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex scrollbar-hide">
+    <div className="fixed inset-0 z-50 flex scrollbar-hide mt-[4.3rem]">
       <div
         className="flex-1 bg-black bg-opacity-50 transition-opacity duration-100 scrollbar-hide"
         onClick={onClose}

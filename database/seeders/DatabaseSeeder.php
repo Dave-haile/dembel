@@ -2099,6 +2099,80 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'component' => 'Mall Highlights',
+                'title' => 'Mall Highlights',
+                'subtitle' => null,
+                'description' => 'Discover what makes Dembel City Center Mall the premier destination for shopping and entertainment',
+                'image_url' => null,
+                'extra_data' => json_encode([
+                    [
+                        'icon' => 'ShoppingBag',
+                        'number' => '200+',
+                        'label' => 'Shops',
+                        'description' => 'Premium retail stores',
+                    ],
+                    [
+                        'icon' => 'Coffee',
+                        'number' => '30+',
+                        'label' => 'Restaurants & Cafes',
+                        'description' => 'Diverse dining options',
+                    ],
+                    [
+                        'icon' => 'Film',
+                        'number' => '5+',
+                        'label' => 'Entertainment Zones',
+                        'description' => 'Cinemas, play areas & arcades',
+                    ],
+                    [
+                        'icon' => 'Gift',
+                        'number' => 'Seasonal',
+                        'label' => 'Events & Sales',
+                        'description' => 'Exciting offers year-round',
+                    ],
+                    [
+                        'icon' => 'Car',
+                        'number' => '1,000+',
+                        'label' => 'Parking Spaces',
+                        'description' => 'Secure parking facility',
+                    ],
+                    [
+                        'icon' => 'Shield',
+                        'number' => '24/7',
+                        'label' => 'Security',
+                        'description' => 'Safe and family-friendly',
+                    ],
+                    [
+                        'icon' => 'Leaf',
+                        'number' => 'Eco',
+                        'label' => 'Green Spaces',
+                        'description' => 'Relaxing, eco-friendly areas',
+                    ],
+                    [
+                        'icon' => 'MapPin',
+                        'number' => 'Prime',
+                        'label' => 'Location in Addis',
+                        'description' =>  'Heart of the city',
+                    ]
+                ]),
+                'position' => 3,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'component' => 'VideoSection',
+                'title' => 'Cinematic Tour',
+                'subtitle' => ' A Day at Dembel',
+                'description' => "Immerse yourself in the vibrant atmosphere of Addis Ababa's premier lifestyle destination. From luxury shopping to fine dining, experience it all before you arrive.",
+                'image_url' => "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=1600&q=80",
+                'extra_data' => json_encode([
+                    'video_url' => 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+                ]),
+                'position' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+
+            ],
+            [
                 'component' => 'Facilities',
                 'title' => 'World-Class Facilities',
                 'subtitle' => null,

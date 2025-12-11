@@ -43,7 +43,12 @@ export const COMPONENT_CONFIGS = {
         fields: [
           { key: "year", label: "Year", type: "text", required: true },
           { key: "title", label: "Title", type: "text", required: true },
-          { key: "desc", label: "Description", type: "textarea", required: true },
+          {
+            key: "desc",
+            label: "Description",
+            type: "textarea",
+            required: true,
+          },
         ],
       },
     ],
@@ -59,7 +64,12 @@ export const COMPONENT_CONFIGS = {
         fields: [
           { key: "icon", label: "Icon Name", type: "text", required: true },
           { key: "title", label: "Title", type: "text", required: true },
-          { key: "desc", label: "Description", type: "textarea", required: true },
+          {
+            key: "desc",
+            label: "Description",
+            type: "textarea",
+            required: true,
+          },
           { key: "color", label: "Color Gradient", type: "text" },
         ],
       },
@@ -76,8 +86,18 @@ export const COMPONENT_CONFIGS = {
         fields: [
           { key: "icon", label: "Icon Name", type: "text", required: true },
           { key: "title", label: "Title", type: "text", required: true },
-          { key: "desc", label: "Description", type: "textarea", required: true },
-          { key: "image", label: "Facility Image", type: "file", accept: "image/*" },
+          {
+            key: "desc",
+            label: "Description",
+            type: "textarea",
+            required: true,
+          },
+          {
+            key: "image",
+            label: "Facility Image",
+            type: "file",
+            accept: "image/*",
+          },
         ],
       },
     ],
@@ -111,7 +131,12 @@ export const COMPONENT_CONFIGS = {
         fields: [
           { key: "name", label: "Full Name", type: "text", required: true },
           { key: "role", label: "Role/Position", type: "text", required: true },
-          { key: "image", label: "Profile Photo", type: "file", accept: "image/*" },
+          {
+            key: "image",
+            label: "Profile Photo",
+            type: "file",
+            accept: "image/*",
+          },
           { key: "bio", label: "Bio", type: "textarea" },
           { key: "linkedin", label: "LinkedIn URL", type: "text" },
           { key: "email", label: "Email", type: "text" },
@@ -130,7 +155,12 @@ export const COMPONENT_CONFIGS = {
         fields: [
           { key: "icon", label: "Icon Name", type: "text", required: true },
           { key: "title", label: "Title", type: "text", required: true },
-          { key: "content", label: "Content", type: "textarea", required: true },
+          {
+            key: "content",
+            label: "Content",
+            type: "textarea",
+            required: true,
+          },
           { key: "subContent", label: "Sub Content", type: "text" },
         ],
       },
@@ -145,8 +175,18 @@ export const COMPONENT_CONFIGS = {
         label: "Sections",
         type: "array",
         fields: [
-          { key: "title", label: "Section Title", type: "text", required: true },
-          { key: "content", label: "Content", type: "textarea", required: true },
+          {
+            key: "title",
+            label: "Section Title",
+            type: "text",
+            required: true,
+          },
+          {
+            key: "content",
+            label: "Content",
+            type: "textarea",
+            required: true,
+          },
         ],
       },
     ],
@@ -164,7 +204,12 @@ export const COMPONENT_CONFIGS = {
           { key: "role", label: "Role/Position", type: "text", required: true },
           { key: "email", label: "Email", type: "text" },
           { key: "phone", label: "Phone", type: "text" },
-          { key: "image", label: "Profile Photo", type: "file", accept: "image/*" },
+          {
+            key: "image",
+            label: "Profile Photo",
+            type: "file",
+            accept: "image/*",
+          },
         ],
       },
     ],
@@ -179,26 +224,81 @@ export const COMPONENT_CONFIGS = {
     description: "Company organizational chart",
     extraDataFields: [],
   },
+  MallHighlights: {
+    name: "Mall Highlights",
+    description: "Key statistics and features of the mall",
+    extraDataFields: [
+      {
+        key: "highlights",
+        label: "Highlights",
+        type: "array",
+        fields: [
+          { key: "icon", label: "Icon Name", type: "text", required: true },
+          {
+            key: "number",
+            label: "Number/Value",
+            type: "text",
+            required: true,
+          },
+          { key: "label", label: "Label", type: "text", required: true },
+          {
+            key: "description",
+            label: "Description",
+            type: "textarea",
+            required: true,
+          },
+        ],
+      },
+    ],
+  },
+  VideoSection: {
+    name: "Cinematic Tour",
+    description:
+      "Immerse yourself in the vibrant atmosphere of Addis Ababa's premier lifestyle destination. From luxury shopping to fine dining, experience it all before you arrive.",
+    extraDataFields: [
+      { key: "video_url", label: "Video URL", type: "text", required: true },
+      { key: "video_file", label: "Upload Video File", type: "file", accept: "video/*" },
+    ],
+  },
 };
-
 const AdminAboutContent = () => {
-  const { aboutContents: initialContents, activities, counts, flash } = usePage().props;
-  const [items, setItems] = useState(initialContents || []);
-  const [searchTerm, setSearchTerm] = useState("");
+  const {
+    aboutContents: initialContents,
+    activities,
+    counts,
+    flash,
+    filters,
+  } = usePage().props;
+  const [items, setItems] = useState(initialContents.data || []);
+  const [searchTerm, setSearchTerm] = useState(filters.search || "");
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isViewOpen, setIsViewOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [selected, setSelected] = useState(null);
   const [toast, setToast] = useState(null);
+  const [perPage, setPerPage] = useState(filters.per_page || 10);
 
   useEffect(() => {
-    setItems(Array.isArray(initialContents) ? initialContents : initialContents?.data || []);
+    setItems(
+      Array.isArray(initialContents)
+        ? initialContents
+        : initialContents?.data || []
+    );
   }, [initialContents]);
 
   useEffect(() => {
     if (flash?.success) setToast({ message: flash.success, type: "success" });
     else if (flash?.error) setToast({ message: flash.error, type: "error" });
   }, [flash]);
+
+  const handlePerPageChange = (newPerPage) => {
+    setPerPage(newPerPage);
+    router.get(
+      window.route("admin.about-contents.index"),
+      { per_page: newPerPage, search: searchTerm },
+      { preserveState: true, replace: true }
+    );
+  };
 
   const openCreate = () => {
     setSelected(null);
@@ -230,13 +330,22 @@ const AdminAboutContent = () => {
     <AdminLayout>
       <Head title="Manage About Content" />
 
-      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
 
       <div className="flex flex-col gap-6">
         <div className="bg-white rounded-lg shadow mb-6 p-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-800">About Content</h2>
-            <button onClick={openCreate} className="mt-4 md:mt-0 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+            <button
+              onClick={openCreate}
+              className="mt-4 md:mt-0 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            >
               <Plus className="w-5 h-5 mr-2" /> Add New Content
             </button>
           </div>
@@ -253,17 +362,42 @@ const AdminAboutContent = () => {
                 placeholder="Search content..."
                 className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                  const newSearchTerm = e.target.value;
+                  setSearchTerm(newSearchTerm);
+                  router.get(
+                    window.route("admin.about-contents.index"),
+                    { search: newSearchTerm, per_page: perPage },
+                    { preserveState: true, replace: true }
+                  );
+                }}
               />
             </div>
 
-            <AboutFilters />
+            <AboutFilters
+              perPageCount={perPage}
+              onPerPageChange={handlePerPageChange}
+            />
           </div>
 
-          <AboutTable items={items} searchTerm={searchTerm} onView={openView} onEdit={openEdit} onDelete={openDelete} />
+          <AboutTable
+            items={items}
+            searchTerm={searchTerm}
+            onView={openView}
+            onEdit={openEdit}
+            onDelete={openDelete}
+          />
         </div>
 
-        <ActivityFeed activities={activities} subjectType={'about_content'} onViewMore={() => router.visit(window.route('admin.activity.index', { subject: 'about_content' }))} />
+        <ActivityFeed
+          activities={activities}
+          subjectType={"about_content"}
+          onViewMore={() =>
+            router.visit(
+              window.route("admin.activity.index", { subject: "about_content" })
+            )
+          }
+        />
       </div>
 
       <AboutForm
@@ -271,15 +405,29 @@ const AdminAboutContent = () => {
         onClose={() => setIsFormOpen(false)}
         selected={selected}
         onSaved={() => {
-          router.reload();
+          router.reload({
+            data: { per_page: perPage, search: searchTerm },
+            preserveState: true,
+            replace: true,
+          });
         }}
         COMPONENT_CONFIGS={COMPONENT_CONFIGS}
         setToast={setToast}
       />
 
-      <AboutViewModal isOpen={isViewOpen} onClose={() => setIsViewOpen(false)} selected={selected} />
+      <AboutViewModal
+        isOpen={isViewOpen}
+        onClose={() => setIsViewOpen(false)}
+        selected={selected}
+      />
 
-      <AboutDeleteModal setToast={setToast} isOpen={isDeleteOpen} onClose={() => setIsDeleteOpen(false)} selected={selected} onDeleted={handleDeleteSuccess} />
+      <AboutDeleteModal
+        setToast={setToast}
+        isOpen={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+        selected={selected}
+        onDeleted={handleDeleteSuccess}
+      />
     </AdminLayout>
   );
 };

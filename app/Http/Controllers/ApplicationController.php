@@ -43,11 +43,11 @@ class ApplicationController extends Controller
         Log::info('Validated '. var_export($validatedData, true));
 
         if ($request->hasFile('photo')) {
-            $validatedData['photo'] = $request->file('photo')->store('photos', 'public');
+            $validatedData['photo'] = $request->file('photo')->store('applications/photo', 'public');
         }
 
         if ($request->hasFile('cv')) {
-            $validatedData['cv'] = $request->file('cv')->store('cvs', 'public');
+            $validatedData['cv'] = $request->file('cv')->store('applications/cvs', 'public');
         }
 
         Application::create($validatedData);

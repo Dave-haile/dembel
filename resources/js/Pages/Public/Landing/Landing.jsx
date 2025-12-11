@@ -10,6 +10,7 @@ import FeaturedTenants from "./FeaturedTenants";
 import VisitUs from "./VisitUs";
 import EventsAndNews from "./EventsPromotions";
 import HeroSlider from "./Slider";
+import VideoExperience from "./Video";
 
 const Home = ({
   sliders,
@@ -22,6 +23,8 @@ const Home = ({
   about,
   aboutDine,
   visit,
+  mall,
+  video,
 }) => {
   return (
     <MainLayout services={services}>
@@ -48,11 +51,15 @@ const Home = ({
       </div>
 
       <div className="section-wrapper" data-gsap-safe>
+        <VideoExperience video={video} />
+      </div>
+
+      <div className="section-wrapper" data-gsap-safe>
         <Testimonials testimonials={testimonials} />
       </div>
 
       <div className="section-wrapper" data-gsap-safe>
-        <MallHighlights />
+        <MallHighlights mall={mall} />
       </div>
 
       <div className="section-wrapper" data-gsap-safe>

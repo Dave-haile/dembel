@@ -140,7 +140,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::post('/settings', [AdminSettingController::class, 'settingsUpdate'])->name('admin.settings.update');
     // About Contents CRUD (JSON API)
     Route::get('/about-contents', [AdminAboutContentController::class, 'aboutContents'])->name('admin.about-contents');
-    Route::get('/about-contents/list', [AdminAboutContentController::class, 'aboutContentsList'])->name('admin.about-contents.list');
+    // Route::get('/about-contents/list', [AdminAboutContentController::class, 'aboutContentsList'])->name('admin.about-contents.list');
     Route::post('/about-contents', [AdminAboutContentController::class, 'aboutContentStore'])->name('admin.about-contents.store');
     Route::match(['post', 'put'], '/about-contents/{aboutContent}', [AdminAboutContentController::class, 'aboutContentUpdate'])->name('admin.about-contents.update');
     Route::delete('/about-contents/{aboutContent}', [AdminAboutContentController::class, 'aboutContentDestroy'])->name('admin.about-contents.destroy');

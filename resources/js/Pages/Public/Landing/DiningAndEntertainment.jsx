@@ -192,4 +192,5 @@ const DiningAndEntertainment = React.memo(({ restaurant, aboutDine }) => {
   );
 });
 
+DiningAndEntertainment.displayName = 'DiningAndEntertainment'; // Added display name
 export default DiningAndEntertainment;

@@ -4,10 +4,8 @@ import { ShoppingBag, ShoppingCart, Coffee, Shirt } from "lucide-react";
 export default function DembelLoader() {
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center bg-white">
-
       {/* Container */}
       <div className="relative w-60 h-60 flex items-center justify-center">
-
         {/* === Split Outer Ring (Two Halves) === */}
         <motion.div
           initial={{ rotate: 0 }}
@@ -19,7 +17,11 @@ export default function DembelLoader() {
           <motion.div
             initial={{ y: 0 }}
             animate={{ y: -12 }}
-            transition={{ duration: 1.8, repeat: Infinity, repeatType: "mirror" }}
+            transition={{
+              duration: 1.8,
+              repeat: Infinity,
+              repeatType: "mirror",
+            }}
             className="absolute inset-0 border-t-[6px] border-[#303890] rounded-full shadow-[0_0_18px_#303890aa]"
           />
 
@@ -27,7 +29,11 @@ export default function DembelLoader() {
           <motion.div
             initial={{ y: 0 }}
             animate={{ y: 12 }}
-            transition={{ duration: 1.8, repeat: Infinity, repeatType: "mirror" }}
+            transition={{
+              duration: 1.8,
+              repeat: Infinity,
+              repeatType: "mirror",
+            }}
             className="absolute inset-0 border-b-[6px] border-[#303890] rounded-full shadow-[0_0_18px_#303890aa]"
           />
         </motion.div>
@@ -47,7 +53,6 @@ export default function DembelLoader() {
           <path d="M20 70 L20 40 L50 20 L80 40 L80 70 Z" />
           <path d="M30 70 L30 50 L70 50 L70 70 Z" />
         </motion.svg>
-
       </div>
 
       {/* Text */}
@@ -60,16 +65,11 @@ export default function DembelLoader() {
         <h1 className="text-3xl font-bold text-[#303890] tracking-wide">
           Dembel City Center
         </h1>
-        <p className="text-gray-700 mt-2 text-lg">
-          Preparing your experience…
-        </p>
+        <p className="text-gray-700 mt-2 text-lg">Preparing your experience…</p>
       </motion.div>
-
     </div>
   );
 }
-
-
 
 // export default function DembelLoader() {
 //   return (
@@ -103,7 +103,7 @@ export default function DembelLoader() {
 //         <div className="absolute w-56 h-56">
 //           {/* Left Arc */}
 //           <div
-//             className="absolute w-28 h-56 border-4 border-[#303890] border-r-0 rounded-l-full 
+//             className="absolute w-28 h-56 border-4 border-[#303890] border-r-0 rounded-l-full
 //             animate-arc-left shadow-[0_0_25px_#303890aa]"
 //           ></div>
 
@@ -145,9 +145,7 @@ export default function DembelLoader() {
 export function OrbitLoader() {
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center bg-white">
-
       <div className="relative w-44 h-44 flex items-center justify-center">
-
         {/* Orbit Circle */}
         <div className="absolute w-40 h-40 border-2 border-[#303890] rounded-full opacity-60"></div>
 
@@ -160,10 +158,7 @@ export function OrbitLoader() {
         </div>
 
         {/* Center text or monogram */}
-        <div className="absolute text-[#303890] font-bold text-xl">
-          DCC
-        </div>
-
+        <div className="absolute text-[#303890] font-bold text-xl">DCC</div>
       </div>
 
       {/* Text */}
@@ -171,9 +166,7 @@ export function OrbitLoader() {
         <h1 className="text-2xl font-bold text-[#303890] tracking-wide">
           Dembel City Center
         </h1>
-        <p className="text-gray-600 mt-1">
-          Loading your experience…
-        </p>
+        <p className="text-gray-600 mt-1">Loading your experience…</p>
       </div>
     </div>
   );
@@ -222,8 +215,7 @@ export function LoadingExamples() {
           </div>
           <div className="bg-gray-50 p-4 border-t overflow-x-auto">
             <code className="text-sm text-gray-800">
-              &lt;LoadingAnimation text="Loading your favorite stores…"
-              /&gt;
+              &lt;LoadingAnimation text="Loading your favorite stores…" /&gt;
             </code>
           </div>
         </div>
@@ -232,9 +224,7 @@ export function LoadingExamples() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="border-2 border-gray-200 rounded-lg overflow-hidden">
             <div className="bg-gray-50 px-6 py-4 border-b">
-              <h2 className="text-lg font-bold text-[#303890]">
-                For Events
-              </h2>
+              <h2 className="text-lg font-bold text-[#303890]">For Events</h2>
             </div>
             <div className="p-6 min-h-64 flex items-center justify-center bg-white">
               <LoadingAnimation text="Loading upcoming events…" />
@@ -243,9 +233,7 @@ export function LoadingExamples() {
 
           <div className="border-2 border-gray-200 rounded-lg overflow-hidden">
             <div className="bg-gray-50 px-6 py-4 border-b">
-              <h2 className="text-lg font-bold text-[#303890]">
-                For Dining
-              </h2>
+              <h2 className="text-lg font-bold text-[#303890]">For Dining</h2>
             </div>
             <div className="p-6 min-h-64 flex items-center justify-center bg-white">
               <LoadingAnimation text="Loading restaurant options…" />
@@ -274,9 +262,7 @@ export function LoadingExamples() {
               </div>
             </div>
             <div>
-              <p className="font-semibold text-[#303890] mb-2">
-                Animations
-              </p>
+              <p className="font-semibold text-[#303890] mb-2">Animations</p>
               <ul className="text-gray-700 text-sm space-y-1">
                 <li>• Border: 3s rotate</li>
                 <li>• Icon: 2s bounce</li>
@@ -350,8 +336,8 @@ export function LoadingDemo() {
             {`<LoadingAnimation fullscreen={true} />`}
           </pre>
           <p className="text-gray-600 text-sm mt-4">
-            This will display the loader centered on a full-screen white background with
-            fixed positioning.
+            This will display the loader centered on a full-screen white
+            background with fixed positioning.
           </p>
         </div>
 
@@ -388,7 +374,9 @@ export function LoadingDemo() {
 
         {/* Usage Examples */}
         <div className="bg-white rounded-2xl shadow-lg p-8 mt-12">
-          <h2 className="font-bold text-2xl text-[#303890] mb-6">Usage Examples</h2>
+          <h2 className="font-bold text-2xl text-[#303890] mb-6">
+            Usage Examples
+          </h2>
 
           <div className="space-y-6">
             <div>
@@ -448,7 +436,7 @@ return (
             Tailwind Configuration
           </h2>
           <p className="text-gray-700 mb-4">
-            The following custom animations have been added to{' '}
+            The following custom animations have been added to{" "}
             <code className="bg-white px-2 py-1 rounded border border-gray-300">
               tailwind.config.js
             </code>
@@ -472,14 +460,13 @@ keyframes: {
   );
 }
 
-
 export function LoadingAnimation({
   fullscreen = false,
-  text = 'Loading your experience…',
+  text = "Loading your experience…",
 }) {
   const containerClass = fullscreen
-    ? 'fixed inset-0 z-50 bg-white flex items-center justify-center'
-    : 'flex items-center justify-center';
+    ? "fixed inset-0 z-50 bg-white flex items-center justify-center"
+    : "flex items-center justify-center";
 
   return (
     <div className={containerClass}>
@@ -491,7 +478,7 @@ export function LoadingAnimation({
             className="absolute inset-0 rounded-full border-8 border-transparent border-t-[#303890] border-r-[#303890]/40 border-b-[#303890]/20 animate-spin-slow"
             style={{
               boxShadow:
-                '0 0 30px rgba(48, 56, 144, 0.15), inset 0 0 20px rgba(48, 56, 144, 0.05)',
+                "0 0 30px rgba(48, 56, 144, 0.15), inset 0 0 20px rgba(48, 56, 144, 0.05)",
             }}
           />
 
@@ -499,7 +486,7 @@ export function LoadingAnimation({
           <div
             className="absolute inset-0 rounded-full border-4 border-[#303890]/10"
             style={{
-              boxShadow: 'inset 0 2px 8px rgba(48, 56, 144, 0.1)',
+              boxShadow: "inset 0 2px 8px rgba(48, 56, 144, 0.1)",
             }}
           />
 
@@ -511,7 +498,7 @@ export function LoadingAnimation({
                 className="text-[#fbee21]"
                 strokeWidth={1.5}
                 style={{
-                  filter: 'drop-shadow(0 4px 12px rgba(251, 238, 33, 0.3))',
+                  filter: "drop-shadow(0 4px 12px rgba(251, 238, 33, 0.3))",
                 }}
               />
             </div>
@@ -529,3 +516,131 @@ export function LoadingAnimation({
     </div>
   );
 }
+
+import React, { useRef, useLayoutEffect, useState } from "react";
+import { gsap } from "gsap";
+
+const LoadingScreen = ({ onComplete }) => {
+  const containerRef = useRef(null);
+  const counterRef = useRef(null);
+  const [isComplete, setIsComplete] = useState(false);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        onComplete: () => {
+          setIsComplete(true);
+          setTimeout(onComplete, 200); // Small buffer to ensure cleanup
+        },
+      });
+
+      // 1. Initial State
+      // Hide shutters initially or style them
+
+      // 2. Counter Animation (0 to 100)
+      tl.to(counterRef.current, {
+        innerText: 100,
+        duration: 2.5,
+        snap: { innerText: 1 },
+        ease: "power2.inOut",
+      });
+
+      // 3. Text Reveal (Synchronized with counter)
+      tl.from(
+        ".loading-text-char",
+        {
+          y: 100,
+          opacity: 0,
+          duration: 1,
+          stagger: 0.05,
+          ease: "power3.out",
+        },
+        "<0.5"
+      ); // Start 0.5s after counter starts
+
+      // 4. Line Expansion
+      tl.to(
+        ".loading-line",
+        {
+          width: "100%",
+          duration: 1.5,
+          ease: "expo.inOut",
+        },
+        "-=1"
+      );
+
+      // 5. THE EXIT: Shutter Split
+      // Animate the text out first
+      tl.to([".loading-content", ".loading-counter"], {
+        opacity: 0,
+        scale: 0.9,
+        duration: 0.5,
+        ease: "power2.in",
+      });
+
+      // Animate shutters
+      tl.to(".shutter-col", {
+        height: "0%",
+        duration: 1.2,
+        stagger: {
+          amount: 0.5,
+          from: "center",
+        },
+        ease: "power4.inOut",
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, [onComplete]);
+
+  if (isComplete) return null;
+
+  return (
+    <div
+      ref={containerRef}
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden"
+    >
+      {/* Background Shutters - The "Curtain" */}
+      <div className="absolute inset-0 flex h-full w-full pointer-events-none">
+        {[...Array(5)].map((_, i) => (
+          <div
+            key={i}
+            className="shutter-col relative h-full w-1/5 bg-slate-950 border-r border-slate-900 last:border-0 origin-top"
+          />
+        ))}
+      </div>
+
+      {/* Content Layer */}
+      <div className="loading-content relative z-10 flex flex-col items-center">
+        {/* Title */}
+        <div className="overflow-hidden mb-6">
+          <h1 className="flex text-6xl md:text-8xl lg:text-9xl font-serif font-black text-white tracking-tighter">
+            {"DEMBEL".split("").map((char, i) => (
+              <span key={i} className="loading-text-char inline-block">
+                {char}
+              </span>
+            ))}
+          </h1>
+        </div>
+
+        {/* Subtitle / Line */}
+        <div className="w-64 md:w-96 h-[1px] bg-slate-800 relative mb-6 overflow-hidden">
+          <div className="loading-line absolute top-0 left-0 h-full w-0 bg-yellow-400"></div>
+        </div>
+
+        <div className="overflow-hidden">
+          <span className="loading-text-char text-xs md:text-sm font-bold text-slate-500 tracking-[0.5em] uppercase">
+            City Center
+          </span>
+        </div>
+      </div>
+
+      {/* Counter (Bottom Right) */}
+      <div className="loading-counter absolute bottom-12 right-12 z-10 font-mono text-4xl md:text-6xl font-bold text-yellow-400/20">
+        <span ref={counterRef}>0</span>%
+      </div>
+    </div>
+  );
+};
+
+export { LoadingScreen };

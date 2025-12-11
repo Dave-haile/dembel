@@ -139,7 +139,7 @@
 // };
 
 // export default ContactInfoGrid;
-import { MapPin, Phone, Mail, Clock, Map, Facebook, Twitter, Linkedin, Instagram, Youtube, Send } from "lucide-react";
+import { MapPin, Phone, Mail, Clock} from "lucide-react";
 
 export default function ContactInfoGrid({ data }) {
   const needed = ["Address", "Phone", "Email", "Hours"];

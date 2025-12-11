@@ -14,14 +14,82 @@ const Vacancies = () => {
   const [filteredVacancies, setFilteredVacancies] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [toast, setToast] = useState(null);
+  const [localErrors, setLocalErrors] = useState({}); // New state for frontend errors
   const [filters, setFilters] = useState({
     department: "",
     employmentType: "",
     location: "",
   });
 
+  // Validation function
+  const validateFormData = (data) => {
+    let newErrors = {};
+
+    // Required fields
+    if (!data.first_name) newErrors.first_name = "First name is required.";
+    if (!data.last_name) newErrors.last_name = "Last name is required.";
+    if (!data.phone) newErrors.phone = "Phone number is required.";
+    if (!data.email) newErrors.email = "Email address is required.";
+    if (!data.cv) newErrors.cv = "CV is required.";
+
+    // Max length validation (based on database schema)
+    if (data.first_name && data.first_name.length > 50) newErrors.first_name = "First name cannot exceed 50 characters.";
+    if (data.last_name && data.last_name.length > 50) newErrors.last_name = "Last name cannot exceed 50 characters.";
+    if (data.phone && data.phone.length > 20) newErrors.phone = "Phone number cannot exceed 20 characters.";
+    if (data.alt_phone && data.alt_phone.length > 20) newErrors.alt_phone = "Alternative phone cannot exceed 20 characters.";
+    if (data.email && data.email.length > 100) newErrors.email = "Email cannot exceed 100 characters.";
+    if (data.subcity && data.subcity.length > 50) newErrors.subcity = "Subcity cannot exceed 50 characters.";
+    if (data.woreda && data.woreda.length > 50) newErrors.woreda = "Woreda cannot exceed 50 characters.";
+    if (data.city && data.city.length > 100) newErrors.city = "City cannot exceed 100 characters.";
+    if (data.education_background && data.education_background.length > 100) newErrors.education_background = "Education background cannot exceed 100 characters.";
+    if (data.company && data.company.length > 150) newErrors.company = "Company name cannot exceed 150 characters.";
+    if (data.position && data.position.length > 100) newErrors.position = "Position cannot exceed 100 characters.";
+
+    // Email format validation
+    if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) newErrors.email = "Invalid email address format.";
+
+    // Date validation (basic check for non-empty if provided)
+    if (data.birth_date && isNaN(new Date(data.birth_date))) newErrors.birth_date = "Invalid birth date.";
+    if (data.start_date && isNaN(new Date(data.start_date))) newErrors.start_date = "Invalid start date.";
+    if (data.end_date && isNaN(new Date(data.end_date))) newErrors.end_date = "Invalid end date.";
+    // Ensure end_date is not before start_date if both are provided
+    if (data.start_date && data.end_date && new Date(data.start_date) > new Date(data.end_date)) {
+      newErrors.end_date = "End date cannot be before start date.";
+    }
+
+
+    // Enum validation for marital_status
+    const maritalStatuses = ['Single', 'Married', 'Divorced', 'Widowed'];
+    if (data.marital_status && !maritalStatuses.includes(data.marital_status)) {
+      newErrors.marital_status = "Invalid marital status selected.";
+    }
+
+    // File validation (photo and CV) - basic type and size checks
+    const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+
+    if (data.photo) {
+      if (!['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/svg+xml'].includes(data.photo.type)) {
+        newErrors.photo = "Invalid photo file type. Only JPEG, PNG, JPG, GIF, SVG are allowed.";
+      }
+      if (data.photo.size > MAX_FILE_SIZE) {
+        newErrors.photo = "Photo file size exceeds 2MB limit.";
+      }
+    }
+
+    if (data.cv) {
+      if (!['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(data.cv.type)) {
+        newErrors.cv = "Invalid CV file type. Only PDF, DOC, DOCX are allowed.";
+      }
+      if (data.cv.size > MAX_FILE_SIZE) {
+        newErrors.cv = "CV file size exceeds 2MB limit.";
+      }
+    }
+
+    return newErrors;
+  };
+
   // Application Form state (managed by Vacancies.jsx now)
-  const { post, errors, reset } = useForm({
+  const { post, errors, reset, clearErrors } = useForm({
     first_name: '',
     last_name: '',
     phone: '',
@@ -106,7 +174,18 @@ const Vacancies = () => {
 
   // Function to handle application submission, passed down to JobDetailsModal
   const handleApplicationSubmit = useCallback((formDataToSubmit) => {
-    console.log(formDataToSubmit)
+    clearErrors(); // Clear Inertia's backend errors
+    setLocalErrors({}); // Clear previous local frontend errors
+
+    const newErrors = validateFormData(formDataToSubmit);
+
+    if (Object.keys(newErrors).length > 0) {
+      setLocalErrors(newErrors);
+      setToast({ message: "Please correct the errors in the form.", type: "error" });
+      return;
+    }
+
+    // If validation passes, proceed with submission using Inertia's post
     router.post(window.route('applications.store'), formDataToSubmit,
     {
       forceFormData: true,
@@ -117,9 +196,10 @@ const Vacancies = () => {
         setToast({ message: "Application Submitted Successfully!", type: 'success' });
         reset();
         setSelectedJob(null);
+        setLocalErrors({}); // Clear local errors on successful submission
       },
     });
-  }, [post, reset]);
+  }, [post, reset, clearErrors]);
 
   return (
     <MainLayout>
@@ -193,7 +273,7 @@ const Vacancies = () => {
           job={selectedJob} 
           onClose={() => setSelectedJob(null)} 
           onApplicationSubmit={handleApplicationSubmit}
-          formErrors={errors}
+          formErrors={{ ...errors, ...localErrors }} // Combine Inertia errors and local errors
         />
       )}
       
