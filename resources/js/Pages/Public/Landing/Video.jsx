@@ -86,18 +86,6 @@ const VideoExperience = ({ video }) => {
     }
   }, [isContentVisible]); // Run when content visibility changes to ensure ref is available
   
-  //   {
-  //     "id": 6,
-  //     "component": "VideoSection",
-  //     "title": "Cinematic Tour",
-  //     "subtitle": "A Day at Dembel",
-  //     "description": "Immerse yourself in the vibrant atmosphere of Addis Ababa's premier lifestyle destination. From luxury shopping to fine dining, experience it all before you arrive.",
-  //     "image_url": "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=1600&q=80",
-  //     "extra_data": "[{\"video_url\":\"storage\\/videos\\/P9yNJcnQRZqWB3y1fqN9LJHqeOysvBq3Vr0d2ama.mp4\",\"video_file\":null}]",
-  //     "position": 4,
-  //     "created_at": "2025-12-10T07:48:23.000000Z",
-  //     "updated_at": "2025-12-10T12:57:39.000000Z"
-  // }
   return (
     // SECTION STYLING:
     // sticky top-4: Stacking effect
@@ -220,9 +208,6 @@ const VideoExperience = ({ video }) => {
                          className="w-24 h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer range-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                          style={{ transform: 'rotate(-90deg)', transformOrigin: 'bottom left', width: '60px', position: 'absolute', left: '-20px', bottom: '40px' }}
                        />
-                       {/* <div className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md text-white flex items-center justify-center">
-                         {isMuted || volume === 0 ? <VolumeX size={18} /> : <Volume2 size={18} />}
-                       </div> */}
                      </div>
                   </div>
                 </motion.div>

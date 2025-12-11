@@ -1,52 +1,16 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
-import {
-  UtensilsCrossed,
-  Film,
-  Dumbbell,
-  Car,
-  Baby,
-  Wifi,
-  ShoppingBag,
-  Coffee,
-  Bike,
-} from 'lucide-react';
+import getIcon from './GetIcons';
 
 export default function Facilities({ facilities }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
-  const extra_data = typeof facilities.extra_data === 'string' ? JSON.parse(facilities.extra_data) : facilities.extra_data;
+  // const extra_data = typeof facilities.extra_data === 'string' ? JSON.parse(facilities.extra_data) : facilities.extra_data;
+  const extra_data = facilities?.extra_data ? JSON.parse(facilities.extra_data) : [];
 
-  extra_data.forEach((facility) => {
-    if (facility.title === 'Fine Dining') {
-      facility.icon = UtensilsCrossed;
-    } else if (facility.title === 'Luxury Cinema') {
-      facility.icon = Film;
-    } else if (facility.title === 'Fitness Center') {
-      facility.icon = Dumbbell;
-    } else if (facility.title === 'Smart Parking') {
-      facility.icon = Car;
-    } else if (facility.title === 'Kids Zone') {
-      facility.icon = Baby;
-    } else if (facility.title === 'Free WiFi') {
-      facility.icon = Wifi;
-    } else if (facility.title === 'Personal Shopping') {
-      facility.icon = ShoppingBag;
-    } else if (facility.title === 'Lounge Areas') {
-      facility.icon = Coffee;
-    } else if (facility.title === 'Sports Arena') {
-      facility.icon = Bike;
-    } else if (facility.title === 'Clothing') {
-      facility.icon = ShoppingBag;
-    } else if (facility.title === 'Jewelry') {
-      facility.icon = ShoppingBag;
-    } else {
-      facility.icon = null;
-    }
-  });
   return (
     <section ref={ref} className="py-24 px-4 bg-slate-900 text-white">
       <div className="max-w-7xl mx-auto">
@@ -66,7 +30,6 @@ export default function Facilities({ facilities }) {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {extra_data.map((facility, index) => {
-            const IconComponent = facility.icon;
 
             return (
               <motion.div
@@ -94,7 +57,8 @@ export default function Facilities({ facilities }) {
                     }}
                     transition={{ duration: 0.3 }}
                   >
-                    {IconComponent && <IconComponent className="w-10 h-10 mb-3 text-white" />}
+                    {/* {IconComponent && <IconComponent className="w-10 h-10 mb-3 text-white" />} */}
+                    {getIcon(facility.icon)}
                     <h3 className="text-2xl font-bold mb-2">{facility.title}</h3>
                     <motion.p
                       initial={{ opacity: 0 }}

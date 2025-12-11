@@ -171,7 +171,7 @@ const MallHighlights = ({ mall }) => {
               >
                 <div className="relative z-10">
                   <div className="text-blue-600 mb-6 flex justify-center">
-                    {getIcon(highlight.icon)}
+                    {getIcon(highlight.icon) || ''}
                   </div>
                   <div className="text-4xl lg:text-5xl font-bold text-gray-900 mb-2">
                     {highlight.number}

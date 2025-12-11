@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { X, Mail, Phone, MapPin, Calendar, Users, Briefcase, CheckCircle2 } from 'lucide-react';
-import { toast } from 'react-toastify';
-import { usePage } from '@inertiajs/react';
 import ApplyForm from './ApplyForm';
 
 const JobDetailsModal = ({ job, onClose, onApplicationSubmit, formErrors }) => {
   const [showApplyForm, setShowApplyForm] = useState(false);
-  const { flash } = usePage().props;
 
   useEffect(() => {
     // Prevent scrolling on the main page when the modal is open
@@ -17,14 +14,7 @@ const JobDetailsModal = ({ job, onClose, onApplicationSubmit, formErrors }) => {
     };
   }, []);
 
-  useEffect(() => {
-        if (flash.success) {
-            toast.success(flash.success);
-        }
-        if (flash.error) {
-            toast.error(flash.error);
-        }
-    }, [flash]);
+
 
   if (!job) return null;
 

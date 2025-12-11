@@ -1,6 +1,6 @@
 import { motion, useInView, useMotionValue, useTransform, animate } from 'framer-motion';
 import { useRef, useEffect } from 'react';
-import { TrendingUp, Store, Users, Award } from 'lucide-react';
+import getIcon from './GetIcons';
 
 function Counter({ value, suffix = '' }) {
   const ref = useRef(null);
@@ -26,18 +26,9 @@ function Counter({ value, suffix = '' }) {
 export default function Stats({ stats }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const extra_data = typeof stats.extra_data === 'string' ? JSON.parse(stats.extra_data) : stats.extra_data;
-  extra_data.forEach((stat) => {
-    if (stat.icon === 'TrendingUp') {
-      stat.icon = TrendingUp;
-    } else if (stat.icon === 'Store') {
-      stat.icon = Store;
-    } else if (stat.icon === 'Users') {
-      stat.icon = Users;
-    } else if (stat.icon === 'Award') {
-      stat.icon = Award;
-    }
-  });
+  // const extra_data = typeof stats.extra_data === 'string' ? JSON.parse(stats.extra_data) : stats.extra_data;
+  const extra_data = stats?.extra_data ? JSON.parse(stats.extra_data) : [];
+
 
   return (
     <section ref={ref} className="py-24 px-4 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white relative overflow-hidden">
@@ -62,7 +53,6 @@ export default function Stats({ stats }) {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {extra_data.map((stat, index) => {
-            const IconComponent = stat.icon;
             return (
               <motion.div
                 key={index}
@@ -77,7 +67,7 @@ export default function Stats({ stats }) {
                     transition={{ duration: 0.3 }}
                     className="w-16 h-16 bg-gradient-to-br from-white/20 to-white/5 rounded-xl flex items-center justify-center mb-6 group-hover:shadow-lg"
                   >
-                    <IconComponent className="w-8 h-8 text-white" />
+                    {getIcon(stat.icon)}
                   </motion.div>
 
                   <div className="text-5xl font-bold mb-2">

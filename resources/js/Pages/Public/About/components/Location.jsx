@@ -1,25 +1,18 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { MapPin, Clock, Phone, Mail, Navigation } from 'lucide-react';
+import { Navigation } from 'lucide-react';
 import { Map } from '../../Shared/Map';
+import getIcon from './GetIcons';
 
 export default function Location({ location }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
-  const contactInfo = typeof location.extra_data === 'string' ? JSON.parse(location.extra_data) : location.extra_data;
-  contactInfo.forEach((info) => {
-    if (info.icon === 'MapPin') {
-      info.icon = MapPin;
-    } else if (info.icon === 'Clock') {
-      info.icon = Clock;
-    } else if (info.icon === 'Phone') {
-      info.icon = Phone;
-    } else if (info.icon === 'Mail') {
-      info.icon = Mail;
-    }
-  });
+  // const contactInfo = typeof location.extra_data === 'string' ? JSON.parse(location.extra_data) : location.extra_data;
+  const contactInfo = location?.extra_data ? JSON.parse(location.extra_data) : [];
+
+
 
   return (
     <section ref={ref} className="py-24 px-4 bg-white">
@@ -54,8 +47,8 @@ export default function Location({ location }) {
                 className="flex gap-4 p-6 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors duration-300"
               >
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-slate-900 rounded-lg flex items-center justify-center">
-                    <info.icon className="w-6 h-6 text-white" />
+                  <div className="w-18 h-18 text-white bg-slate-900 rounded-lg flex items-center justify-center">
+                    {getIcon(info.icon,)}
                   </div>
                 </div>
                 <div>

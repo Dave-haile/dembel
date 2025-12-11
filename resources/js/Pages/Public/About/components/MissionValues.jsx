@@ -1,34 +1,34 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Heart, Users, Leaf, Star, Shield, Zap } from 'lucide-react';
+import getIcon from './GetIcons';
+
 
 export default function MissionValues({ missionValues }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const extra_data = missionValues?.extra_data ? JSON.parse(missionValues.extra_data) : [];
+  // const values = typeof missionValues.extra_data === 'string' ? JSON.parse(missionValues.extra_data) : missionValues.extra_data;
+  // extra_data.forEach((value) => {
+  //   if (value.title === 'Customer First') {
+  //     value.color = 'from-rose-500 to-pink-500';
+  //   } else if (value.title === 'Community') {
+  //     value.color = 'from-blue-500 to-cyan-500';
+  //   } else if (value.title === 'Sustainability') {
+  //     value.color = 'from-green-500 to-emerald-500';
+  //   } else if (value.title === 'Excellence') {
+  //     value.color = 'from-amber-500 to-yellow-500';
+  //   } else if (value.title === 'Safety') {
+  //     value.color = 'from-slate-600 to-slate-800';
+  //   } else if (value.title === 'Innovation') {
+  //     value.color = 'from-purple-500 to-indigo-500';
+  //   }
+  // });
 
-  const values = typeof missionValues.extra_data === 'string' ? JSON.parse(missionValues.extra_data) : missionValues.extra_data;
-  values.forEach((value) => {
-    if (value.title === 'Customer First') {
-      value.icon = Heart;
-      value.color = 'from-rose-500 to-pink-500';
-    } else if (value.title === 'Community') {
-      value.icon = Users;
-      value.color = 'from-blue-500 to-cyan-500';
-    } else if (value.title === 'Sustainability') {
-      value.icon = Leaf;
-      value.color = 'from-green-500 to-emerald-500';
-    } else if (value.title === 'Excellence') {
-      value.icon = Star;
-      value.color = 'from-amber-500 to-yellow-500';
-    } else if (value.title === 'Safety') {
-      value.icon = Shield;
-      value.color = 'from-slate-600 to-slate-800';
-    } else if (value.title === 'Innovation') {
-      value.icon = Zap;
-      value.color = 'from-purple-500 to-indigo-500';
-    }
-  });
+  extra_data.map(ic => {
+    console.log(ic);
+  })
+
 
   return (
     <section ref={ref} className="py-24 px-4 bg-gradient-to-b from-slate-50 to-white">
@@ -48,8 +48,7 @@ export default function MissionValues({ missionValues }) {
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {values.map((value, index) => {
-            const IconComponent = value.icon;
+          {extra_data.map((value, index) => {
             return (
               <motion.div
                 key={value.title}
@@ -60,9 +59,9 @@ export default function MissionValues({ missionValues }) {
                 className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 group"
               >
                 <motion.div
-                  className={`w-16 h-16 rounded-xl bg-gradient-to-br ${value.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
+                  className={`w-16 h-16 rounded-xl text-white bg-gradient-to-br ${value.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
                 >
-                  {IconComponent && <IconComponent className="w-8 h-8 text-white" />}
+                  {getIcon(value.icon) || ''}
                 </motion.div>
 
                 <h3 className="text-2xl font-bold text-slate-900 mb-3">
