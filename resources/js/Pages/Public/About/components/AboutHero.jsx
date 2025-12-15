@@ -7,8 +7,6 @@ export default function AboutHero({ hero }) {
     <section className="relative h-screen flex items-center justify-center overflow-hidden ">
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
         <div className="absolute inset-0 opacity-20">
-          {/* <div className={`absolute inset-0 bg-[url('${hero.image}')] bg-cover bg-center`}>
-          </div> */}
           <img className="absolute inset-0 w-full h-full object-cover" src={hero.image_url} alt="" />
         </div>
         <motion.div

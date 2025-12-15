@@ -517,130 +517,311 @@ export function LoadingAnimation({
   );
 }
 
-import React, { useRef, useLayoutEffect, useState } from "react";
+// import React, { useRef, useLayoutEffect, useState } from "react";
+// import { gsap } from "gsap";
+
+// const LoadingScreen = ({ onComplete }) => {
+//   const containerRef = useRef(null);
+//   const counterRef = useRef(null);
+//   const [isComplete, setIsComplete] = useState(false);
+
+//   useLayoutEffect(() => {
+//     const ctx = gsap.context(() => {
+//       const tl = gsap.timeline({
+//         onComplete: () => {
+//           setIsComplete(true);
+//           setTimeout(onComplete, 200); // Small buffer to ensure cleanup
+//         },
+//       });
+
+//       // 1. Initial State
+//       // Hide shutters initially or style them
+
+//       // 2. Counter Animation (0 to 100)
+//       tl.to(counterRef.current, {
+//         innerText: 100,
+//         duration: 2.5,
+//         snap: { innerText: 1 },
+//         ease: "power2.inOut",
+//       });
+
+//       // 3. Text Reveal (Synchronized with counter)
+//       tl.from(
+//         ".loading-text-char",
+//         {
+//           y: 100,
+//           opacity: 0,
+//           duration: 1,
+//           stagger: 0.05,
+//           ease: "power3.out",
+//         },
+//         "<0.5"
+//       ); // Start 0.5s after counter starts
+
+//       // 4. Line Expansion
+//       tl.to(
+//         ".loading-line",
+//         {
+//           width: "100%",
+//           duration: 1.5,
+//           ease: "expo.inOut",
+//         },
+//         "-=1"
+//       );
+
+//       // 5. THE EXIT: Shutter Split
+//       // Animate the text out first
+//       tl.to([".loading-content", ".loading-counter"], {
+//         opacity: 0,
+//         scale: 0.9,
+//         duration: 0.5,
+//         ease: "power2.in",
+//       });
+
+//       // Animate shutters
+//       tl.to(".shutter-col", {
+//         height: "0%",
+//         duration: 1.2,
+//         stagger: {
+//           amount: 0.5,
+//           from: "center",
+//         },
+//         ease: "power4.inOut",
+//       });
+//     }, containerRef);
+
+//     return () => ctx.revert();
+//   }, [onComplete]);
+
+//   if (isComplete) return null;
+
+//   return (
+//     <div
+//       ref={containerRef}
+//       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden"
+//     >
+//       {/* Background Shutters - The "Curtain" */}
+//       <div className="absolute inset-0 flex h-full w-full pointer-events-none">
+//         {[...Array(5)].map((_, i) => (
+//           <div
+//             key={i}
+//             className="shutter-col relative h-full w-1/5 bg-slate-950 border-r border-slate-900 last:border-0 origin-top"
+//           />
+//         ))}
+//       </div>
+
+//       {/* Content Layer */}
+//       <div className="loading-content relative z-10 flex flex-col items-center">
+//         {/* Title */}
+//         <div className="overflow-hidden mb-6">
+//           <h1 className="flex text-6xl md:text-8xl lg:text-9xl font-serif font-black text-white tracking-tighter">
+//             {"DEMBEL".split("").map((char, i) => (
+//               <span key={i} className="loading-text-char inline-block">
+//                 {char}
+//               </span>
+//             ))}
+//           </h1>
+//         </div>
+
+//         {/* Subtitle / Line */}
+//         <div className="w-64 md:w-96 h-[1px] bg-slate-800 relative mb-6 overflow-hidden">
+//           <div className="loading-line absolute top-0 left-0 h-full w-0 bg-yellow-400"></div>
+//         </div>
+
+//         <div className="overflow-hidden">
+//           <span className="loading-text-char text-xs md:text-sm font-bold text-slate-500 tracking-[0.5em] uppercase">
+//             City Center
+//           </span>
+//         </div>
+//       </div>
+
+//       {/* Counter (Bottom Right) */}
+//       <div className="loading-counter absolute bottom-12 right-12 z-10 font-mono text-4xl md:text-6xl font-bold text-yellow-400/20">
+//         <span ref={counterRef}>0</span>%
+//       </div>
+//     </div>
+//   );
+// };
+
+// export { LoadingScreen };
+
+
+import React, { useRef, useLayoutEffect } from "react";
 import { gsap } from "gsap";
 
-const LoadingScreen = ({ onComplete }) => {
+export const LoadingScreen = () => {
   const containerRef = useRef(null);
   const counterRef = useRef(null);
-  const [isComplete, setIsComplete] = useState(false);
+
+  const titleText = "DEMBEL";
+  const subtitleText = "City Center";
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        onComplete: () => {
-          setIsComplete(true);
-          setTimeout(onComplete, 200); // Small buffer to ensure cleanup
+      const tl = gsap.timeline();
+
+      // --- Initial States ---
+      gsap.set(".loading-char", {
+        yPercent: 120,
+        rotateX: -90,
+        opacity: 0,
+        transformOrigin: "50% 50% -50px" // rotate around a point behind the text
+      });
+      gsap.set(".loading-line", { scaleX: 0, transformOrigin: "center" });
+      gsap.set(".subtitle-char", { opacity: 0, y: 20, filter: "blur(10px)" });
+      gsap.set(".shutter-bg", { scaleY: 0, transformOrigin: "top" });
+
+      // --- Animation Sequence ---
+
+      // 1. Background Shutters Draw In
+      tl.to(".shutter-bg", {
+        scaleY: 1,
+        duration: 1.2,
+        stagger: {
+          amount: 0.5,
+          from: "random"
         },
+        ease: "power3.inOut"
       });
 
-      // 1. Initial State
-      // Hide shutters initially or style them
+      // 2. Text Explodes In (Elastic/Back effect)
+      tl.to(".loading-char", {
+        yPercent: 0,
+        rotateX: 0,
+        opacity: 1,
+        duration: 1.4,
+        stagger: 0.06,
+        ease: "elastic.out(1, 0.5)", // Bouncy reveal
+      }, "-=0.6");
 
-      // 2. Counter Animation (0 to 100)
+      // 3. Line Expands
+      tl.to(".loading-line", {
+        scaleX: 1,
+        duration: 1,
+        ease: "expo.out",
+      }, "-=1.0");
+
+      // 4. Counter Counts
       tl.to(counterRef.current, {
         innerText: 100,
         duration: 2.5,
         snap: { innerText: 1 },
         ease: "power2.inOut",
-      });
-
-      // 3. Text Reveal (Synchronized with counter)
-      tl.from(
-        ".loading-text-char",
-        {
-          y: 100,
-          opacity: 0,
-          duration: 1,
-          stagger: 0.05,
-          ease: "power3.out",
+        onUpdate: function () {
+          // Add a little shake to the counter as it reaches 100
+          if (this.progress() > 0.8) {
+            gsap.set(counterRef.current, {
+              x: Math.random() * 2 - 1,
+              y: Math.random() * 2 - 1
+            });
+          }
         },
-        "<0.5"
-      ); // Start 0.5s after counter starts
+        onComplete: () => {
+          gsap.set(counterRef.current, { x: 0, y: 0 }); // reset shake
+        }
+      }, "<");
 
-      // 4. Line Expansion
-      tl.to(
-        ".loading-line",
-        {
-          width: "100%",
-          duration: 1.5,
-          ease: "expo.inOut",
-        },
-        "-=1"
-      );
+      // 5. Subtitle Smooth Blur Reveal
+      tl.to(".subtitle-char", {
+        opacity: 1,
+        y: 0,
+        filter: "blur(0px)",
+        stagger: 0.04,
+        duration: 1,
+        ease: "power2.out"
+      }, "-=1.8");
 
-      // 5. THE EXIT: Shutter Split
-      // Animate the text out first
-      tl.to([".loading-content", ".loading-counter"], {
-        opacity: 0,
-        scale: 0.9,
-        duration: 0.5,
-        ease: "power2.in",
-      });
-
-      // Animate shutters
-      tl.to(".shutter-col", {
-        height: "0%",
-        duration: 1.2,
+      // 6. Idle Animation (Floating)
+      tl.to(".loading-char", {
+        y: -10,
+        duration: 2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
         stagger: {
-          amount: 0.5,
-          from: "center",
-        },
-        ease: "power4.inOut",
+          each: 0.1,
+          from: "center"
+        }
       });
+
+      // Pulse the line
+      gsap.to(".loading-line", {
+        boxShadow: "0 0 30px rgba(250, 204, 21, 0.8)",
+        duration: 1.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+
     }, containerRef);
 
     return () => ctx.revert();
-  }, [onComplete]);
-
-  if (isComplete) return null;
+  }, []);
 
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden"
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden bg-slate-950 text-white"
     >
-      {/* Background Shutters - The "Curtain" */}
+      {/* Background Decor */}
       <div className="absolute inset-0 flex h-full w-full pointer-events-none">
-        {[...Array(5)].map((_, i) => (
+        {[...Array(7)].map((_, i) => (
           <div
             key={i}
-            className="shutter-col relative h-full w-1/5 bg-slate-950 border-r border-slate-900 last:border-0 origin-top"
+            className="shutter-bg relative h-full w-full bg-slate-900/30 border-r border-slate-800/50 last:border-0"
           />
         ))}
       </div>
 
-      {/* Content Layer */}
-      <div className="loading-content relative z-10 flex flex-col items-center">
+      {/* Main Content */}
+      <div className="relative z-10 flex flex-col items-center select-none">
+
         {/* Title */}
-        <div className="overflow-hidden mb-6">
-          <h1 className="flex text-6xl md:text-8xl lg:text-9xl font-serif font-black text-white tracking-tighter">
-            {"DEMBEL".split("").map((char, i) => (
-              <span key={i} className="loading-text-char inline-block">
+        <div className="overflow-hidden mb-8 px-4" style={{ perspective: "800px" }}>
+          <h1 className="flex text-7xl md:text-9xl font-serif font-black tracking-tighter text-slate-100">
+            {titleText.split("").map((char, i) => (
+              <span key={i} className="loading-char inline-block origin-bottom transform-style-3d">
                 {char}
               </span>
             ))}
           </h1>
         </div>
 
-        {/* Subtitle / Line */}
-        <div className="w-64 md:w-96 h-[1px] bg-slate-800 relative mb-6 overflow-hidden">
-          <div className="loading-line absolute top-0 left-0 h-full w-0 bg-yellow-400"></div>
+        {/* Line */}
+        <div className="w-64 md:w-96 h-[3px] bg-slate-800 relative mb-8 rounded-full overflow-visible">
+          <div className="loading-line absolute top-0 left-0 h-full w-full bg-yellow-400 shadow-[0_0_15px_rgba(250,204,21,0.5)]"></div>
         </div>
 
-        <div className="overflow-hidden">
-          <span className="loading-text-char text-xs md:text-sm font-bold text-slate-500 tracking-[0.5em] uppercase">
-            City Center
-          </span>
+        {/* Subtitle */}
+        <div className="flex space-x-[0.2em] mb-12 overflow-hidden">
+          {subtitleText.split("").map((char, i) => (
+            <span
+              key={i}
+              className={`subtitle-char text-xs md:text-sm font-bold text-slate-500 tracking-[0.5em] uppercase inline-block ${char === " " ? "w-4" : ""}`}
+            >
+              {char}
+            </span>
+          ))}
+        </div>
+
+        {/* Counter */}
+        <div className="relative font-mono">
+          <div
+            ref={counterRef}
+            className="loading-counter text-4xl md:text-5xl font-bold text-yellow-400 tabular-nums"
+          >
+            0
+          </div>
         </div>
       </div>
 
-      {/* Counter (Bottom Right) */}
-      <div className="loading-counter absolute bottom-12 right-12 z-10 font-mono text-4xl md:text-6xl font-bold text-yellow-400/20">
-        <span ref={counterRef}>0</span>%
-      </div>
+      {/* Utility Styles for 3D transforms */}
+      <style>{`
+        .transform-style-3d {
+          transform-style: preserve-3d;
+          backface-visibility: hidden;
+        }
+      `}</style>
     </div>
   );
 };
-
-export { LoadingScreen };

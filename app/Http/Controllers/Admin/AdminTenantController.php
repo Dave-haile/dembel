@@ -44,7 +44,15 @@ class AdminTenantController extends Controller
         }
 
         // Get pagination setting or default to 10
-        $perPage = $request->per_page === 'all' ? PHP_INT_MAX : ($request->per_page ?? 10);
+        $perPage = 10;
+
+        if ($request->filled('per_page')) {
+            if ($request->per_page === 'all') {
+                $perPage = PHP_INT_MAX;
+            } elseif (is_numeric($request->per_page)) {
+                $perPage = (int) $request->per_page;
+            }
+        }
 
         // Check if this is an AJAX request for pagination/search
         if ($request->header('X-Inertia') === null && ($request->ajax() || $request->wantsJson())) {
@@ -173,13 +181,13 @@ class AdminTenantController extends Controller
                 'post_max_size' => ini_get('post_max_size'),
             ]);
             throw ValidationException::withMessages([
-                'logo' => 'Logo upload failed (code '.$file->getError().'). Check file size limits.',
+                'logo' => 'Logo upload failed (code ' . $file->getError() . '). Check file size limits.',
             ]);
         }
 
         if ($request->hasFile('logo')) {
             $path = $request->file('logo')->store('tenants', 'public');
-            $validated['logo'] = 'storage/'.$path;
+            $validated['logo'] = 'storage/' . $path;
         }
 
         $tenant = Tenant::create($validated);

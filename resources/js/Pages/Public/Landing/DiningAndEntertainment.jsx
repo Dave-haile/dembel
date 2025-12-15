@@ -2,11 +2,15 @@ import React, { useRef, useLayoutEffect, useMemo } from "react";
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, Star, Utensils } from 'lucide-react';
-import { Link } from "@inertiajs/react";
+
+// Mock Link for standalone usage
+const Link = ({ href, className, children, ...props }) => (
+  <a href={href} className={className} {...props}>{children}</a>
+);
 
 gsap.registerPlugin(ScrollTrigger);
 
-const DiningAndEntertainment = React.memo(({ restaurant, aboutDine }) => {
+const DiningAndEntertainment = React.memo(({ restaurant = [], aboutDine }) => {
   const containerRef = useRef(null);
   const imagesRef = useRef(null);
   const textRef = useRef(null);
@@ -25,26 +29,29 @@ const DiningAndEntertainment = React.memo(({ restaurant, aboutDine }) => {
     .slice(0, 3), [restaurant, defaultImages]);
 
   useLayoutEffect(() => {
+    // Only run animations if the user prefers reduced motion (optional accessibility check)
     const ctx = gsap.context(() => {
       // Fade in and slide up text
-      gsap.fromTo(textRef.current,
-        { opacity: 0, y: 50 }, // Change x to y for vertical slide-up
-        {
-          opacity: 1,
-          y: 0, // Animate to y: 0
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 70%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
+      if (textRef.current) {
+        gsap.fromTo(textRef.current,
+            { opacity: 0, y: 50 },
+            {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: containerRef.current,
+                start: "top 70%",
+                toggleActions: "play none none reverse"
+            }
+            }
+        );
+      }
 
       // Staggered image entry
       const imageElements = imagesRef.current?.querySelectorAll('.grid-img');
-      if (imageElements) {
+      if (imageElements && imageElements.length > 0) {
         gsap.fromTo(imageElements,
           { y: 60, opacity: 0 },
           {
@@ -64,29 +71,37 @@ const DiningAndEntertainment = React.memo(({ restaurant, aboutDine }) => {
 
     return () => ctx.revert();
   }, []);
-  const subtitleParts = useMemo(() => (aboutDine.subtitle || "")
+
+  const subtitleParts = useMemo(() => (aboutDine?.subtitle || "")
     .split(",")
-    .map((s) => s.trim()), [aboutDine.subtitle]);
+    .map((s) => s.trim()), [aboutDine?.subtitle]);
   const taste = useMemo(() => subtitleParts[0] || "Fine Dining", [subtitleParts]);
   const cuisines = useMemo(() => subtitleParts[1] || "International", [subtitleParts]);
+  const firstCuisine = cuisines.split(' ')[0] || "Global";
+  const secondCuisine = cuisines.split(' ')[1] || "Cuisine";
+
+  const titlePart1 = aboutDine.title.includes(' E') ? aboutDine.title.split(' E')[0] : 'Fine';
+  const titlePart2 = aboutDine.title.includes('& ') ? aboutDine.title.split('& ')[1] : 'Dining';
+
   return (
-    <section className="w-full py-8 px-4 flex justify-center sticky top-8 z-20">
+    // CHANGE: The section is sticky at top-8 (offset from FeaturedTenants which is top-4).
+    // z-20 ensures it slides OVER the previous component.
+    <section className="w-full py-4 px-4 flex justify-center sticky top-8 z-20 pointer-events-none">
       <div
         ref={containerRef}
-        className="relative w-full max-w-[80rem] bg-slate-950 rounded-[2.5rem] overflow-hidden shadow-2xl text-white isolate"
+        className="w-full max-w-[80rem] bg-slate-950 rounded-[2.5rem] overflow-hidden shadow-2xl text-white isolate pointer-events-auto transform-gpu translate-z-0"
       >
         <h1 className="text-4xl py-8 md:text-6xl font-serif font-bold text-white mb-4 text-center relative z-20">
           Welcome to <span className="text-yellow-500">The Plaza</span>
         </h1>
 
-        {/* Abstract Background Gradient */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[100px] mix-blend-screen opacity-50"></div>
-          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[120px] mix-blend-screen opacity-50"></div>
+        {/* Background Effects - Optimized for performance */}
+        <div className="absolute inset-0 -z-10 bg-slate-950">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(37,99,235,0.15)_0%,transparent_70%)] opacity-50"></div>
+          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(147,51,234,0.1)_0%,transparent_70%)] opacity-50"></div>
           <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 opacity-90"></div>
-
-          {/* Grain Texture */}
-          <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
+          {/* Static noise image instead of SVG filter for better scroll performance */}
+          <div className="absolute inset-0 opacity-[0.05] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat bg-[length:100px_100px]"></div>
         </div>
 
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 p-8 md:p-12 lg:p-16 items-center relative z-10">
@@ -95,11 +110,12 @@ const DiningAndEntertainment = React.memo(({ restaurant, aboutDine }) => {
           <div ref={imagesRef} className="lg:col-span-6 relative">
             <div className="grid grid-cols-2 gap-4 md:gap-6">
               <div className="flex flex-col gap-4 md:gap-6 pt-12">
-                <div className="grid-img group relative rounded-2xl overflow-hidden shadow-xl h-64 w-full transform transition-transform duration-500 hover:scale-[1.02]">
+                <div className="grid-img group relative rounded-2xl overflow-hidden shadow-xl h-64 w-full transition-transform duration-500 hover:scale-[1.02] transform-gpu">
                   <img
                     src={displayImages[0]}
                     alt="Fine Dining Atmosphere"
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
                 </div>
@@ -107,18 +123,19 @@ const DiningAndEntertainment = React.memo(({ restaurant, aboutDine }) => {
                 {/* Decorative Element */}
                 <div className="grid-img hidden md:flex items-center justify-center p-6 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl">
                   <div className="text-center">
-                    <span className="block text-3xl font-serif text-yellow-400 font-bold">{cuisines.split(' ')[0]} </span>
-                    <span className="text-sm text-gray-300 uppercase tracking-widest">{cuisines.split(' ')[1]}</span>
+                    <span className="block text-3xl font-serif text-yellow-400 font-bold">{firstCuisine} </span>
+                    <span className="text-sm text-gray-300 uppercase tracking-widest">{secondCuisine}</span>
                   </div>
                 </div>
               </div>
 
               <div className="flex flex-col gap-4 md:gap-6">
-                <div className="grid-img group relative rounded-2xl overflow-hidden shadow-xl h-80 w-full transform transition-transform duration-500 hover:scale-[1.02]">
+                <div className="grid-img group relative rounded-2xl overflow-hidden shadow-xl h-80 w-full transition-transform duration-500 hover:scale-[1.02] transform-gpu">
                   <img
                     src={displayImages[1]}
                     alt="Chef's Special"
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
                   <div className="absolute bottom-4 left-4 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/20">
@@ -128,11 +145,12 @@ const DiningAndEntertainment = React.memo(({ restaurant, aboutDine }) => {
                     </div>
                   </div>
                 </div>
-                <div className="grid-img group relative rounded-2xl overflow-hidden shadow-xl h-48 w-full transform transition-transform duration-500 hover:scale-[1.02]">
+                <div className="grid-img group relative rounded-2xl overflow-hidden shadow-xl h-48 w-full transition-transform duration-500 hover:scale-[1.02] transform-gpu">
                   <img
                     src={displayImages[2]}
                     alt="Gourmet Dish"
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
                 </div>
@@ -148,9 +166,9 @@ const DiningAndEntertainment = React.memo(({ restaurant, aboutDine }) => {
             </div>
 
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6 leading-tight text-white">
-              {aboutDine.title.includes(' E') ? aboutDine.title.split(' E')[0] : 'Fine'} <br />
+              {titlePart1} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-400">
-                {aboutDine.title.includes('& ') ? aboutDine.title.split('& ')[1] : 'Dining'}
+                {titlePart2}
               </span>
             </h2>
 
@@ -192,5 +210,5 @@ const DiningAndEntertainment = React.memo(({ restaurant, aboutDine }) => {
   );
 });
 
-DiningAndEntertainment.displayName = 'DiningAndEntertainment'; // Added display name
+DiningAndEntertainment.displayName = 'DiningAndEntertainment';
 export default DiningAndEntertainment;

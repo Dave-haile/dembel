@@ -34,17 +34,17 @@ const Home = ({
         <WhoWeAre about={about} />
       </div>
 
-      <div className="section-wrapper" data-gsap-safe>
+      {/* <div className="section-wrapper" data-gsap-safe> */}
         <FeaturedTenants tenants={tenants} />
-      </div>
+      {/* </div> */}
 
-      <div className="section-wrapper" data-gsap-safe>
-        <DiningAndEntertainment restaurant={restaurant} aboutDine={aboutDine} />
-      </div>
+      {/* <div className="section-wrapper" data-gsap-safe> */}
+      {/* </div> */}
 
       <div className="section-wrapper" data-gsap-safe>
         <EventsAndNews events={event} />
       </div>
+        <DiningAndEntertainment restaurant={restaurant} aboutDine={aboutDine} />
 
       <div className="section-wrapper" data-gsap-safe>
         <Gallery galleries={gallery} />

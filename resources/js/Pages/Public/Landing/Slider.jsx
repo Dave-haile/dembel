@@ -4,15 +4,11 @@ import { gsap } from "gsap";
 import {
   ChevronLeft,
   ChevronRight,
-  Loader2,
   Pause,
   Play,
   ArrowRight,
 } from "lucide-react";
-import DembelLoader, {
-  LoadingAnimation,
-  LoadingScreen,
-} from "../Shared/Loader";
+import{ LoadingScreen } from "../Shared/Loader";
 
 // Preload images to prevent lag/pop-in
 const useImagePreloader = (images) => {

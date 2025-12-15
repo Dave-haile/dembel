@@ -268,6 +268,7 @@ class AdminAboutContentController extends Controller
     return $configs[$componentName] ?? null;
   }
 
+
   public function aboutContentDestroy(AboutContent $aboutContent)
   {
     $old = $aboutContent->image_url;

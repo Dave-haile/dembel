@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('category');
             $table->foreignId('floor_id')->nullable()->constrained('floors')->nullOnDelete();
-            $table->unsignedInteger('sector')->nullable();
+            $table->string('sector')->nullable();
             $table->text('description')->nullable();
             $table->string('image');
             $table->boolean('approval')->default(false);

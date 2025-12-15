@@ -16,7 +16,7 @@ const OldServicesComponent = ({ services }) => {
     const ctx = gsap.context(() => {
       // Animate Service Sections
       const sections = gsap.utils.toArray('.service-item');
-      sections.forEach((section, i) => {
+      sections.forEach((section) => {
         const image = section.querySelector('.service-img');
         const content = section.querySelector('.service-content');
 
