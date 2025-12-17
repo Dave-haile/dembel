@@ -25,6 +25,8 @@ const Tenants = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedTenant, setSelectedTenant] = useState(null);
   const [toast, setToast] = useState(null);
+  const [totalItems, setTotalItems] = useState(0);
+  const [lastPage, setLastPage] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
     category_id: 0,
@@ -59,46 +61,40 @@ const Tenants = () => {
   const fetchTenants = async (size = perPage) => {
     try {
       setLoading(true);
-
-      // Use the list endpoint for AJAX requests
-      const url = window.route('admin.tenants.list', {
+  
+      // Use Inertia's router.get() just like the public page
+      router.get('/admin/tenants', {
         per_page: size === 'all' ? 'all' : String(size),
         search: searchTerm || '',
         category_id: filterCategory || '',
         page: currentPage,
-      });
-
-      const res = await fetch(url, {
-        headers: {
-          'Accept': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest',
-          'X-Inertia': 'true'
+      }, {
+        preserveState: true,
+        preserveScroll: true,
+        replace: false,
+        onSuccess: (page) => {
+          // The data will come in page.props
+          const tenantsData = page.props.initialTenants || page.props.tenants || [];
+          const paginationData = page.props.pagination || {};
+          
+          setTenants(tenantsData);
+          setCurrentPage(paginationData.current_page || 1);
+          setTotalItems(paginationData.total || 0);
+          setLastPage(paginationData.last_page || 1);
+          setLoading(false);
+        },
+        onError: (errors) => {
+          console.error('Failed to load tenants:', errors);
+          setToast({
+            message: 'Failed to load tenants',
+            type: 'error'
+          });
+          setLoading(false);
+          setTenants([]);
+          setTotalItems(0);
         }
       });
-
-      if (!res.ok) {
-        const errorText = await res.text();
-        console.error('Error response:', errorText);
-        throw new Error(`HTTP ${res.status}: ${errorText}`);
-      }
-
-      const data = await res.json();
-
-      // Handle both paginated response and direct array response
-      if (data && data.data) {
-        // Paginated response
-        setTenants(data.data);
-        setCurrentPage(data.current_page || 1);
-      } else if (Array.isArray(data)) {
-        // Direct array response (when per_page=all)
-        setTenants(data);
-      } else {
-        console.warn('Unexpected response format:', data);
-        setTenants([]);
-      }
-
-      setLoading(false);
-      return data;
+      
     } catch (e) {
       console.error('Failed to load tenants:', e);
       setToast({
@@ -106,8 +102,8 @@ const Tenants = () => {
         type: 'error'
       });
       setLoading(false);
-      setTenants([]); // Clear tenants on error
-      return [];
+      setTenants([]);
+      setTotalItems(0);
     }
   };
 

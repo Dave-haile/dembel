@@ -43,8 +43,13 @@ class AdminAboutContentController extends Controller
     }
 
     // Pagination
-    $perPage = $request->per_page === 'all' ? 1000 : ($request->per_page ?? 10);
-    $aboutContents = $query->orderBy('position')->paginate($perPage);
+    $perPage = $request->per_page ?? 10; // default to 10 to avoid undefined variable
+    if ($request->per_page === 'all') {
+      $perPage = 'all';
+      $aboutContents = $query->orderBy('position')->get();
+    } else {
+      $aboutContents = $query->orderBy('position')->paginate($perPage);
+    }
 
     $counts = [
       'total' => AboutContent::count(), // Use original count for total
@@ -83,8 +88,12 @@ class AdminAboutContentController extends Controller
     }
 
     // Pagination
-    $perPage = $request->per_page === 'all' ? 1000 : ($request->per_page ?? 10);
-    $contents = $query->orderBy('position')->paginate($perPage);
+    if ($request->per_page === 'all') {
+        $contents = $query->orderBy('position')->get();
+    } else {
+        $perPage = $request->per_page ?? 10;
+        $contents = $query->orderBy('position')->paginate($perPage);
+    }
 
     return response()->json($contents);
   }
@@ -143,10 +152,9 @@ class AdminAboutContentController extends Controller
 
   public function aboutContentUpdate(Request $request, AboutContent $aboutContent)
   {
-    // Remove debug log
-    // Log::info('About Content Requet ' . var_export($request->all(), true));
+    Log::info('About Content Requet ' . var_export($request->all(), true));
 
-    // Parse extra_data from JSON string to PHP array if it's a string
+
     if ($request->has('extra_data') && is_string($request->extra_data)) {
         $request->merge(['extra_data' => json_decode($request->extra_data, true)]);
     }
@@ -216,7 +224,7 @@ class AdminAboutContentController extends Controller
         // If extra_data was sent as an array (without a new file upload) and it's for VideoSection
         // We need to ensure existing video_file path is retained if not updated by new file
         $componentConfig = app(\App\Http\Controllers\Admin\AdminAboutContentController::class)->getComponentConfig($aboutContent->component);
-        if ($componentConfig['name'] === 'Cinematic Tour') { // Check if it's the VideoSection component
+        if ($componentConfig && ($componentConfig['name'] ?? null) === 'Cinematic Tour') { // Check if it's the VideoSection component
             $currentExtraData = is_array($aboutContent->extra_data) ? $aboutContent->extra_data : (json_decode($aboutContent->extra_data, true) ?? []);
             if (!empty($currentExtraData) && isset($currentExtraData[0]) && isset($currentExtraData[0]['video_url'])) {
                 // If new extra_data doesn't have video_url or it's null, retain the old one

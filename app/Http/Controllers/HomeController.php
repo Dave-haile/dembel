@@ -26,10 +26,10 @@ class HomeController extends Controller
         $event = Event::approved()->orderBy('created_at', 'DESC')->limit(3)->get();
         $tenants = Tenant::select('id', 'name', 'category_id', 'logo')->with('category')->orderBy('id', 'ASC')->limit(7)->get();
         $restaurant = Tenant::where('category_id', 7)->limit(3)->get();
-        $aboutLegacy = AboutContent::where('component', 'A Legacy of Excellence')->first();
+        $aboutLegacy = AboutContent::where('component', 'ALegacyofExcellence')->first();
         $aboutDine = AboutContent::Where('component', 'Dining & Entertainment')->first();
         $vistUs = Contact::where('component', 'Get in Touch')->first();
-        $mall = AboutContent::where('component','MallHighlights')->first();
+        $mall = AboutContent::where('component','Mall Highlights')->first();
         $video = AboutContent::where('component','VideoSection')->first();
 
         // Log::info('About content:' . var_export($aboutLegacy, true));

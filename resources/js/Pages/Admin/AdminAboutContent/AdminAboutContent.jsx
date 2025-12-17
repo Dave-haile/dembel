@@ -4,7 +4,6 @@ import Toast from "../components/Toast";
 import AdminLayout from "../Shared/AdminLayout";
 import { usePage, Head, router } from "@inertiajs/react";
 import AboutStats from "./components/AboutStats";
-import AboutFilters from "./components/AboutFilters";
 import AboutTable from "./components/AboutTable";
 import AboutForm from "./components/AboutForm";
 import AboutViewModal from "./components/AboutViewModal";
@@ -260,6 +259,11 @@ export const COMPONENT_CONFIGS = {
       { key: "video_file", label: "Upload Video File", type: "file", accept: "video/*" },
     ],
   },
+  ALegacyofExcellence: {
+    name: "A Legacy of Excellence",
+    description: "Dembel City Centre (DCC) is a beautiful flowery-yellow multi-story building, located at Africa Avenue on the road to the Air Port of Addis Ababa. As one of the first Western-style shopping malls in Ethiopia, built in 2002, it has become an integral part of the city's identity—so much so that the area around it bears its name.",
+    extraDataFields: []
+  },
 };
 const AdminAboutContent = () => {
   const {
@@ -276,7 +280,6 @@ const AdminAboutContent = () => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [selected, setSelected] = useState(null);
   const [toast, setToast] = useState(null);
-  const [perPage, setPerPage] = useState(filters.per_page || 10);
 
   useEffect(() => {
     setItems(
@@ -290,15 +293,6 @@ const AdminAboutContent = () => {
     if (flash?.success) setToast({ message: flash.success, type: "success" });
     else if (flash?.error) setToast({ message: flash.error, type: "error" });
   }, [flash]);
-
-  const handlePerPageChange = (newPerPage) => {
-    setPerPage(newPerPage);
-    router.get(
-      window.route("admin.about-contents.index"),
-      { per_page: newPerPage, search: searchTerm },
-      { preserveState: true, replace: true }
-    );
-  };
 
   const openCreate = () => {
     setSelected(null);
@@ -366,18 +360,15 @@ const AdminAboutContent = () => {
                   const newSearchTerm = e.target.value;
                   setSearchTerm(newSearchTerm);
                   router.get(
-                    window.route("admin.about-contents.index"),
-                    { search: newSearchTerm, per_page: perPage },
+                    window.route("admin.about-contents"),
+                    { search: newSearchTerm, per_page: 'all' },
                     { preserveState: true, replace: true }
                   );
                 }}
               />
             </div>
 
-            <AboutFilters
-              perPageCount={perPage}
-              onPerPageChange={handlePerPageChange}
-            />
+            {/* AboutFilters component removed as pagination is no longer needed */}
           </div>
 
           <AboutTable
@@ -406,7 +397,7 @@ const AdminAboutContent = () => {
         selected={selected}
         onSaved={() => {
           router.reload({
-            data: { per_page: perPage, search: searchTerm },
+            data: { per_page: 'all', search: searchTerm },
             preserveState: true,
             replace: true,
           });

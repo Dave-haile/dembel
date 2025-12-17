@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
@@ -28,6 +29,7 @@ class AdminSettingController extends Controller
   {
     $user = Auth::user();
 
+    Log::info('User Request '. var_export($request->all(), true));
     $validator = Validator::make($request->all(), [
       'name' => ['required', 'string', 'max:255'],
       'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
@@ -36,10 +38,27 @@ class AdminSettingController extends Controller
       'current_password' => ['nullable', 'required_with:password', 'current_password'],
       'password' => ['nullable', 'confirmed', 'min:8'],
     ]);
+    Log::info('validated', $validator->errors()->toArray());
     if ($validator->fails()) {
       throw ValidationException::withMessages($validator->errors()->toArray());
     }
     $validated = $validator->validated();
+
+    // Handle avatar upload errors early (e.g., size exceeds php.ini limits -> error code 1)
+    if ($request->hasFile('avatar') && ! $request->file('avatar')->isValid()) {
+      $file = $request->file('avatar');
+      Log::error('Avatar upload invalid on settings update', [
+        'error_code' => $file->getError(),
+        'size' => $file->getSize(),
+        'client_mime' => $file->getClientMimeType(),
+        'upload_max_filesize' => ini_get('upload_max_filesize'),
+        'post_max_size' => ini_get('post_max_size'),
+      ]);
+
+      throw ValidationException::withMessages([
+        'avatar' => 'Avatar upload failed (code '.$file->getError().'). Please check the file size limits.',
+      ]);
+    }
 
     $dataToUpdate = [
       'name' => $validated['name'],

@@ -18,65 +18,63 @@ use Inertia\Inertia;
 class AdminTenantController extends Controller
 {
     public function tenants(Request $request)
-    {
-        $query = Tenant::with(['category', 'floor'])
-            ->orderBy('created_at', 'desc');
+{
+    $query = Tenant::with(['category', 'floor'])
+        ->orderBy('created_at', 'desc');
 
-        // Apply search filter if search term exists
-        if ($request->has('search') && ! empty($request->search)) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%")
-                    ->orWhere('location', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('phone', 'like', "%{$search}%")
-                    ->orWhere('room_no', 'like', "%{$search}%")
-                    ->orWhereHas('category', function ($q) use ($search) {
-                        $q->where('name', 'like', "%{$search}%");
-                    });
-            });
-        }
-
-        // Apply category filter if category_id exists
-        if ($request->has('category_id') && ! empty($request->category_id)) {
-            $query->where('category_id', $request->category_id);
-        }
-
-        // Get pagination setting or default to 10
-        $perPage = 10;
-
-        if ($request->filled('per_page')) {
-            if ($request->per_page === 'all') {
-                $perPage = PHP_INT_MAX;
-            } elseif (is_numeric($request->per_page)) {
-                $perPage = (int) $request->per_page;
-            }
-        }
-
-        // Check if this is an AJAX request for pagination/search
-        if ($request->header('X-Inertia') === null && ($request->ajax() || $request->wantsJson())) {
-            $tenants = $perPage === PHP_INT_MAX
-                ? $query->get()
-                : $query->paginate($perPage);
-
-            return response()->json($tenants);
-        }
-
-        // Initial page load with default pagination
-        $tenants = $query->paginate($perPage);
-        $floors = Floor::all();
-        $count = $query->count();
-        $categories = Category::all();
-
-        return Inertia::render('Admin/Tenant/AdminTenant', [
-            'tenants' => $tenants,
-            'floors' => $floors,
-            'count' => $count,
-            'categories' => $categories,
-            'activities' => ActivityLog::latest()->take(5)->get(),
-        ]);
+    // Apply search filter
+    if ($request->has('search') && !empty($request->search)) {
+        $search = $request->search;
+        $query->where(function ($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%")
+                ->orWhere('location', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%")
+                ->orWhere('phone', 'like', "%{$search}%")
+                ->orWhere('room_no', 'like', "%{$search}%")
+                ->orWhereHas('category', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                });
+        });
     }
+
+    // Apply category filter
+    if ($request->has('category_id') && !empty($request->category_id)) {
+        $query->where('category_id', $request->category_id);
+    }
+
+    // Get pagination setting; default to 10 unless explicitly set to "all"
+    $perPageRaw = $request->get('per_page', 10);
+    if ($perPageRaw === 'all') {
+        $perPage = PHP_INT_MAX;
+    } else {
+        $perPage = (int) $perPageRaw;
+        if ($perPage <= 0) {
+            $perPage = 10;
+        }
+    }
+
+    $tenants = $query->paginate($perPage)->withQueryString();
+    $floors = Floor::all();
+    $categories = Category::all();
+
+    // Always return an Inertia response (avoid plain JSON when X-Inertia is present)
+    return Inertia::render('Admin/Tenant/AdminTenant', [
+        'initialTenants' => $tenants->items(),
+        'pagination' => [
+            'current_page' => $tenants->currentPage(),
+            'last_page' => $tenants->lastPage(),
+            'per_page' => $tenants->perPage(),
+            'total' => $tenants->total(),
+            'has_more' => $tenants->hasMorePages(),
+        ],
+        'floors' => $floors,
+        'count' => $tenants->total(),
+        'categories' => $categories,
+        'activities' => ActivityLog::latest()->take(5)->get(),
+        'filters' => $request->only(['search', 'category_id', 'per_page', 'page']),
+    ]);
+}
      public function tenantList(Request $request)
     {
         $query = Tenant::with(['category', 'floor'])

@@ -77,7 +77,6 @@ class AdminVacancyController extends Controller
 
   public function vacancyStore(Request $request)
   {
-    Log::info($request->all());
     $validator = Validator::make($request->all(), [
       'title' => ['required', 'string', 'max:150'],
       'department' => ['nullable', 'string', 'max:100'],
@@ -126,7 +125,6 @@ class AdminVacancyController extends Controller
       $validated['slug'] = $slug;
     }
 
-    Log::info($validated);
     $vacancy = Vacancy::create($validated);
     $activity = new ActivityLog;
     $activity->user_id = Auth::user()->id;

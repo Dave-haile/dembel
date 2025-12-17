@@ -396,6 +396,31 @@ const AboutForm = ({
   const [extraDataPreviews, setExtraDataPreviews] = useState({});
   const [uploadProgress, setUploadProgress] = useState(0); // New state for upload progress
 
+  // Resolve user-entered component value to a known COMPONENT_CONFIGS key
+  const resolveComponentKey = (value) => {
+    const raw = (value || "").trim();
+    const compact = raw.replace(/\s/g, "");
+
+    // Exact key match (case-sensitive first)
+    if (COMPONENT_CONFIGS[compact]) return compact;
+
+    // Case-insensitive key match
+    const ciKey = Object.keys(COMPONENT_CONFIGS).find(
+      (k) => k.toLowerCase() === compact.toLowerCase()
+    );
+    if (ciKey) return ciKey;
+
+    // Match by component display name (e.g., "Hero Section")
+    const byName = Object.entries(COMPONENT_CONFIGS).find(
+      ([key, cfg]) =>
+        (cfg.name || "").replace(/\s/g, "").toLowerCase() ===
+        compact.toLowerCase()
+    );
+    if (byName) return byName[0];
+
+    return null;
+  };
+
   useEffect(() => {
     if (selected) {
       // console.log("Selected item in AboutForm:", selected);
@@ -460,17 +485,32 @@ const AboutForm = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Normalize/resolve component key (handles spaces, case, display name)
+    const componentKey = resolveComponentKey(formData.component);
+
+    // Guard against missing/unknown component to avoid runtime errors before submit
+    if (!componentKey || !COMPONENT_CONFIGS[componentKey]) {
+      setErrors({ component: "Please choose a valid component key" });
+      setToast({
+        message: "Select a valid component before saving",
+        type: "error",
+      });
+      return;
+    }
+
     setLoading(true);
+    // Use normalized component key in the payload
+    const normalizedFormData = { ...formData, component: componentKey };
     const fd = buildFormDataForSubmit(
-      formData,
+      normalizedFormData,
       extraData,
-      formData.component,
+      componentKey,
       COMPONENT_CONFIGS
     );
-    const url = formData.id
-      ? `/admin/about-contents/${formData.id}`
+    const url = normalizedFormData.id
+      ? `/admin/about-contents/${normalizedFormData.id}`
       : "/admin/about-contents";
-    if (formData.id) fd.append("_method", "PUT");
+    if (normalizedFormData.id) fd.append("_method", "PUT");
 
     router.post(url, fd, {
       forceFormData: true,

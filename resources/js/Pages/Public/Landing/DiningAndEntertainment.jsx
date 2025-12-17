@@ -1,6 +1,4 @@
-import React, { useRef, useLayoutEffect, useMemo } from "react";
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useRef, useMemo } from "react";
 import { ArrowRight, Star, Utensils } from 'lucide-react';
 
 // Mock Link for standalone usage
@@ -8,7 +6,6 @@ const Link = ({ href, className, children, ...props }) => (
   <a href={href} className={className} {...props}>{children}</a>
 );
 
-gsap.registerPlugin(ScrollTrigger);
 
 const DiningAndEntertainment = React.memo(({ restaurant = [], aboutDine }) => {
   const containerRef = useRef(null);
@@ -27,51 +24,6 @@ const DiningAndEntertainment = React.memo(({ restaurant = [], aboutDine }) => {
     .filter(Boolean)
     .concat(defaultImages)
     .slice(0, 3), [restaurant, defaultImages]);
-
-  useLayoutEffect(() => {
-    // Only run animations if the user prefers reduced motion (optional accessibility check)
-    const ctx = gsap.context(() => {
-      // Fade in and slide up text
-      if (textRef.current) {
-        gsap.fromTo(textRef.current,
-            { opacity: 0, y: 50 },
-            {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power3.out",
-            scrollTrigger: {
-                trigger: containerRef.current,
-                start: "top 70%",
-                toggleActions: "play none none reverse"
-            }
-            }
-        );
-      }
-
-      // Staggered image entry
-      const imageElements = imagesRef.current?.querySelectorAll('.grid-img');
-      if (imageElements && imageElements.length > 0) {
-        gsap.fromTo(imageElements,
-          { y: 60, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.2,
-            ease: "back.out(1.2)",
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 75%",
-            }
-          }
-        );
-      }
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
-
   const subtitleParts = useMemo(() => (aboutDine?.subtitle || "")
     .split(",")
     .map((s) => s.trim()), [aboutDine?.subtitle]);
