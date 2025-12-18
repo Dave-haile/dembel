@@ -18,39 +18,6 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        $users = [
-            [
-                'name' => 'Admin User',
-                'email' => 'admin@company.com',
-                'email_verified_at' => now(),
-                'phone' => '+251911223344',
-                'avatar' => 'users/default.png',
-                'role' => 'admin',
-                'check' => true,
-                'password' => Hash::make('password123'),
-            ],
-            [
-                'name' => 'Content Manager',
-                'email' => 'content@company.com',
-                'email_verified_at' => now(),
-                'phone' => '+251922334455',
-                'avatar' => 'users/default.png',
-                'role' => 'editor',
-                'check' => true,
-                'password' => Hash::make('password123'),
-            ],
-            [
-                'name' => 'Regular User',
-                'email' => 'user@company.com',
-                'email_verified_at' => now(),
-                'phone' => '+251933445566',
-                'avatar' => 'users/default.png',
-                'role' => 'viewer',
-                'check' => false,
-                'password' => Hash::make('password123'),
-            ],
-        ];
-
         $category = [
             ['name' => 'Fashion', 'icon' => '👗'],
             ['name' => 'Jewelry', 'icon' => '💍'],
@@ -2682,7 +2649,7 @@ class DatabaseSeeder extends Seeder
         ];
 
 
-        DB::table('users')->insert($users);
+        // DB::table('users')->insert($users);
         DB::table('categories')->insert($category);
         DB::table('sliders')->insert($sliders);
         DB::table('floors')->insert($floor);
