@@ -544,20 +544,20 @@ All admin routes require authentication and are prefixed with `/admin`:
 
 <div align="center">
 
-#### Hero Section And Team
-<div style="display: flex; gap: 10px; justify-content: center;">
+#### Hero Section
 <img src="Screenshots/AboutUs/Abouthero.png" alt="About Hero" width="800"/>
-<img src="Screenshots/AboutUs/Team.png" alt="Team" width="800"/>
-</div>
 
-### Mall Story
+#### Mall Story
 <img src="Screenshots/AboutUs/MallStory.png" alt="Mall Story" width="800"/>
 
-#### Mission & Values And Facilities
-<div style="display: flex; gap: 10px; justify-content: center;">
+#### Mission & Values
 <img src="Screenshots/AboutUs/MissionAndValue.png" alt="Mission & Values" width="800"/>
+
+#### Facilities
 <img src="Screenshots/AboutUs/Facility.png" alt="Facilities" width="800"/>
-</div>
+
+#### Team
+<img src="Screenshots/AboutUs/Team.png" alt="Team" width="800"/>
 
 </div>
 
