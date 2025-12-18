@@ -546,8 +546,8 @@ All admin routes require authentication and are prefixed with `/admin`:
 
 #### Hero Section And Team
 <div style="display: flex; gap: 10px; justify-content: center;">
-<img src="Screenshots/AboutUs/Team.png" alt="Team" width="800"/>
 <img src="Screenshots/AboutUs/Abouthero.png" alt="About Hero" width="800"/>
+<img src="Screenshots/AboutUs/Team.png" alt="Team" width="800"/>
 </div>
 
 ### Mall Story
